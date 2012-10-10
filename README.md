@@ -1,15 +1,4 @@
 hq-xmlapi
 =========
 
-Fork von http://www.homematic-inside.de/software/addons/item/xmlapi bzw.
-http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098
-
-Erweiterung des Homematic XML-API Firmware Patches
-
-Ziele:
-======
-
-* Filter devicelist/statelist nach Raum/Gewerk
-* Variablen auslesen mit Text-Bezeichnern
-* Variablen setzen mit Text-Bezeichnern (alternativ in siriproxy-homematic implementieren?)
-* einfache Authentifizierung
+Fork von http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098
