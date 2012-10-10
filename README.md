@@ -1,7 +1,7 @@
 hq-xmlapi
 =========
 
-Fork von http://www.homematic-inside.de/software/addons/item/xmlapi
+Fork von http://www.homematic-inside.de/software/addons/item/xmlapi bzw.
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098
 
 Erweiterung des Homematic XML-API Firmware Patches
