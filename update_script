@@ -1,0 +1,12 @@
+#!/bin/sh
+MTDBLOCK_STORAGE=/dev/mtdblock2
+mkdir -p /mnt
+mount -t yaffs $MTDBLOCK_STORAGE /mnt
+cp -a xmlapi /mnt/www/config
+umount /mnt
+echo Rebooting...
+lcdtool "Reboot...             "
+lcdtool -a 0x40 -t bin 00
+echo "x" > /dev/watchdog
+reboot
+while true ; do true ;  done
