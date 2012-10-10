@@ -11,4 +11,5 @@ Ziele:
 
 * Filter devicelist/statelist nach Raum/Gewerk
 * Variablen auslesen mit Text-Bezeichnern
+* Variablen setzen mit Text-Bezeichnern (alternativ in siriproxy-homematic implementieren?)
 * einfache Authentifizierung
