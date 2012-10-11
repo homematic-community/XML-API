@@ -1,31 +1,28 @@
 #!/bin/tclsh
 
 load tclrega.so
-source once.tcl
-sourceOnce cgi.tcl
-sourceOnce xml.tcl
 
+set ise_id ""
+set new_value ""
 
-cgi_eval {
-
-  cgi_input
-
-  set ise_id ""
-  set new_value ""
-
-  catch { import ise_id }
-  catch { import new_value }
-
-  cgi_content_type "text/xml"
-  cgi_http_head
-
-  puts -nonewline {<?xml version="1.0" ?>}  
-  puts -nonewline {<result>} 
-
-  set res [rega "dom.GetObject($ise_id).State($new_value);"]
-  puts "<changed id=\"$ise_id\"/>"
-
-  puts -nonewline {</result>} 
-
+catch {
+  set input $env(QUERY_STRING)
+  set pairs [split $input &]
+  foreach pair $pairs {
+    if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]}
+      set $varname $val      
+    }    
+  }
 }
+puts {Content-Type: text/xml
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<result>}
 
+array set res [rega_script "Write(dom.GetObject($ise_id).State($new_value));"]
+if {$res(STDOUT) != "null"} {
+  puts "<changed id=\"$ise_id\"/>";
+  } else {
+    puts "<not_found />";
+  }
+#puts "<return value=\"$res(STDOUT)\" />";
+puts -nonewline {</result>}
