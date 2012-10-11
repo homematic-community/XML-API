@@ -1,32 +1,32 @@
 #!/bin/tclsh
 
 load tclrega.so
-source once.tcl
-sourceOnce cgi.tcl
-sourceOnce xml.tcl
 
+set program_id ""
 
-cgi_eval {
-
-  cgi_input
-
-  set ise_id ""
-
-  catch { import program_id }
-
-  cgi_content_type "text/xml"
-  cgi_http_head
-
-  puts -nonewline {<?xml version="1.0" ?>}  
-  puts -nonewline {<result>} 
-
-  array set res_arr [rega_script "object obj = dom.GetObject($program_id); if (obj) { obj.ProgramExecute(); }"]
-  if { $res_arr(obj) != "" } { 
-  	puts "<started program_id=\"$program_id\"/>"
-  } else {
-  	puts "<not_found/>"
-  }  
-  puts -nonewline {</result>} 
-
+catch {
+ set input $env(QUERY_STRING)
+ set pairs [split $input &]
+ foreach pair $pairs {
+  if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
+   set $varname $val
+  }
+ }
 }
+
+puts {Content-Type: text/xml
+
+
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<result>}
+
+array set res [rega_script "object obj = dom.GetObject($program_id); if (obj) { obj.ProgramExecute(); Write(obj); }"]
+
+if { $res(STDOUT) != "" } {
+ puts "<started program_id=\"$program_id\"/>"
+} else {
+ puts {<not_found/>}
+}
+
+puts {</result>}
 
