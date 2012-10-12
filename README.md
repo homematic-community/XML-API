@@ -1,8 +1,9 @@
 hq-xmlapi
 =========
 
-Fork von http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098
+Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon
 
+Lizensiert unter GPL v3
 
 Changelog
 =========
