@@ -1,53 +1,47 @@
 #!/bin/tclsh
-
-
 load tclrega.so
-source once.tcl
-sourceOnce cgi.tcl
-sourceOnce xml.tcl
+puts -nonewline {Content-Type: text/xml
 
-cgi_eval {
-
-cgi_input
+<?xml version="1.0" encoding="ISO-8859-1" ?><state>}
 
 set device_id ""
 set channel_id ""
 set datapoint_id ""
 
-catch { import device_id }
-catch { import channel_id }
-catch { import datapoint_id }
-
-cgi_content_type "text/xml"
-cgi_http_head
-
-puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?>}
-puts -nonewline {<state>}
+catch {
+ set input $env(QUERY_STRING)
+ set pairs [split $input &]
+ foreach pair $pairs {
+  if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
+   set $varname $val
+  }
+ }
+}
 
 array set res [rega_script {
 
-string sDevId = "} $device_id {";
-string sChannelId = "} $channel_id {";
-string sDatapointId = "} $datapoint_id {";
-string sChnId;
-string sDPId;
-		
-		if (sDatapointId.Length() > 0 ) {
-			object oDatapoint = dom.GetObject(sDatapointId);
-			if (oDatapoint.IsTypeOf(OT_DP)){
-				WriteLine(oDatapoint.Value());
-			}
-		} else {
+	string sDevId = "} $device_id {";
+	string sChannelId = "} $channel_id {";
+	string sDatapointId = "} $datapoint_id {";
+	string sChnId;
+	string sDPId;
+			
+	if (sDatapointId.Length() > 0 ) {
+		object oDatapoint = dom.GetObject(sDatapointId);
+		if (oDatapoint.IsTypeOf(OT_DP)){
+			WriteLine(oDatapoint.Value());
+		}
+	
+	} else {
 
 		if (sChannelId.Length() > 0 ) {
-			object oChannel2   = dom.GetObject(sChannelId);		
+			object oChannel2 = dom.GetObject(sChannelId);		
 			sDevId = oChannel2.Device();
 		}				
 
-		object oDevice   = dom.GetObject(sDevId);
-		
-		if( oDevice.ReadyConfig() && (oDevice.Name() != "Zentrale") && (oDevice.Name() != "HMW-RCV-50 BidCoS-Wir") && oDevice.IsTypeOf(OT_DEVICE))
-		{
+		object oDevice = dom.GetObject(sDevId);
+
+		if(oDevice.ReadyConfig() && (oDevice.Name() != "Zentrale") && (oDevice.Name() != "HMW-RCV-50 BidCoS-Wir") && oDevice.IsTypeOf(OT_DEVICE)) {
 			Write("<device");
 			Write(" name='" # oDevice.Name() # "'");
 			Write(" ise_id='" # sDevId # "'");
@@ -63,25 +57,20 @@ string sDPId;
 			
 			Write(" >");  ! device tag schliessen
 
-			foreach(sChnId, oDevice.Channels())
-			{
+			foreach(sChnId, oDevice.Channels())	{
 				object oChannel = dom.GetObject(sChnId);
-				if ( (! oChannel.Internal()) ||  oChannel.Internal()  )
-				{
+				if ((!oChannel.Internal()) || oChannel.Internal()) {
 
 					Write("<channel name='");
 					WriteXML( oChannel.Name() );
 					Write("' ise_id='" # sChnId # "'>");
 
-					foreach(sDPId, oChannel.DPs().EnumUsedIDs())
-					{
+					foreach(sDPId, oChannel.DPs().EnumUsedIDs()) {
 						object oDP = dom.GetObject(sDPId);
-						if(oDP)
-						{
+						if(oDP) {
 							string dp = oDP.Name().StrValueByIndex(".", 2);
 
-							if( (dp != "ON_TIME") && (dp != "INHIBIT") )
-							{
+							if( (dp != "ON_TIME") && (dp != "INHIBIT") ) {
 								Write("<datapoint");
 								Write(" name='"); WriteXML(oDP.Name());
 								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2))
@@ -102,8 +91,6 @@ string sDPId;
 			Write("</device>");
 		}
 	}
-  }]
-  puts -nonewline $res(STDOUT)
-}
+}]
+puts -nonewline $res(STDOUT)
 puts -nonewline {</state>}
-}
