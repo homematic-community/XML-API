@@ -1,5 +1,5 @@
-hq-xmlapi
-=========
+Homematic XML-API
+=================
 
 Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon
 
