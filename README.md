@@ -7,7 +7,7 @@ siehe auch diesen Forums-Thread: http://homematic-forum.de/forum/viewtopic.php?f
 
 Lizensiert unter GPL v3
 
-*Download:* https://github.com/downloads/hobbyquaker/hq-xmlapi/hq-xmlapi.img
+**Download:** https://github.com/downloads/hobbyquaker/hq-xmlapi/hq-xmlapi.img
 
 Changelog
 =========
