@@ -1,7 +1,7 @@
 Homematic XML-API
 =================
 
-Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon
+Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon - kompatibel zur Version 1.2
 
 siehe auch diesen Forums-Thread: http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
