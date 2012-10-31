@@ -5,7 +5,7 @@ puts  {Content-Type: text/xml
 <?xml version="1.0" encoding="ISO-8859-1" ?>}
 
 set start "0"
-set count "0"
+set show "0"
 set clear "0"
 
 catch {
@@ -31,7 +31,7 @@ append hm_script {
 append hm_script $start
 append hm_script {;
     integer iCount = }
-append hm_script $count
+append hm_script $show
 append hm_script {; 
     integer eCount = dom.GetHistoryDataCount();
     integer clear = }
@@ -41,13 +41,13 @@ append hm_script {;
     if (iCount == "0") {
       iCount = eCount;
     }
-    WriteLine("<records start=\"" # iStart # "\" count=\"" # iCount # "\">" # eCount # "</records>");
+    WriteLine("<records start=\"" # iStart # "\" show=\"" # iCount # "\" count=\"" # eCount # "\"/>");
 }
 
 append hm_script {
 
     if (clear == "1") {
-      ! var clearHistory = dom.ClearHistoryData();
+      var clearHistory = dom.ClearHistoryData();
       WriteLine("<cleared_protocol/>");
     } else {
 
@@ -78,7 +78,7 @@ append hm_script {
          
           if( iLastGroupIndex != iGroupIndex )
           {
-              drop = drop # "<entry datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />\n";
+              drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />\n";
             sCollectedNames = "";
             sCollectedValues = "";
             iLastGroupIndex = iGroupIndex;
@@ -108,7 +108,7 @@ append hm_script {
     }
     if( sCollectedValues.Length() )
     {
-      drop = drop # "<entry datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />";
+      drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />";
 
     }
 
