@@ -12,6 +12,7 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+* added protocol.cgi, returns the system history. parameter: start, show, clear. Set clear=1 to clear the Log
 * updated info.html
 * sysvar.cgi: new, returns a single variable. parameter: ise_id, gives value_list and value_text on default
 * sysvarlist.cgi: removed cgi.tcl, added attributes value_list and value_text, added parameter text.
