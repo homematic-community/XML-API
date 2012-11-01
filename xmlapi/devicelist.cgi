@@ -1,18 +1,8 @@
 #!/bin/tclsh
-
 load tclrega.so
-#source once.tcl
-#sourceOnce cgi.tcl
-source cgi.tcl
-#sourceOnce xml.tcl
-
-
-cgi_eval {
-
-cgi_input
-cgi_content_type "text/xml"
-cgi_http_head
-
+puts  {Content-Type: text/xml
+Access-Control-Allow-Origin: *
+}
 puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?>}
 puts -nonewline {<deviceList>}
   
@@ -120,6 +110,7 @@ puts -nonewline {<deviceList>}
       }
     }
   }]
-}
+
 puts -nonewline $res(STDOUT)
 puts -nonewline {</deviceList>}
+
