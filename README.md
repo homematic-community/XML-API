@@ -12,6 +12,7 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+* In allen für HQ WebUI relevanten cgis allow-origin Header hinzugefügt. Notwendig wenn HQ WebUI nicht auf der CCU installiert sondern lokal ausgeführt wird.
 * added protocol.cgi, returns the system history. parameter: start, show, clear. Set clear=1 to clear the Log
 * updated info.html
 * sysvar.cgi: new, returns a single variable. parameter: ise_id, gives value_list and value_text on default
