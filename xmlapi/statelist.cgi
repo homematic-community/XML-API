@@ -1,38 +1,37 @@
 #!/bin/tclsh
 
-
-source once.tcl
-sourceOnce cgi.tcl
-loadOnce tclrega.so
-
-
-
-
 #  !*****************************************************************************
 #  !* statelist.cgi
 #  !* Stati aller kanaele und timestamp der letzten aktualisierung
 #  !*
 #  !* Autor      : Dirk Szymanski
 #  !* Erstellt am: gleich, kleinen moment noch
+#  !* 
+#  !* 1.11.2012 Sebastian Raff: cgi.tcl rausgeworfen, Allow-Origin Header
+#  !* 	hinzugefügt
 #  !*
 #  !*****************************************************************************
 
 
+load tclrega.so
+puts  -nonewline {Content-Type: text/xml
+Access-Control-Allow-Origin: *
 
-cgi_eval {
-
-cgi_input
-cgi_content_type "text/xml"
-cgi_http_head
+<?xml version="1.0" encoding="ISO-8859-1" ?><stateList>}
 
 set ise_id 0
 set show_internal 0
 
-catch { import ise_id }
-catch { import show_internal }
-
-puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?><stateList>}
-  
+catch {
+  set input $env(QUERY_STRING)
+  set pairs [split $input &]
+  foreach pair $pairs {
+    if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
+      set $varname $val      
+    }    
+  }
+}
+ 
 if { $ise_id != 0 } then {
 
 set comm "var ise_id=$ise_id;\n"
@@ -136,4 +135,5 @@ string sDPId;
   puts -nonewline $res(STDOUT)
 }
 puts -nonewline {</stateList>}
-}
+
+
