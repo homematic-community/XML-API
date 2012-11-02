@@ -1,10 +1,9 @@
 #!/bin/tclsh
 load tclrega.so
-puts  {Content-Type: text/xml
+puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
-}
-puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?>}
-puts -nonewline {<deviceList>}
+
+<?xml version="1.0" encoding="ISO-8859-1" ?><deviceList>}
   
 
   array set res [rega_script {

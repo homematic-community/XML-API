@@ -15,20 +15,19 @@ catch {
 }
 
 
-puts {Content-Type: text/xml
+puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<result>}
+<?xml version="1.0" encoding="ISO-8859-1" ?><result>}
 
 array set res [rega_script "object obj = dom.GetObject($program_id); if (obj) { obj.ProgramExecute(); Write(obj); }"]
 
 if { $res(STDOUT) != "" } {
- puts "<started program_id=\"$program_id\"/>"
+ puts -nonewline "<started program_id=\"$program_id\"/>"
 } else {
- puts {<not_found/>}
+ puts -nonewline {<not_found/>}
 }
 
-puts {</result>}
+puts -nonewline {</result>}
 
 

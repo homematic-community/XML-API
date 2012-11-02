@@ -7,14 +7,13 @@
 #  !* Autor      : Dirk Szymanski
 #  !* Erstellt am: gleich, kleinen moment noch
 #  !* 
-#  !* 1.11.2012 Sebastian Raff: cgi.tcl rausgeworfen, Allow-Origin Header
+#  !* 1.11.2012 hobbyquaker: cgi.tcl rausgeworfen, Allow-Origin Header
 #  !* 	hinzugefügt
 #  !*
 #  !*****************************************************************************
 
-
 load tclrega.so
-puts  -nonewline {Content-Type: text/xml
+puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><stateList>}

@@ -1,6 +1,6 @@
 #!/bin/tclsh
 load tclrega.so
-puts  {Content-Type: text/xml
+puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?>}
@@ -19,7 +19,7 @@ catch {
  }
 }
 
-puts {<systemProtocol>}
+puts -nonewline {<systemProtocol>}
 
 append hm_script {
     string drop = "";
@@ -42,7 +42,7 @@ append hm_script {;
     if (iCount == "0") {
       iCount = eCount;
     }
-    WriteLine("<records start=\"" # iStart # "\" show=\"" # iCount # "\" count=\"" # eCount # "\"/>");
+    Write("<records start=\"" # iStart # "\" show=\"" # iCount # "\" count=\"" # eCount # "\"/>");
 }
 
 append hm_script {
@@ -113,7 +113,7 @@ append hm_script {
 
     }
 
-    WriteLine(drop);
+    Write(drop);
     }
 }
 

@@ -1,28 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/REC-html40/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>XML-API</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 </head>
 <body>
-<h2>XML-API Version 1.2</h2>
+<h2>XML-API Version 1.3rc1</h2>
 <table>
 	<tr><td><a href="./version.cgi">version.cgi</a></td><td>Version der XML-API</td></tr>
-	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Gerï¿½te mit Kanï¿½len. Enthï¿½lt u.a. die Namen, Seriennummern, Gerï¿½tetypen und ID's</td></tr>
-	<tr><td><a href="./functionlist.cgi">functionlist.cgi</a></td><td>Liste aller Gewerke mit Kanï¿½len</td></tr>
+	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Geräte mit Kanälen. Enthält u.a. die Namen, Seriennummern, Gerätetypen und ID's</td></tr>
+	<tr><td><a href="./functionlist.cgi">functionlist.cgi</a></td><td>Liste aller Gewerke mit Kanälen</td></tr>
 	<tr><td><a href="./favoritelist.cgi">favoritelist.cgi</a></td><td>Liste aller Favoriten und Usern</td></tr>
 	<tr><td><a href="./sysvarlist.cgi">sysvarlist.cgi</a></td><td>Liste alle Systemvariablen mit Werten<br>
 		<b>Parameter:</b> sysvarlist.cgi?text=true - gibt auch Wertelisten und den Text des aktuellen Werts in den Attributen value_list und value_text aus.</td></tr>
-	<tr><td><a href="./sysvar.cgi">sysvar.cgi</a></td><td>Eine einzelne Systemvariablen mit Werten. Parameter: ise_id und text, default text=true<br>
-	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes Gerï¿½te mit Kanï¿½len und aktuellen Werten zurï¿½ck (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurï¿½ck) )</td></tr>
-	<tr><td><a href="./statelist.cgi">statelist.cgi</a></td><td>Liste alle Gerï¿½te mit Kanï¿½len und aktuellen Werten</td></tr>
-	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>ï¿½ndern eines Kanal-Zustandes mit der angegebenen ID (z.Bsp.: statechange.cgi?ise_id=1234&new_value=0.20)</td></tr>
+	<tr><td><a href="./sysvar.cgi">sysvar.cgi</a></td><td>Eine einzelne Systemvariablen mit Werten. <b>Parameter</b>: ise_id<br>
+	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes Geräte mit Kanälen und aktuellen Werten zurück (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurück) )</td></tr>
+	<tr><td><a href="./statelist.cgi">statelist.cgi</a></td><td>Liste alle Geräte mit Kanälen und aktuellen Werten</td></tr>
+	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>Ändern eines Kanal-Zustandes mit der angegebenen ID (z.Bsp.: statechange.cgi?ise_id=1234&new_value=0.20)</td></tr>
 	<tr><td><a href="./programlist.cgi">programlist.cgi</a></td><td>Liste aller Programme</td></tr>
-	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus</td></tr>
+	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus<br><b>Parameter</b>protocol.cgi?clear=1 löscht das Systemprotokoll</td></tr>
 	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm mit der angegebenen ID (z.Bsp.: runprogram.cgi?program_id=1234)</td></tr>
-	<tr><td><a href="./roomlist.cgi">roomlist.cgi</a></td><td>Liste aller Rï¿½ume mit Kanï¿½len</td></tr>
-	<tr><td><a href="./rssilist.cgi">rssilist.cgi</a></td><td>Liste aller Gerï¿½te mit Signalstï¿½rke</td></tr>
+	<tr><td><a href="./roomlist.cgi">roomlist.cgi</a></td><td>Liste aller Räume mit Kanälen</td></tr>
+	<tr><td><a href="./rssilist.cgi">rssilist.cgi</a></td><td>Liste aller Geräte mit Signalstärke</td></tr>
 </table>
 </body>
 </html>

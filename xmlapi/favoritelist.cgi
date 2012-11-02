@@ -1,18 +1,9 @@
 #!/bin/tclsh
-
 load tclrega.so
-source once.tcl
-sourceOnce cgi.tcl
+puts -nonewline {Content-Type: text/xml
+Access-Control-Allow-Origin: *
 
-
-cgi_eval {
-
-#  cgi_input
-
-  cgi_content_type "text/xml"
-  cgi_http_head
-  puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?>}
-  puts -nonewline {<favoriteList>}
+<?xml version="1.0" encoding="ISO-8859-1" ?><favoriteList>}
 
 array set res [rega_script {
 
@@ -56,6 +47,6 @@ array set res [rega_script {
     }
 
 }]
-  puts -nonewline $res(STDOUT)
-  puts -nonewline {</favoriteList>}
-}
+puts -nonewline $res(STDOUT)
+puts -nonewline {</favoriteList>}
+

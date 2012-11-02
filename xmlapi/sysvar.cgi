@@ -1,6 +1,6 @@
 #!/bin/tclsh
 load tclrega.so
-puts  {Content-Type: text/xml
+puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><systemVariables>}
