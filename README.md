@@ -7,18 +7,14 @@ siehe auch diesen Forums-Thread: http://homematic-forum.de/forum/viewtopic.php?f
 
 Lizensiert unter GPL v3
 
-**Download:** https://github.com/downloads/hobbyquaker/hq-xmlapi/hq-xmlapi.img
-
 Changelog
 =========
 
-* In allen für HQ WebUI relevanten cgis allow-origin Header hinzugefügt. Notwendig wenn HQ WebUI nicht auf der CCU installiert sondern lokal ausgeführt wird.
-* added protocol.cgi, returns the system history. parameter: start, show, clear. Set clear=1 to clear the Log
-* updated info.html
-* sysvar.cgi: new, returns a single variable. parameter: ise_id, gives value_list and value_text on default
-* sysvarlist.cgi: removed cgi.tcl, added attributes value_list and value_text, added parameter text.
-* programlist.cgi: removed cgi.tcl
-* runprogram.cgi: removed cgi.tcl
-* statechange.cgi: removed cgi.tcl
-* state.cgi: removed cgi.tcl
+* allow-origin Header hinzugefügt
+* info.html aktualisiert
+* protocol.cgi hinzugefügt: Gibt das Systemprotokol zurück. Parameter: start, show, clear. clear=1 löscht das Protokoll
+* sysvar.cgi hinzugefügt: Gibt eine einzelne Variable zurück. Liefert Wertelisten. Parameter: ise_id
+* sysvarlist.cgi: neue attribute value_list and value_text, neuer Parameter text um die Attribute einzuschalten (text=true)
+* cgi.tcl und once.tcl entfernt
+
 
