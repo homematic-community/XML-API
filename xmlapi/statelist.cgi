@@ -7,8 +7,9 @@
 #  !* Autor      : Dirk Szymanski
 #  !* Erstellt am: gleich, kleinen moment noch
 #  !* 
-#  !* 1.11.2012 hobbyquaker: cgi.tcl rausgeworfen, Allow-Origin Header
-#  !* 	hinzugefügt
+#  !* 11.2012 hobbyquaker: cgi.tcl rausgeworfen, Allow-Origin Header
+#  !* 	hinzugefügt. Parameter show_internal=1 aktiviert ausgabe des
+#  !*   datenpunkt-attributs state.
 #  !*
 #  !*****************************************************************************
 
@@ -30,40 +31,43 @@ catch {
     }    
   }
 }
- 
-if { $ise_id != 0 } then {
 
 set comm "var ise_id=$ise_id;\n"
+set comm "var show_internal=$show_internal;\n"
 
-append comm {
-	object obj = dom.GetObject(ise_id);
-	if(obj.TypeName() == "HSSDP")
-	{
-		object oDP = obj;
-		string dp = oDP.Name().StrValueByIndex(".", 2);
 
-                                                                Write("<datapoint");
-                                                                Write(" name='");WriteXML(oDP.Name());Write("'");
-                                                                Write(" type='");WriteXML(oDP.Name().StrValueByIndex(".", 2));Write("'");
-                                                                Write(" ise_id='");WriteXML(ise_id);Write("'");
-! state fragt den aktuellen status des sensors/aktors ab, dauert lange
-!                                                               Write(" state='");WriteXML(oDP.State());Write("'");
-! value nimmt den von der ccu gecachten wert, moeglicherweise nicht korrekt. Ggf. bei einigen geraeten immer abfragen
-                                                                Write(" value='");WriteXML(oDP.Value());Write("'");
-                                                                Write(" valuetype='");WriteXML(oDP.ValueType());Write("'");
-																Write(" timestamp='");WriteXML(oDP.Timestamp().ToInteger());Write("'");
-                                                                Write(" />");
-	}
-}
+if { $ise_id != 0 } then {
 
-array set res [rega_script $comm]
+  append comm {
+        object obj = dom.GetObject(ise_id);
+        if(obj.TypeName() == "HSSDP")
+        {
+            object oDP = obj;
+            string dp = oDP.Name().StrValueByIndex(".", 2);
 
-puts -nonewline $res(STDOUT)
-
+            Write("<datapoint");
+            Write(" name='");WriteXML(oDP.Name());Write("'");
+            Write(" type='");WriteXML(oDP.Name().StrValueByIndex(".", 2));Write("'");
+            Write(" ise_id='");WriteXML(ise_id);Write("'");
+            ! state fragt den aktuellen status des sensors/aktors ab, dauert lange
+            if (show_internal == 1) {
+                Write(" state='");WriteXML(oDP.State());Write("'");
+            }
+            ! value nimmt den von der ccu gecachten wert, moeglicherweise nicht korrekt. Ggf. bei einigen geraeten immer abfragen
+            Write(" value='");WriteXML(oDP.Value());Write("'");
+            Write(" valuetype='");WriteXML(oDP.ValueType());Write("'");
+            Write(" timestamp='");WriteXML(oDP.Timestamp().ToInteger());Write("'");
+            Write(" />");
+        }
+    }
 
 } else {
 
-array set res [rega_script {
+
+
+
+
+append comm {
 
 string sDevId;
 string sChnId;
@@ -113,9 +117,11 @@ string sDPId;
 								Write(" name='"); WriteXML(oDP.Name());
 								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2))
 								Write("' ise_id='" # sDPId );
-! state fragt den aktuellen status des sensors/aktors ab, dauert lange
-!								Write("' state='"); WriteXML(oDP.State());
-! value nimmt den von der ccu gecachten wert, moeglicherweise nicht korrekt. Ggf. bei einigen geraeten immer abfragen
+                                ! state fragt den aktuellen status des sensors/aktors ab, dauert lange
+								if (show_internal == 1) {
+                                        Write("' state='"); WriteXML(oDP.State());
+                                }
+                                ! value nimmt den von der ccu gecachten wert, moeglicherweise nicht korrekt. Ggf. bei einigen geraeten immer abfragen
 								Write("' value='"); WriteXML(oDP.Value());
 								Write("' valuetype='" # oDP.ValueType());
 								Write("' timestamp='" # oDP.Timestamp().ToInteger());
@@ -130,7 +136,10 @@ string sDPId;
 		}
 	}
 
-  }]
+  }
+
+  array set res [rega_script $comm]
+
   puts -nonewline $res(STDOUT)
 }
 puts -nonewline {</stateList>}
