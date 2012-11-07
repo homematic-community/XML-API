@@ -43,7 +43,9 @@ append hm_script {;
 		Write("' max='"); WriteXML( oSysVar.ValueMax());
 		Write("' unit='"); WriteXML( oSysVar.ValueUnit());
 		Write("' type='" # oSysVar.ValueType() # "' subtype='" # oSysVar.ValueSubType());
-		Write("' timestamp='" # oSysVar.Timestamp().ToInteger());
+		Write("' logged='"); WriteXML( oSysVar.DPArchive());
+        Write("' visible='"); WriteXML( oSysVar.Visible());
+        Write("' timestamp='" # oSysVar.Timestamp().ToInteger());
 		Write("'/>");
 	}
 
