@@ -9,9 +9,11 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.2-hq8
+* Fehler in sysvarlist.cgi behoben, 3 Attribute haben gefehlt. (Danke Monty)
 
 1.2-hq7
-* Datenpunktausgabe in favoritelist.cgi arbeitet nun wie erwartet (gleiches verhalten wie state.cgi).
+* Datenpunktausgabe in favoritelist.cgi arbeitet nun wie erwartet (gleiches verhalten wie state.cgi, danke Monty).
 
 1.2-hq6
 * exec.cgi (von http://homematic-forum.de/forum/viewtopic.php?f=31&t=7014) hinzugefügt. Liefert zwar json und kein xml - passt aber thematisch imho trotzdem dazu
