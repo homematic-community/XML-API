@@ -11,7 +11,7 @@ Changelog
 =========
 
 1.2-hq7
-* Fehler in favoritelist.cgi behoben - es werden nun alle Datenpunk-Typen ausser ON_TIME und INHIBIT zurückgegeben.
+* Datenpunktausgabe in favoritelist.cgi arbeitet nun wie erwartet (gleiches verhalten wie state.cgi).
 
 1.2-hq6
 * exec.cgi (von http://homematic-forum.de/forum/viewtopic.php?f=31&t=7014) hinzugefügt. Liefert zwar json und kein xml - passt aber thematisch imho trotzdem dazu
