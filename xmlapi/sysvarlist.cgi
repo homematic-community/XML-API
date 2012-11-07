@@ -34,8 +34,8 @@ append hm_script {;
 		Write(" name='"); WriteXML( oSysVar.Name() );
 		Write("' variable='"); WriteXML( oSysVar.Variable());
 		Write("' value='"); WriteXML( oSysVar.Value());
-		if (sShowText == "true") {
-			Write("' value_list='"); WriteXML( oSysVar.ValueList());
+		Write("' value_list='"); WriteXML( oSysVar.ValueList());
+        if (sShowText == "true") {
 			Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
 		}
 		Write("' ise_id='" # oSysVar.ID() );
