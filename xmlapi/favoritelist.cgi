@@ -65,7 +65,7 @@ append hm_script {
 						if (oDP) {
 							string dp = oDP.Name().StrValueByIndex(".", 2);
 
-							if( (dp == "STATE") || (dp == "LEVEL") || (dp == "PRESS_LONG") || (dp == "PRESS_SHORT") ) {
+							if ((dp != "ON_TIME") && (dp != "INHIBIT")) {
 								Write("<datapoint");
 								Write(" name='"); WriteXML(oDP.Name());
 								Write("' ise_id='" # sDPId );
