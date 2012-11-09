@@ -9,6 +9,10 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+
+1.2-hq9
+* neues cgi scripterrors.cgi hinzugefügt. Gibt aus den letzten 10 Zeilen der /var/log/messages Homematic-Script Fehlermeldungen aus
+
 1.2-hq8
 * Fehler in sysvarlist.cgi behoben, 3 Attribute haben gefehlt. (Danke Monty)
 
