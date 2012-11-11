@@ -10,6 +10,10 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+1.2-hq10
+* Ausgabe von version.cgi von 1.3 auf 1.2 zurück-geändert um Probleme mit Homedroid zu vermeiden
+* statechange.cgi: Anführungszeichen hinzugefügt damit auch Varialben vom Typ Zeichenkette gesetzt werden können
+
 1.2-hq9
 * neues cgi scripterrors.cgi hinzugefügt. Gibt aus den letzten 10 Zeilen der /var/log/messages Homematic-Script Fehlermeldungen aus
 

@@ -28,6 +28,7 @@ append hm_script $text
 
 append hm_script {;
 
+
 	foreach (sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
 		oSysVar     = dom.GetObject(sSysVarId);
 		Write("<systemVariable");
@@ -35,10 +36,10 @@ append hm_script {;
 		Write("' variable='"); WriteXML( oSysVar.Variable());
 		Write("' value='"); WriteXML( oSysVar.Value());
 		Write("' value_list='"); WriteXML( oSysVar.ValueList());
+		Write("' ise_id='" # oSysVar.ID() );
         if (sShowText == "true") {
 			Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
 		}
-		Write("' ise_id='" # oSysVar.ID() );
 		Write("' min='"); WriteXML( oSysVar.ValueMin());
 		Write("' max='"); WriteXML( oSysVar.ValueMax());
 		Write("' unit='"); WriteXML( oSysVar.ValueUnit());
