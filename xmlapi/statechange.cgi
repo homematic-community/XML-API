@@ -19,7 +19,7 @@ Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><result>}
 
-array set res [rega_script "Write(dom.GetObject($ise_id).State($new_value));"]
+array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
 if {$res(STDOUT) != "null"} {
   puts -nonewline "<changed id=\"$ise_id\"/>";
   } else {
