@@ -81,6 +81,7 @@ array set res [rega_script {
 								! value nimmt den von der ccu gecachten wert, moeglicherweise nicht korrekt. Ggf. bei einigen geraeten immer abfragen
 								Write("' value='"); WriteXML(oDP.Value());
 								Write("' valuetype='" # oDP.ValueType());
+								Write("' valueunit='" # oDP.ValueUnit());
 								Write("' timestamp='" # oDP.Timestamp().ToInteger());
 								Write("' />");
 							}

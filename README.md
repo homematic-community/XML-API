@@ -9,6 +9,9 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.3
+* Datenpunktausgabe "unit" in state.cgi und statelist.cgi hinzugefügt
+* scripterrors.cgi - Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen
 
 1.2-hq10
 * Ausgabe von version.cgi von 1.3 auf 1.2 zurück-geändert um Probleme mit Homedroid zu vermeiden
