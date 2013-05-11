@@ -32,18 +32,23 @@ append hm_script {;
 	oSysVar = dom.GetObject(sSysVarId);
 	Write("<systemVariable");
 	Write(" name='"); WriteXML( oSysVar.Name() );
-	Write("' variable='"); WriteXML( oSysVar.Variable());
-	Write("' value='"); WriteXML( oSysVar.Value());
-	if (sShowText == "true") {
-		Write("' value_list='"); WriteXML( oSysVar.ValueList());
-		Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
-	}
-	Write("' ise_id='" # oSysVar.ID() );
-	Write("' min='"); WriteXML( oSysVar.ValueMin());
-	Write("' max='"); WriteXML( oSysVar.ValueMax());
-	Write("' unit='"); WriteXML( oSysVar.ValueUnit());
-	Write("' type='" # oSysVar.ValueType() # "' subtype='" # oSysVar.ValueSubType());
-	Write("' timestamp='" # oSysVar.Timestamp().ToInteger());
+        Write("' ise_id='"); WriteXML( oSysVar.ID());
+        Write("' variable='"); WriteXML( oSysVar.Variable());
+        Write("' value='"); WriteXML( oSysVar.Value());
+        if (sShowText == "true") {
+                Write("' value_list='"); WriteXML( oSysVar.ValueList());
+                Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
+        }
+        if (oSysVar.ValueType() == 2) {
+                Write("' value_name_0='"); WriteXML( oSysVar.ValueName0());
+                Write("' value_name_1='"); WriteXML( oSysVar.ValueName1());
+        }
+        Write("' min='"); WriteXML( oSysVar.ValueMin());
+        Write("' max='"); WriteXML( oSysVar.ValueMax());
+        Write("' unit='"); WriteXML( oSysVar.ValueUnit());
+        Write("' type='"); WriteXML( oSysVar.ValueType());
+        Write("' subtype='"); WriteXML( oSysVar.ValueSubType());
+        Write("' timestamp='"); WriteXML( oSysVar.Timestamp().ToInteger());
 	Write("'/>");	
 }
 
