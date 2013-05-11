@@ -9,6 +9,9 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.4
+* Datenpunktausgabe "value_name_0 und value_name_1" in sysvar.cgi und sysvarlist.cgi hinzugefügt
+
 1.3
 * Datenpunktausgabe "unit" in state.cgi und statelist.cgi hinzugefügt
 * scripterrors.cgi - Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen
