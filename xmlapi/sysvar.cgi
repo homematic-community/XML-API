@@ -30,26 +30,33 @@ append hm_script {;
 append hm_script $ise_id
 append hm_script {;
 	oSysVar = dom.GetObject(sSysVarId);
-	Write("<systemVariable");
-	Write(" name='"); WriteXML( oSysVar.Name() );
-        Write("' ise_id='"); WriteXML( oSysVar.ID());
+        Write("<systemVariable");
+        Write(" name='"); WriteXML( oSysVar.Name() );
         Write("' variable='"); WriteXML( oSysVar.Variable());
         Write("' value='"); WriteXML( oSysVar.Value());
         if (sShowText == "true") {
-                Write("' value_list='"); WriteXML( oSysVar.ValueList());
+                if (oSysVar.ValueType() == 16) {
+                        Write("' value_list='"); WriteXML( oSysVar.ValueList());
+                } else {
+                        Write("' value_list='");
+                }
                 Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
         }
-        if (oSysVar.ValueType() == 2) {
-                Write("' value_name_0='"); WriteXML( oSysVar.ValueName0());
-                Write("' value_name_1='"); WriteXML( oSysVar.ValueName1());
-        }
+        Write("' ise_id='"); WriteXML( oSysVar.ID());
         Write("' min='"); WriteXML( oSysVar.ValueMin());
         Write("' max='"); WriteXML( oSysVar.ValueMax());
         Write("' unit='"); WriteXML( oSysVar.ValueUnit());
         Write("' type='"); WriteXML( oSysVar.ValueType());
         Write("' subtype='"); WriteXML( oSysVar.ValueSubType());
         Write("' timestamp='"); WriteXML( oSysVar.Timestamp().ToInteger());
-	Write("'/>");	
+        if (oSysVar.ValueType() == 2) {
+                Write("' value_name_0='"); WriteXML( oSysVar.ValueName0());
+                Write("' value_name_1='"); WriteXML( oSysVar.ValueName1());
+        } else {
+                Write("' value_name_0='");
+                Write("' value_name_1='");
+        }
+        Write("'/>");	
 }
 
 array set res [rega_script $hm_script]
