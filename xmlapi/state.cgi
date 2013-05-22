@@ -74,7 +74,7 @@ array set res [rega_script {
 							if( (dp != "ON_TIME") && (dp != "INHIBIT") ) {
 								Write("<datapoint");
 								Write(" name='"); WriteXML(oDP.Name());
-								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2))
+								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2));
 								Write("' ise_id='" # sDPId );
 								! state fragt den aktuellen status des sensors/aktors ab, dauert lange
 								!Write("' state='"); WriteXML(oDP.State());
