@@ -1,18 +1,5 @@
 #!/bin/tclsh
 
-#  !*****************************************************************************
-#  !* statelist.cgi
-#  !* Stati aller kanaele und timestamp der letzten aktualisierung
-#  !*
-#  !* Autor      : Dirk Szymanski
-#  !* Erstellt am: gleich, kleinen moment noch
-#  !* 
-#  !* 11.2012 hobbyquaker: cgi.tcl rausgeworfen, Allow-Origin Header
-#  !* 	hinzugefügt. Parameter show_internal=1 aktiviert ausgabe des
-#  !*   datenpunkt-attributs state.
-#  !*
-#  !*****************************************************************************
-
 load tclrega.so
 puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
@@ -115,7 +102,7 @@ string sDPId;
 							{
 								Write("<datapoint");
 								Write(" name='"); WriteXML(oDP.Name());
-								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2))
+								Write("' type='"); WriteXML(oDP.Name().StrValueByIndex(".", 2));
 								Write("' ise_id='" # sDPId );
                                 ! state fragt den aktuellen status des sensors/aktors ab, dauert lange
 								if (show_internal == 1) {
