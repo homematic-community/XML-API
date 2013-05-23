@@ -1,12 +1,27 @@
 #!/bin/sh
 MTDBLOCK_STORAGE=/dev/mtdblock2
+
 mkdir -p /mnt
-mount -t yaffs $MTDBLOCK_STORAGE /mnt
+
+if ["$1" == ""]; then
+        echo "CCU1"
+        mount -t yaffs $MTDBLOCK_STORAGE /mnt
+else
+        echo "CCU2"
+        mount -t ubifs ubi0:root /mnt
+fi
+
 cp -a xmlapi /mnt/www/config
 umount /mnt
-echo Rebooting...
-lcdtool "Reboot...             "
-lcdtool -a 0x40 -t bin 00
-echo "x" > /dev/watchdog
-reboot
-while true ; do true ;  done
+
+if ["$1" == ""]; then
+        echo "CCU1"
+        lcdtool "Reboot...             "
+        lcdtool -a 0x40 -t bin 00
+        echo "x" > /dev/watchdog
+        reboot
+        while true ; do true ;  done
+else
+        echo "CCU2"
+        # CCU2 always reboot after Addon/Firmware Update
+fi
