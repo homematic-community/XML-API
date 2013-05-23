@@ -98,7 +98,7 @@ string sDPId;
 						{
 							string dp = oDP.Name().StrValueByIndex(".", 2);
 
-							if( (dp != "ON_TIME") && (dp != "INHIBIT") )
+							if( (dp != "ON_TIME") && (dp != "INHIBIT") && (dp != "CMD_RETS") && (dp != "CMD_RETL") && (dp != "CMD_SETS") && (dp != "CMD_SETL") )
 							{
 								Write("<datapoint");
 								Write(" name='"); WriteXML(oDP.Name());
