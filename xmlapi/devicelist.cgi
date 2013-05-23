@@ -9,7 +9,7 @@ Access-Control-Allow-Origin: *
   array set res [rega_script {
   !*****************************************************************************
   !* DeviceList.xml
-  !* Gerätelist mit vollständiger Kanalliste.
+  !* Gerï¿½telist mit vollstï¿½ndiger Kanalliste.
   !*
   !* Autor      : Falk Werner
   !* Erstellt am: 23.05.2008
@@ -101,7 +101,7 @@ Access-Control-Allow-Origin: *
 !            Write(" readable='" # bChnReadable # "'");
 !            Write(" writable='" # bChnWritable # "'");
 !            Write(" eventable='" # bChnEventable # "'");
-            Write(" />")
+            Write(" />");
           }
         }
      
