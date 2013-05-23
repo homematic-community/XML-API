@@ -7,14 +7,6 @@ Access-Control-Allow-Origin: *
   
 
   array set res [rega_script {
-  !*****************************************************************************
-  !* DeviceList.xml
-  !* Ger�telist mit vollst�ndiger Kanalliste.
-  !*
-  !* Autor      : Falk Werner
-  !* Erstellt am: 23.05.2008
-  !*
-  !*****************************************************************************
 
     integer DIR_SENDER      = 1;
     integer DIR_RECEIVER    = 2;
