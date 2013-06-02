@@ -9,6 +9,10 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.5
+* Bugfix
+* Anpassung für CCU2
+
 1.4
 * Datenpunktausgabe "value_name_0 und value_name_1" in sysvar.cgi und sysvarlist.cgi hinzugefügt
 
