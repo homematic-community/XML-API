@@ -9,6 +9,12 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+
+1.6
+* state.cgi - Abfrage meherer IDs hinzugef�gt (z.Bsp.: state.cgi?device_id=12796,1245789 )
+* neues cgi systemNotification.cgi - Gibt die System Meldungen aus
+* neues cgi systemNotificationClear.cgi -	L�scht die vorhandenen System Meldungen
+
 1.5
 * Bugfix
 * Anpassung für CCU2
@@ -22,7 +28,7 @@ Changelog
 
 1.2-hq10
 * Ausgabe von version.cgi von 1.3 auf 1.2 zurück-geändert um Probleme mit Homedroid zu vermeiden
-* statechange.cgi: Anführungszeichen hinzugefügt damit auch Varialben vom Typ Zeichenkette gesetzt werden können
+* statechange.cgi - Anführungszeichen hinzugefügt damit auch Varialben vom Typ Zeichenkette gesetzt werden können
 
 1.2-hq9
 * neues cgi scripterrors.cgi hinzugefügt. Gibt aus den letzten 10 Zeilen der /var/log/messages Homematic-Script Fehlermeldungen aus
