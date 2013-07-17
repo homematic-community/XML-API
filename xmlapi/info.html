@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 </head>
 <body>
-<h2>XML-API Version 1.5</h2>
+<h2>XML-API Version 1.6</h2>
 <table>
 	<tr><td><a href="./version.cgi">version.cgi</a></td><td>Version der XML-API</td></tr>
 	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Geraete mit Kanaelen. Enthaelt u.a. die Namen, Seriennummern, Geraetetypen und ID's</td></tr>
@@ -18,10 +18,12 @@
 		<b>Parameter:</b> sysvarlist.cgi?text=true - gibt den Text des aktuellen Werts in den Attributen value_text aus.			
 	</td></tr>
 	<tr><td><a href="./sysvar.cgi">sysvar.cgi</a></td><td>Eine einzelne Systemvariablen mit Werten.<br><b>Parameter</b>: ise_id</td></tr>
-	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes Geraete mit Kanaelen und aktuellen Werten zurueck (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurueck) )</td></tr>
+	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes oder mehrere ("123,456,...") Geraete mit Kanaelen und aktuellen Werten zurueck (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurueck) )</td></tr>
 	<tr><td><a href="./statelist.cgi">statelist.cgi</a></td><td>Liste alle Geraete mit Kanaelen und aktuellen Werten
     		<br><b>Parameter:</b> ise_id, show_internal (gibt zusaetzlich das Attribut state aus)</td></tr>
 	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>aendern eines Kanal-Zustandes mit der angegebenen ID<br><b>Parameter</b>: z.B. statechange.cgi?ise_id=1234&new_value=0.20)</td></tr>
+	<tr><td><a href="./systemNotification.cgi">systemNotification.cgi</a></td><td>Gibt die System Meldungen aus</td></tr>
+	<tr><td><a href="./systemNotificationClear.cgi">systemNotificationClear.cgi</a></td><td>Löscht die vorhandenen System Meldungen</td></tr>
 	<tr><td><a href="./programlist.cgi">programlist.cgi</a></td><td>Liste aller Programme</td></tr>
 	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus<br><b>Parameter:</b> protocol.cgi?clear=1 loescht das Systemprotokoll</td></tr>
 	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm mit der angegebenen ID (z.Bsp.: runprogram.cgi?program_id=1234)</td></tr>
