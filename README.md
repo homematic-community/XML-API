@@ -11,9 +11,9 @@ Changelog
 =========
 
 1.6
-* state.cgi - Abfrage meherer IDs hinzugefügt (z.Bsp.: state.cgi?device_id=12796,1245789 )
+* state.cgi - Abfrage mehrerer IDs hinzugefï¿½gt (z.Bsp.: state.cgi?device_id=12796,1245789 )
 * neues cgi systemNotification.cgi - Gibt die System Meldungen aus
-* neues cgi systemNotificationClear.cgi -	Löscht die vorhandenen System Meldungen
+* neues cgi systemNotificationClear.cgi -	Lï¿½scht die vorhandenen System Meldungen
 
 1.5
 * Bugfix
