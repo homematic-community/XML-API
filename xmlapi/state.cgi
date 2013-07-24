@@ -28,32 +28,19 @@ array set res [rega_script {
 	string sDPId;
 
 	if (sDatapointIds.Length() > 0 ) {
-	
-		integer datapointCounter = 0;
-		string datapointCounterI;
-		foreach(datapointCounterI, sDatapointIds.Split(",")){
-			datapointCounter = datapointCounter + 1;
-		}
-  
+	  
 		string sDatapointId;
 		foreach(sDatapointId, sDatapointIds.Split(",")) {	
-			
-			if (datapointCounter == 1) {
-			
-				object oDatapoint = dom.GetObject(sDatapointId);
-              			if (oDatapoint.IsTypeOf(OT_DP)){
-                  			WriteLine(oDatapoint.Value());
-              			}
-           		 } else {
-             			 object oDatapoint = dom.GetObject(sDatapointId);
-             			 if (oDatapoint.IsTypeOf(OT_DP)){
-              				Write("<datapoint ise_id='");
-               				WriteXML(sDatapointId);
-                			Write("' value='"); 
-                			WriteXML(oDatapoint.Value());
-                			Write("'/>");
-              			} 
-            		}
+					
+			object oDatapoint = dom.GetObject(sDatapointId);
+        	   	if (oDatapoint.IsTypeOf(OT_DP)){
+           			Write("<datapoint ise_id='");
+           			WriteXML(sDatapointId);
+	               		Write("' value='"); 
+        	       		WriteXML(oDatapoint.Value());
+               			Write("'/>");
+           		} 
+        
 		}
 		
 	} else {
