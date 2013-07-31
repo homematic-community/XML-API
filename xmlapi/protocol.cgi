@@ -27,6 +27,7 @@ append hm_script {
     string sCollectedNames = "";
     string sCollectedValues = "";
     string sCollectedDateTimes = "";
+    string sCollectedTimestamp = "";
     string s;
     integer iStart = }
 append hm_script $start
@@ -58,7 +59,8 @@ append hm_script {
       string sDatapointId = s.StrValueByIndex(";",1);
       string sRecordedValue = s.StrValueByIndex(";",2);
       string sDateTime = s.StrValueByIndex(";",3);
-     
+      string sTimestamp = s.StrValueByIndex(";",3).Timestamp().ToTime().ToInteger();
+	    
       string sDatapointName = "";
       object oHistDP = dom.GetObject( sDatapointId );
       if( oHistDP )
@@ -79,7 +81,7 @@ append hm_script {
          
           if( iLastGroupIndex != iGroupIndex )
           {
-              drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />\n";
+              drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" timestamp=\"" # sCollectedTimestamp # "\" />\n";
             sCollectedNames = "";
             sCollectedValues = "";
             iLastGroupIndex = iGroupIndex;
@@ -93,7 +95,8 @@ append hm_script {
          
           sCollectedNames = sDatapointName;
           sCollectedDateTimes = sDateTime;
-
+	  sCollectedTimestamp = sTimestamp;
+		
           if( !sCollectedValues.Length() )
           {
             sCollectedValues = sRecordedValue;
@@ -109,7 +112,7 @@ append hm_script {
     }
     if( sCollectedValues.Length() )
     {
-      drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" />";
+      drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" timestamp=\"" # sCollectedTimestamp # "\" />";
 
     }
 
