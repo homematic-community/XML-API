@@ -9,6 +9,10 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.7
+* statechange.cgi - encoden von Hexadezimalwerten
+* protocol.cgi - Timestamp hinzugefügt
+* state.cgi - einzelne Datenpunktausgabe (<state>...</state>) entfernt
 
 1.6
 * state.cgi - Abfrage Abfrage von mehreren IDs hinzugefügt (z.Bsp.: state.cgi?device_id=12796,1245789 )
