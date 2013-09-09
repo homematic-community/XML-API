@@ -21,6 +21,8 @@ foreach (sProgramId, dom.GetObject(ID_PROGRAMS).EnumUsedIDs())
 		WriteXML( oProgram.Name() );
 		Write("' description='");
 		WriteXML(oProgram.PrgInfo());
+		Write("' visible='");
+                WriteXML(oProgram.Visible());
 		Write("'/>");
 	}
 }
