@@ -11,6 +11,7 @@ Changelog
 =========
 1.8
 * programlist.cgi  - visible hinzugefügt
+* statelist.cgi - channel visible hinzugefügt
 
 1.7
 * statechange.cgi - encoden von Hexadezimalwerten
