@@ -89,13 +89,25 @@ string sDPId;
 
 					Write("<channel name='");
 					WriteXML( oChannel.Name() );
-					Write("' ise_id='" # sChnId);
+					Write("' ise_id='" # sChnId);					
+					
 					if (oChannel.Name().Find(":0") > 0) {
 						Write("' visible='" );
+						Write("' operate='");
+						
 					} else {
 						Write("' visible='"); 
 						WriteXML(oChannel.Visible());
+						
+						Write("' operate='");                        
+						object o_sysVar = dom.GetObject(sChnId); 	
+						if( o_sysVar.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) {
+							Write("true");
+						} else {
+							Write("false");		
+						} 
 					}
+					
 
 					Write("'>");
 					
