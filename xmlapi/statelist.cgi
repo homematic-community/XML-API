@@ -121,6 +121,7 @@ string sDPId;
 								Write("' valuetype='" # oDP.ValueType());
 								Write("' valueunit='" # oDP.ValueUnit());
 								Write("' timestamp='" # oDP.Timestamp().ToInteger());
+								Write("' operations='" # oDP.Operations());
 								Write("' />");
 							}
 						}
