@@ -9,6 +9,9 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+1.8
+* programlist.cgi  - visible hinzugefügt
+
 1.7
 * statechange.cgi - encoden von Hexadezimalwerten
 * protocol.cgi - Timestamp hinzugefügt
