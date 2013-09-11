@@ -89,8 +89,16 @@ string sDPId;
 
 					Write("<channel name='");
 					WriteXML( oChannel.Name() );
-					Write("' ise_id='" # sChnId # "'>");
+					Write("' ise_id='" # sChnId);
+					if (oChannel.Name().Find(":0") > 0) {
+						Write("' visible='" );
+					} else {
+						Write("' visible='"); 
+						WriteXML(oChannel.Visible());
+					}
 
+					Write("'>");
+					
 					foreach(sDPId, oChannel.DPs().EnumUsedIDs())
 					{
 						object oDP = dom.GetObject(sDPId);
