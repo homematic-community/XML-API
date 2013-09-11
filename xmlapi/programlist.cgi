@@ -22,7 +22,17 @@ foreach (sProgramId, dom.GetObject(ID_PROGRAMS).EnumUsedIDs())
 		Write("' description='");
 		WriteXML(oProgram.PrgInfo());
 		Write("' visible='");
-                WriteXML(oProgram.Visible());
+        WriteXML(oProgram.Visible());
+        Write("' operate='");
+                        
+		object o_sysVar = dom.GetObject(sProgramId);
+ 	
+		if( o_sysVar.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) {
+			Write("true");
+		} else {
+			Write("false");		
+		}        
+        
 		Write("'/>");
 	}
 }
