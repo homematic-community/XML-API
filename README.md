@@ -10,8 +10,8 @@ Lizensiert unter GPL v3
 Changelog
 =========
 1.8
-* programlist.cgi  - visible hinzugefügt
-* statelist.cgi - channel visible und operations hinzugefügt
+* programlist.cgi  - operate und visible hinzugefügt
+* statelist.cgi - channel visible, operate und operations hinzugefügt
 
 1.7
 * statechange.cgi - encoden von Hexadezimalwerten
