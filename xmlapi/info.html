@@ -5,10 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 </head>
 <body>
-<h2>XML-API Version 1.8</h2>
+<h2>XML-API Version 1.9</h2>
 <table>
 	<tr><td><a href="./version.cgi">version.cgi</a></td><td>Version der XML-API</td></tr>
-	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Geraete mit Kanaelen. Enthaelt u.a. die Namen, Seriennummern, Geraetetypen und ID's</td></tr>
+	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Geraete mit Kanaelen. Enthaelt u.a. die Namen, Seriennummern, Geraetetypen und ID's
+			<br><b>Parameter:</b> show_internal=1 (gibt zusaetzlich die internen Kanaele aus)</td></tr>
 	<tr><td><a href="./functionlist.cgi">functionlist.cgi</a></td><td>Liste aller Gewerke mit Kanaelen</td></tr>
 	<tr><td><a href="./favoritelist.cgi">favoritelist.cgi</a></td><td>Liste aller Favoriten und Usern
     		<br><b>Paramter:</b> favoritelist.cgi&show_datapoint gibt zusaetzlich die Attribute datapoint_id und datapoint_type aus.    			
@@ -20,7 +21,7 @@
 	<tr><td><a href="./sysvar.cgi">sysvar.cgi</a></td><td>Eine einzelne Systemvariablen mit Werten.<br><b>Parameter</b>: ise_id</td></tr>
 	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes oder mehrere ("123,456,...") Geraete mit Kanaelen und aktuellen Werten zurueck (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurueck) )</td></tr>
 	<tr><td><a href="./statelist.cgi">statelist.cgi</a></td><td>Liste alle Geraete mit Kanaelen und aktuellen Werten
-    		<br><b>Parameter:</b> ise_id, show_internal (gibt zusaetzlich das Attribut state aus)</td></tr>
+    		<br><b>Parameter:</b> ise_id, show_internal=1 (gibt zusaetzlich das Attribut state aus)</td></tr>
 	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>aendern eines Kanal-Zustandes mit der angegebenen ID<br><b>Parameter</b>: z.B. statechange.cgi?ise_id=1234&new_value=0.20)</td></tr>
 	<tr><td><a href="./systemNotification.cgi">systemNotification.cgi</a></td><td>Gibt die System Meldungen aus</td></tr>
 	<tr><td><a href="./systemNotificationClear.cgi">systemNotificationClear.cgi</a></td><td>L�scht die vorhandenen System Meldungen</td></tr>
