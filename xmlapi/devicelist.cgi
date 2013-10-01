@@ -5,9 +5,22 @@ Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><deviceList>}
   
+set show_internal ""
 
-  array set res [rega_script {
+catch {
+	set input $env(QUERY_STRING)
+	set pairs [split $input &]
+	foreach pair $pairs {
+		if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
+   			set $varname $val
+   		}
+	}
+}
 
+array set res [rega_script {
+
+	string show_internal = "} $show_internal {";
+	
     integer DIR_SENDER      = 1;
     integer DIR_RECEIVER    = 2;
 !    string  TYPE_VIRTUAL    = "29";
@@ -39,8 +52,19 @@ Access-Control-Allow-Origin: *
         {
         
           object oChannel = dom.GetObject(sChnId);
-          if (false == oChannel.Internal())
-          {
+          
+          boolean show = false;
+          
+          if (false == oChannel.Internal() ) {
+          	show = true;
+          }
+          	
+          if ( show_internal == "1"){
+          	show = true;
+          }          
+          
+          if (show == true){
+          	
             integer iChnDir     = oChannel.ChnDirection();
             string  sChnDir     = "UNKNOWN";
             if (DIR_SENDER   == iChnDir) { sChnDir = "SENDER";   }
@@ -85,7 +109,13 @@ Access-Control-Allow-Origin: *
             Write(" aes_available='" # bChnAESAvailable # "'");
             Write(" transmission_mode='" # sChnMode # "'");
 !            Write(" archive='" # oChannel.ChnArchive() # "'");
-            Write(" visible='" # oChannel.Visible() # "'");
+            
+            if (false == oChannel.Internal()) {
+            	Write(" visible='" # oChannel.Visible() # "'");
+            } else {
+            	Write(" visible=''");
+            }
+            
             Write(" ready_config='" # oChannel.ReadyConfig() # "'");            
 !            Write(" link_count='" # iChnLinkCount # "'");
 !            Write(" program_count='" # iChnProgramCount # "'");
@@ -93,7 +123,20 @@ Access-Control-Allow-Origin: *
 !            Write(" readable='" # bChnReadable # "'");
 !            Write(" writable='" # bChnWritable # "'");
 !            Write(" eventable='" # bChnEventable # "'");
-            Write(" />");
+
+			if (false == oChannel.Internal()) {
+				Write(" operate='");
+				if( oChannel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) {
+					Write("true");
+				} else {
+					Write("false");		
+				} 			                     		
+			} else {
+				Write(" operate='");
+			}	
+					 							
+            Write("' />");
+            
           }
         }
      
