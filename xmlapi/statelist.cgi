@@ -91,7 +91,7 @@ string sDPId;
 					WriteXML( oChannel.Name() );
 					Write("' ise_id='" # sChnId);					
 					
-					if (oChannel.Name().Find(":0") > 0) {
+					if (oChannel.Internal()) {
 						Write("' visible='" );
 						Write("' operate='");
 						
