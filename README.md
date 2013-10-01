@@ -9,6 +9,10 @@ Lizensiert unter GPL v3
 
 Changelog
 =========
+
+1.9
+* devicelist.cgi - operate und show_internal hinzugefügt
+
 1.8
 * programlist.cgi  - operate und visible hinzugefügt
 * statelist.cgi - channel visible, operate und operations hinzugefügt
