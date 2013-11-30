@@ -17,6 +17,7 @@ catch {
  }
 }
 
+
 append hm_script {
 
 	object oSysVar;
@@ -32,7 +33,19 @@ append hm_script {;
 	foreach (sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
 		oSysVar     = dom.GetObject(sSysVarId);
                 Write("<systemVariable");
-                Write(" name='"); WriteXML( oSysVar.Name() );
+                
+                string replaceTxt = oSysVar.Name();
+				string replaceTxtNeu = "";
+				string replaceTeilStr;
+				foreach(replaceTeilStr, replaceTxt.Split(">")) {
+ 					if (replaceTxtNeu == ""){
+						replaceTxtNeu = replaceTeilStr;
+					}else{
+						replaceTxtNeu = replaceTxtNeu # "&gt;" # replaceTeilStr;
+					}
+				}
+                
+                Write(" name='"); WriteXML( replaceTxtNeu );               
                 Write("' variable='"); WriteXML( oSysVar.Variable());
                 Write("' value='"); WriteXML( oSysVar.Value());
                 if (oSysVar.ValueType() == 16) {
