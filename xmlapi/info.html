@@ -3,33 +3,49 @@
 <head>
 <title>XML-API</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<style type="text/css">  
+	a {color: blue;}
+	table { width:100%; }
+  	td, th { border: 1px solid;}  	
+</style>
 </head>
 <body>
-<h2>XML-API Version 1.9</h2>
-<table>
+<table cellpadding="5" cellspacing="5">
+	<tr>
+		<th colspan="2">XML-API Version 1.10</th>
+	</tr>
 	<tr><td><a href="./version.cgi">version.cgi</a></td><td>Version der XML-API</td></tr>
-	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Geraete mit Kanaelen. Enthaelt u.a. die Namen, Seriennummern, Geraetetypen und ID's
-			<br><b>Parameter:</b> show_internal=1 (gibt zusaetzlich die internen Kanaele aus)</td></tr>
-	<tr><td><a href="./functionlist.cgi">functionlist.cgi</a></td><td>Liste aller Gewerke mit Kanaelen</td></tr>
+	<tr><td><a href="./devicelist.cgi">devicelist.cgi</a></td><td>Liste aller Ger&auml;te mit Kan&auml;len. Enth&auml;lt u.a. die Namen, Seriennummern, Ger&auml;tetypen und ID's
+			<br><b>Parameter:</b> show_internal=1 (gibt zus&auml;tzlich die internen Kan&auml;le aus)</td></tr>
+	<tr><td><a href="./functionlist.cgi">functionlist.cgi</a></td><td>Liste aller Gewerke mit Kan&auml;len</td></tr>
 	<tr><td><a href="./favoritelist.cgi">favoritelist.cgi</a></td><td>Liste aller Favoriten und Usern
-    		<br><b>Paramter:</b> favoritelist.cgi&show_datapoint gibt zusaetzlich die Attribute datapoint_id und datapoint_type aus.    			
+    		<br><b>Paramter:</b> favoritelist.cgi&show_datapoint gibt zus&auml;tzlich die Attribute datapoint_id und datapoint_type aus.    			
     	</td></tr>
     	<tr><td><a href="./scripterrors.cgi">scripterrors.cgi</a></td><td>Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen</td></tr>
 	<tr><td><a href="./sysvarlist.cgi">sysvarlist.cgi</a></td><td>Liste alle Systemvariablen mit Werten<br>
 		<b>Parameter:</b> sysvarlist.cgi?text=true - gibt den Text des aktuellen Werts in den Attributen value_text aus.			
 	</td></tr>
 	<tr><td><a href="./sysvar.cgi">sysvar.cgi</a></td><td>Eine einzelne Systemvariablen mit Werten.<br><b>Parameter</b>: ise_id</td></tr>
-	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes oder mehrere ("123,456,...") Geraete mit Kanaelen und aktuellen Werten zurueck (z.Bsp.: state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurueck) )</td></tr>
-	<tr><td><a href="./statelist.cgi">statelist.cgi</a></td><td>Liste alle Geraete mit Kanaelen und aktuellen Werten
-    		<br><b>Parameter:</b> ise_id, show_internal=1 (gibt zusaetzlich das Attribut state aus)</td></tr>
-	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>aendern eines Kanal-Zustandes mit der angegebenen ID<br><b>Parameter</b>: z.B. statechange.cgi?ise_id=1234&new_value=0.20)</td></tr>
+	<tr><td><a href="./state.cgi">state.cgi</a></td><td>Gibt ein einzelnes oder mehrere ("123,456,...") Ger&auml;te mit Kan&auml;len und aktuellen Werten zurueck <br><b>Parameter</b>: z.Bsp. state.cgi?device_id=12796 | state.cgi?channel_id=12796 | state.cgi?datapoint_id=12839 (gibt nur Value() zurueck)</td></tr>
+	<tr>
+		<td>
+			<a href="./statelist.cgi">statelist.cgi</a>
+		</td>
+		<td>Liste alle Ger&auml;te mit Kan&auml;len und aktuellen Werten
+    		<br><b>Parameter:</b> ise_id, show_internal=1 (gibt zus&auml;tzlich das Attribut state aus)
+    		<br><br><b>HMW-RCV-50 BidCoS-Wir!</b>
+    		<br>Damit die virtuellen Wired Kanäle der CCU angezeigt werden, muss der Name "HMW-RCV-50 BidCoS-Wir" der Komponente auf der CCU in einen X Beliebigen umbenannt werden.</br>     		
+    	</td>    	
+    </tr>
+    		
+	<tr><td><a href="./statechange.cgi">statechange.cgi</a></td><td>&auml;ndern eines oder mehrere Kan&auml;le-Zust&auml;nde mit der angegebenen ID<br><b>Parameter</b>: z.B. statechange.cgi?ise_id=1234&new_value=0.20 oder statechange.cgi?ise_id=1234,1235&new_value=0.20,1.45</td></tr>
 	<tr><td><a href="./systemNotification.cgi">systemNotification.cgi</a></td><td>Gibt die System Meldungen aus</td></tr>
-	<tr><td><a href="./systemNotificationClear.cgi">systemNotificationClear.cgi</a></td><td>Lï¿½scht die vorhandenen System Meldungen</td></tr>
+	<tr><td><a href="./systemNotificationClear.cgi">systemNotificationClear.cgi</a></td><td>L&ouml;scht die vorhandenen System Meldungen</td></tr>
 	<tr><td><a href="./programlist.cgi">programlist.cgi</a></td><td>Liste aller Programme</td></tr>
-	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus<br><b>Parameter:</b> protocol.cgi?clear=1 loescht das Systemprotokoll</td></tr>
-	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm mit der angegebenen ID (z.Bsp.: runprogram.cgi?program_id=1234)</td></tr>
-	<tr><td><a href="./roomlist.cgi">roomlist.cgi</a></td><td>Liste aller Raeume mit Kanaelen</td></tr>
-    <tr><td><a href="./rssilist.cgi">rssilist.cgi</a></td><td>Liste aller Geraete mit Signalstaerke</td></tr>    
+	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus<br><b>Parameter:</b> protocol.cgi?clear=1 l&ouml;scht das Systemprotokoll</td></tr>
+	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm mit der angegebenen ID <br><b>Parameter</b>: z.B. runprogram.cgi?program_id=1234</td></tr>
+	<tr><td><a href="./roomlist.cgi">roomlist.cgi</a></td><td>Liste aller R&auml;ume mit Kan&auml;len</td></tr>
+    <tr><td><a href="./rssilist.cgi">rssilist.cgi</a></td><td>Liste aller Ger&auml;te mit Signalst&auml;rke</td></tr>    
 </table>
 </body>
 </html>
