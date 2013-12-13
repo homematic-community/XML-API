@@ -10,6 +10,10 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+1.10
+* statechange.cgi - aendern eines oder mehrere Kanaele-Zustaende
+* sysvar.cgi - Anpassung wegen Variablen Name "Timer>>"
+
 1.9
 * devicelist.cgi - operate und show_internal hinzugefügt
 
