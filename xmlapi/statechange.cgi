@@ -42,5 +42,6 @@ array set res [rega_script "Write(dom.GetObject([lindex $rec_ise_id $x]).State('
         puts -nonewline "<not_found />";
       }
 }
+
 puts -nonewline {</result>}
 
