@@ -29,13 +29,18 @@ regsub -all {%3C} $new_value {<} new_value
 regsub -all {%3E} $new_value {>} new_value
 regsub -all {%3F} $new_value {?} new_value
 
+set rec_new_value [split $new_value "\,"]
+set rec_ise_id [split $ise_id "\,"]
 
-array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
-if {$res(STDOUT) != "null"} {
-  puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" />";
-  } else {
-    puts -nonewline "<not_found />";
-  }
-#puts "<return value=\"$res(STDOUT)\" />";
+for {set x 0} {$x<[llength $rec_ise_id]} {incr x} {
+
+array set res [rega_script "Write(dom.GetObject([lindex $rec_ise_id $x]).State('[lindex $rec_new_value $x]'));"]
+
+    if {$res(STDOUT) != "null"} {
+      puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" />";
+      } else {
+        puts -nonewline "<not_found />";
+      }
+}
 puts -nonewline {</result>}
 
