@@ -10,6 +10,9 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+1.10 als Addon
+* Die XML-API kann jetzt als Addon/Zusatzsoftware über das WebUI installiert/deinstalliert werden 
+
 1.10
 * statechange.cgi - aendern eines oder mehrere Kanaele-Zustaende
 * sysvar.cgi - Anpassung wegen Variablen Name "Timer>>"
