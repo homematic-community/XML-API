@@ -19,6 +19,12 @@ info)
 	echo "Config-Url: $CONFIG_URL"
 	;;
 uninstall)
+	if [ -e /www/config/xmlapi ]
+        then
+		mount -o remount,rw /
+		rm -rf /www/config/xmlapi
+		mount -o remount,ro /
+	fi
 	rm -rf $WWW_DIR
 	;;
 esac
