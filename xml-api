@@ -6,7 +6,7 @@ CONFIG_URL=/addons/xmlapi/
 case "$1" in
 ""|start)
 	if [ ! -e /www/config/xmlapi ]
-        then
+	then
 		mount -o remount,rw /
 		ln -s $WWW_DIR /www/config/xmlapi
 		mount -o remount,ro /
@@ -19,6 +19,12 @@ info)
 	echo "Config-Url: $CONFIG_URL"
 	;;
 uninstall)
+	if [ -e /www/config/xmlapi ]
+	then
+		mount -o remount,rw /
+		rm -rf /www/config/xmlapi
+		mount -o remount,ro /
+	fi
 	rm -rf $WWW_DIR
 	;;
 esac
