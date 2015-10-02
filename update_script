@@ -1,46 +1,24 @@
 #!/bin/sh
 
-ADDON_DIR=/usr/local/addons/xmlapi
-RCD_DIR=/usr/local/etc/config/rc.d
-CONFIG_DIR=/usr/local/etc/config
-MTDBLOCK_STORAGE=/dev/mtdblock2
+mkdir -p /mnt
 
 if [ "$1" = "" ]; then
         echo "CCU1"
-        mkdir -p /mnt
-        mount -t yaffs $MTDBLOCK_STORAGE /mnt
-        cp -af /xmlapi /mnt/www/config
-        umount /mnt
+        mount -t yaffs /dev/mtdblock3 /mnt
 elif [ "$1" = "CCU2" ]; then
         echo "CCU2"
-        mkdir -p /mnt
-        mount -t ubifs ubi0:root /mnt
-        cp -af /xmlapi /mnt/www/config
-        umount /mnt
+        mount -t ubifs ubi1:user /mnt
 elif [ "$1" = "HM-RASPBERRYMATIC" ]; then
         echo "HM-RASPBERRYMATIC"
         mount /usr/local
-        mkdir -p $ADDON_DIR
-        chmod 755 $ADDON_DIR
-        mkdir -p $RCD_DIR
-        chmod 755 $RCD_DIR
-        # remove everything first
-        rm -rf $ADDON_DIR/*
-        # remove link to website
-        rm -f $CONFIG_DIR/addons/www/xmlapi
-        # copy addon
-        cp -af /xmlapi/* $ADDON_DIR
-        # fix user/group name
-        chown root:root $ADDON_DIR/*
-        # copy startup script
-        cp -af /xml-api $RCD_DIR
-        # fix user/group name
-        chown root:root $RCD_DIR/xml-api
-        # link to website
-        ln -sf $ADDON_DIR $CONFIG_DIR/addons/www/xmlapi
-        # unmount /usr/local again
-        umount /usr/local
+        mount --bind /usr/local /mnt
 fi
+
+cp -R ./xmlapi /mnt/etc/config/addons/www/
+cp ./xml-api /mnt/etc/config/rc.d/
+chmod +x /mnt/etc/config/rc.d/xml-api
+
+umount /mnt
 
 # sync filesystem to make sure all changes are written to disk
 sync
@@ -57,5 +35,6 @@ elif [ "$1" = "CCU2" ]; then
         # CCU2 always reboots after Addon/Firmware Update
 elif [ "$1" = "HM-RASPBERRYMATIC" ]; then
         echo "HM-RASPBERRYMATIC"
+        umount /usr/local
         # RASPBERRYMATIC always reboots after Addon/Firmware Update
 fi
