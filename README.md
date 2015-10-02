@@ -10,6 +10,9 @@ Lizensiert unter GPL v3
 Changelog
 =========
 
+1.11
+* Kompatibilität zu RaspberryMatic (HM-RASPBERRYMATIC) hergestellt.
+
 1.10 als Addon
 * Die XML-API kann jetzt als Addon/Zusatzsoftware über das WebUI installiert/deinstalliert werden 
 
