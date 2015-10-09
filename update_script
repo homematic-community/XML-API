@@ -30,9 +30,6 @@ cp VERSION $ADDON_DIR/
 cp xml-api $RCD_DIR/
 chmod +x $RCD_DIR/xml-api
 
-# unmount filesystem again
-umount /usr/local
-
 # sync filesystem to make sure all changes are written to disk
 sync
 

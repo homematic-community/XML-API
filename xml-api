@@ -13,13 +13,13 @@ case "$1" in
   ;;
 info)
   VER=`cat ${WWW_DIR}/VERSION`
-  echo "Info: <b>XML-API Addon</b><br>"
+  echo "Info: <b>XML-API CCU Addon</b><br>"
   echo "Info: <a href='https://github.com/hobbyquaker/XML-API'>https://github.com/hobbyquaker/XML-API</a>"
   echo "Version: $VER"
   echo "Name: XML-API"
   echo "Operations: uninstall"
   echo "Config-Url: $CONFIG_URL"
-  #echo "Update: http://raw.githubusercontent.com/hobbyquaker/XML-API/master/VERSION"
+  echo "Update: $CONFIG_URL/update-check.cgi"
   ;;
 uninstall)
   if [ -e /www/config/xmlapi ]; then
