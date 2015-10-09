@@ -5,20 +5,28 @@ CONFIG_URL=/addons/xmlapi/
 
 case "$1" in
 ""|start)
-	if [ ! -e /www/config/xmlapi ]
-        then
-		mount -o remount,rw /
-		ln -s $WWW_DIR /www/config/xmlapi
-		mount -o remount,ro /
-	fi
-	;;
+  if [ ! -e /www/config/xmlapi ]; then
+    mount -o remount,rw /
+    ln -s $WWW_DIR /www/config/xmlapi
+    mount -o remount,ro /
+  fi
+  ;;
 info)
-	echo "Version: 1.10"
-	echo "Name: XML-API"
-	echo "Operations: uninstall"
-	echo "Config-Url: $CONFIG_URL"
-	;;
+  VER=`cat ${WWW_DIR}/VERSION`
+  echo "Info: <b>XML-API CCU Addon</b><br>"
+  echo "Info: <a href='https://github.com/hobbyquaker/XML-API'>https://github.com/hobbyquaker/XML-API</a>"
+  echo "Version: $VER"
+  echo "Name: XML-API"
+  echo "Operations: uninstall"
+  echo "Config-Url: $CONFIG_URL"
+  echo "Update: $CONFIG_URL/update-check.cgi"
+  ;;
 uninstall)
-	rm -rf $WWW_DIR
-	;;
+  if [ -e /www/config/xmlapi ]; then
+    mount -o remount,rw /
+    rm -f /www/config/xmlapi
+    mount -o remount,ro /
+  fi
+  rm -rf $WWW_DIR
+  ;;
 esac

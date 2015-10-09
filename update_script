@@ -1,27 +1,49 @@
 #!/bin/sh
-MTDBLOCK_STORAGE=/dev/mtdblock2
 
-mkdir -p /mnt
+ADDON_DIR=/usr/local/etc/config/addons/www/xmlapi
+RCD_DIR=/usr/local/etc/config/rc.d
+CONFIG_DIR=/usr/local/etc/config
 
-if ["$1" == ""]; then
-        echo "CCU1"
-        mount -t yaffs $MTDBLOCK_STORAGE /mnt
-else
-        echo "CCU2"
-        mount -t ubifs ubi0:root /mnt
+if [ "$1" = "" ]; then
+  echo "CCU1"
+  lcdtool "installing XML-API      "
+  mount -t yaffs /dev/mtdblock3 /usr/local
+elif [ "$1" = "CCU2" ]; then
+  echo "CCU2"
+  mount -t ubifs ubi1:user /usr/local
+elif [ "$1" = "HM-RASPBERRYMATIC" ]; then
+  echo "HM-RASPBERRYMATIC"
+  mount /usr/local
 fi
 
-cp -a xmlapi /mnt/www/config
-umount /mnt
+mkdir -p $ADDON_DIR
+chmod 755 $ADDON_DIR
+mkdir -p $RCD_DIR
+chmod 755 $RCD_DIR
 
-if ["$1" == ""]; then
-        echo "CCU1"
-        lcdtool "Reboot...             "
-        lcdtool -a 0x40 -t bin 00
-        echo "x" > /dev/watchdog
-        reboot
-        while true ; do true ;  done
-else
-        echo "CCU2"
-        # CCU2 always reboot after Addon/Firmware Update
+# remove old stuff
+rm -f $ADDON_DIR/*
+
+# copy all stuff and setup rc.d
+cp -R xmlapi/* $ADDON_DIR/
+cp VERSION $ADDON_DIR/
+cp xml-api $RCD_DIR/
+chmod +x $RCD_DIR/xml-api
+
+# sync filesystem to make sure all changes are written to disk
+sync
+
+if [ "$1" = "" ]; then
+  echo "CCU1"
+  lcdtool "Reboot...             "
+  lcdtool -a 0x40 -t bin 00
+  echo "x" > /dev/watchdog
+  reboot
+  while true ; do true ;  done
+elif [ "$1" = "CCU2" ]; then
+  echo "CCU2"
+  # CCU2 always reboots after Addon/Firmware Update
+elif [ "$1" = "HM-RASPBERRYMATIC" ]; then
+  echo "HM-RASPBERRYMATIC"
+  # RASPBERRYMATIC always reboots after Addon/Firmware Update
 fi
