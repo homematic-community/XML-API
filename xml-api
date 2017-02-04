@@ -15,11 +15,11 @@ info)
   VER=`cat ${WWW_DIR}/VERSION`
   echo "Info: <b>XML-API CCU Addon</b><br>"
   echo "Info: <a href='https://github.com/hobbyquaker/XML-API'>https://github.com/hobbyquaker/XML-API</a>"
-  echo "Version: $VER"
+  echo "Version: $(cat ${WWW_DIR}/VERSION)"
   echo "Name: XML-API"
   echo "Operations: uninstall"
-  echo "Config-Url: $CONFIG_URL"
-  echo "Update: $CONFIG_URL/update-check.cgi"
+  echo "Config-Url: ${CONFIG_URL}"
+  echo "Update: ${CONFIG_URL}/update-check.cgi"
   ;;
 uninstall)
   if [ -e /www/config/xmlapi ]; then

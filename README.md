@@ -81,5 +81,3 @@ Changelog
 * sysvar.cgi hinzugefÃ¼gt: Gibt eine einzelne Variable zurÃ¼ck. Liefert Wertelisten. Parameter: ise_id
 * sysvarlist.cgi: neuer Parameter text um die neuen Attribute value_list and value_text zu aktivieren (text=true)
 * cgi.tcl und once.tcl entfernt
-
-

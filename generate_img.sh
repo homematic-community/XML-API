@@ -5,6 +5,6 @@ cp update_script tmp/
 cp xml-api tmp/
 cp VERSION tmp/
 cd tmp
-tar -czvf ../xmlapi_addon_1.11.tar.gz *
+tar --owner=root --group=root --exclude=.DS_Store -czvf ../xmlapi_addon-$(cat ../VERSION).tar.gz *
 cd ..
 rm -rf tmp
