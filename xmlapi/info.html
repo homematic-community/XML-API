@@ -21,6 +21,9 @@
 	<tr><td><a href="./favoritelist.cgi">favoritelist.cgi</a></td><td>Liste aller Favoriten und Usern
     		<br><b>Paramter:</b> favoritelist.cgi&show_datapoint gibt zus&auml;tzlich die Attribute datapoint_id und datapoint_type aus.    			
     	</td></tr>
+	<tr><td><a href="./mastervalue.cgi">mastervalue.cgi</a></td><td>Gibt ein einzelnes oder mehrere (1234,5678) Ger&auml;te mit den Namen und Werten der MasterValues zur&uuml;ck<br>
+		<b>Parameter:</b> mastervalue.cgi?device_id=1234 (gibt alle MasterValues des Ger&auml;tes zur&uuml;ck) | mastervalue.cgi?device_id=1234&requested_names=TEMPERATURE_COMFORT,TEMPERATURE_LOWERING
+		(gibt nur die MasterValues TEMPERATURE_COMFORT und TEMPERATURE_LOWERING zur&uumlck) </td></tr>
     	<tr><td><a href="./scripterrors.cgi">scripterrors.cgi</a></td><td>Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen</td></tr>
 	<tr><td><a href="./sysvarlist.cgi">sysvarlist.cgi</a></td><td>Liste alle Systemvariablen mit Werten<br>
 		<b>Parameter:</b> sysvarlist.cgi?text=true - gibt den Text des aktuellen Werts in den Attributen value_text aus.			
