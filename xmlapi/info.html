@@ -24,6 +24,8 @@
 	<tr><td><a href="./mastervalue.cgi">mastervalue.cgi</a></td><td>Gibt ein einzelnes oder mehrere (1234,5678) Ger&auml;te mit den Namen und Werten der MasterValues zur&uuml;ck<br>
 		<b>Parameter:</b> mastervalue.cgi?device_id=1234 (gibt alle MasterValues des Ger&auml;tes zur&uuml;ck) | mastervalue.cgi?device_id=1234&requested_names=TEMPERATURE_COMFORT,TEMPERATURE_LOWERING
 		(gibt nur die MasterValues TEMPERATURE_COMFORT und TEMPERATURE_LOWERING zur&uumlck) </td></tr>
+	<tr><td><a href="./mastervaluechange.cgi">mastervaluechange.cgi</a></td><td>Setzt ein oder mehrere (TEMPERATURE_LOWERING,TEMPERATURE_COMFORT) MasterValues f&uuml;r ein oder mehrere (1234,5678) Ger&auml;te<br>
+    	                <b>Parameter:</b> mastervaluechange.cgi?device_id=1234,5678&name=TEMPERATURE_LOWERING,TEMPERATURE_COMFORT&value=17.0,22.5 (Setzt Absenktemperatur f&uuml;r Ger&auml;t 1234 auf 17 Grad und Komforttemperatur f&uuml;r Ger&auml;t 5678 auf 22.5 Grad</td></tr>
     	<tr><td><a href="./scripterrors.cgi">scripterrors.cgi</a></td><td>Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen</td></tr>
 	<tr><td><a href="./sysvarlist.cgi">sysvarlist.cgi</a></td><td>Liste alle Systemvariablen mit Werten<br>
 		<b>Parameter:</b> sysvarlist.cgi?text=true - gibt den Text des aktuellen Werts in den Attributen value_text aus.			
