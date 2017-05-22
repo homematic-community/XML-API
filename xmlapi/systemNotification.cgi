@@ -29,17 +29,18 @@ append hm_script {;
   			if( oTmp.IsTypeOf( OT_ALARMDP ) && ( oTmp.AlState() == asOncoming ) ){
   				
   			  var trigDP = dom.GetObject(oTmp.AlTriggerDP());
-  					
-  				Write("<notification ise_id='");
-  				!WriteXML( oTmp.ID());
-  				WriteXML( oTmp.AlTriggerDP());
-  				Write("' name='");
-  				WriteXML( trigDP.AlDestMapDP().Name());
-  				Write("' type='");
-          WriteXML(trigDP.AlDestMapDP().Name().StrValueByIndex(".", 2));
-          Write("' timestamp='");
-          WriteXML(trigDP.AlDestMapDP().Timestamp().ToInteger());
-  				Write("'/>");
+  			  if( trigDP ) {
+  				  Write("<notification ise_id='");
+  				  !WriteXML( oTmp.ID());
+  				  WriteXML( oTmp.AlTriggerDP());
+  				  Write("' name='");
+  				  WriteXML( trigDP.Name());
+  				  Write("' type='");
+  				  WriteXML(trigDP.HssType());
+  				  Write("' timestamp='");
+  				  WriteXML(trigDP.Timestamp().ToInteger());
+  				  Write("'/>");
+  			  }
   		  }
       }
 		}
