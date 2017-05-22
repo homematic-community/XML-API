@@ -5,7 +5,31 @@
 [![Issues](https://img.shields.io/github/issues/hobbyquaker/XML-API.svg)](https://github.com/hobbyquaker/XML-API/issues)
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](https://opensource.org/licenses/GPL-3.0)
 
-Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon mit voller Kompatibilität und erweiterer Funktionen. Siehe auch diesen Foren-Thread: http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959. Lizensiert unter GPL v3.
+A HomeMatic CCU Addon implementing a xml request functionality as an interface to all homematic deviced available to a CCU device. This addon provides useful scripts that can be accessed via a HTTP request to a CCU device and allows to query and set all e.g. room- and devicetype names.
+Siehe auch diesen Foren-Thread: http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959. Lizensiert unter GPL v3.
+
+## Supported CCU models
+* HomeMatic CCU1
+* [HomeMatic CCU2](http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
+* [RaspberryMatic](http://homematic-forum.de/forum/viewtopic.php?f=56&t=26917)
+
+## Installation
+This addon can be added like a usual CCU addon package via the WebUI provided functionality by selecting "System-Konfiguration » Systemsteuerung » Zusatzsoftware", to upload the addon package as a tar.gz and the use »Installieren« to actually install the addon. After a restart of the CCU the xml-api interface can then be selected from the »Zusatzsoftware« tab in the CCU settings.
+
+## Use
+After installation the XML-API should be avilable via the following URL call:
+```
+http://[CCU_IP]/config/xmlapi/[ScriptName]
+```
+where [CCU_IP] corresponds to the IP address or name of your CCU device and [ScriptName] being one of the following tool scripts:
+
+...
+
+All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. All of these scripts rely on a `ise_id` device or channel identifier that can be, e.g. used in the following way:
+```
+http://192.168.178.200/config/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
+```
+This call, if executed with the right ise_id and IP adress would then set a dimmer to 20%.
 
 ## ChangeLog
 1.12
