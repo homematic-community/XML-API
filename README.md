@@ -6,7 +6,6 @@
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](https://opensource.org/licenses/GPL-3.0)
 
 A HomeMatic CCU Addon implementing a xml request functionality as an interface to all homematic deviced available to a CCU device. This addon provides useful scripts that can be accessed via a HTTP request to a CCU device and allows to query and set all e.g. room- and devicetype names.
-Siehe auch diesen Foren-Thread: http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959. Lizensiert unter GPL v3.
 
 ## Supported CCU models
 * HomeMatic CCU1
@@ -23,13 +22,36 @@ http://[CCU_IP]/config/xmlapi/[ScriptName]
 ```
 where [CCU_IP] corresponds to the IP address or name of your CCU device and [ScriptName] being one of the following tool scripts:
 
-...
+| ScriptName                    | Description / Parameters  
+| ----------------------------- |-------------------------
+| `devicelist.cgi`              | Lists all devices with their channels. Contains name, serial number, device types and ids.<br> `show_internal=1` (outputs all internal channels also)
+| `functionlist.cgi`            | Lists all functions with their channels.     
+| `favoritelist.cgi`            | Lists all favorites and users.<br>`show_datapoint` (outputs also attribute `datapoint_id` and `datapoint_type`)
+| `mastervalue.cgi`             | Returns one or more (1234,5678) devices with their names and values of their master values.<br>`device_id=1234` (returns all master values of device)<br>`requested_name=TEMPERATURE_COMFORT,TEMPERATURE_LOWERING` (returns only master values for specified names)
+| `mastervaluechange.cgi`       | Sets one or more (TEMPERATURE_LOWERING,TEMPERATURE_COMFORT) master values of one or more (1234,5678) devices.<br>`device_id=1234` (sets master values of device)<br>`name=TEMPERATURE_LOWERING` (sets specified master value only)<br>`value=17.0,22.5` (sets master values to specified values)
+| `programlist.cgi`             | Lists all programs.
+| `protocol.cgi`                | Returns the system protocol.<br>`clear=1` (clears the system protocol)
+| `runprogram.cgi`              | Starts the specified program.<br>`program_id=1234` (id of program to start)
+| `roomlist.cgi`                | Lists all rooms with their channels.
+| `rssilist.cgi`                | Lists all devices with their signal strength.
+| `scripterrors.cgi`            | Searches the last 10 lines of `/var/log/messages` for homematic-script errors and output these.
+| `state.cgi`                   | Returns for single or multiple devices (1234,5678) the channels and their values.<br>`device_id=1234` (id of the device to return values)<br>`channel_id=5678` (if of the channel to return values)<br>`datapoint_id=12839` (id of data to return only Value())
+| `statelist.cgi`               | Lists all devices with channels and current values.<br>`ise_id` (id of devices to list values for)<br>`show_internal=1` (also return internal attribute state)
+| `statechange.cgi`             | Changes one or more channel states.<br>`ise_id=1234,5678` (id of the channels)<br>`new_value=0.20` (new value for channel state)
+| `systemNotification.cgi`      | Returns the current system notifications
+| `systemNotificationClear.cgi` | Clears all current clearable system notifications.
+| `sysvarlist.cgi`              | Lists all system variable with values.<br>`text=true` (return current value of system variable in attribute value_text)
+| `sysvar.cgi`                  | Returns single system variable with values.<br>`ise_id=1234` (id of system variable)
+| `version.cgi`                 | Outputs version of XML-API
 
 All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. All of these scripts rely on a `ise_id` device or channel identifier that can be, e.g. used in the following way:
 ```
 http://192.168.178.200/config/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
 ```
 This call, if executed with the right ise_id and IP adress would then set a dimmer to 20%.
+
+## Support
+http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
 1.12
