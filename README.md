@@ -78,3 +78,6 @@ Fork von http://www.homematic-inside.de/software/download/item/xmlapi-addon mit 
 * sysvar.cgi hinzugefügt: Gibt eine einzelne Variable zurück. Liefert Wertelisten. Parameter: ise_id
 * sysvarlist.cgi: neuer Parameter text um die neuen Attribute value_list and value_text zu aktivieren (text=true)
 * cgi.tcl und once.tcl entfernt
+
+## Authors
+* Uwe Langhammer, Maik, dirch, Philipp, hobbyquaker, jens-maus
