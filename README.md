@@ -54,6 +54,10 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.13
+* Support to query and set master values via `mastervalue.cgi` and `mastervaluechange.cgi`
+* Fixed `systemNotification.cgi` to not use `.AlDestMapDP()` incorrectly.
+
 1.12
 * Workaround für Osram Lightify
 
