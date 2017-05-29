@@ -59,7 +59,7 @@ append hm_script {
       string sDatapointId = s.StrValueByIndex(";",1);
       string sRecordedValue = s.StrValueByIndex(";",2);
       string sDateTime = s.StrValueByIndex(";",3);
-      string sTimestamp = s.StrValueByIndex(";",3).Timestamp().ToTime().ToInteger();
+      string sTimestamp = s.StrValueByIndex(";",3).ToTime().ToInteger();
 	    
       string sDatapointName = "";
       object oHistDP = dom.GetObject( sDatapointId );
