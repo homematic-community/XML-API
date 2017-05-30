@@ -46,7 +46,7 @@ where [CCU_IP] corresponds to the IP address or name of your CCU device and [Scr
 
 All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. All of these scripts rely on a `ise_id` device or channel identifier that can be, e.g. used in the following way:
 ```
-http://192.168.178.200/config/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
+http://<CCU-IP>/config/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
 ```
 This call, if executed with the right ise_id and IP adress would then set a dimmer to 20%.
 
@@ -54,6 +54,9 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.14
+* fixed a bug where `.Timestamp()` was incorrectly used in `protocol.cgi`.
+
 1.13
 * Support to query and set master values via `mastervalue.cgi` and `mastervaluechange.cgi`
 * Fixed `systemNotification.cgi` to not use `.AlDestMapDP()` incorrectly.
