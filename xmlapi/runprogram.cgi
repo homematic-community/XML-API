@@ -2,7 +2,7 @@
 
 load tclrega.so
 
-set program_id ""
+set program_id "-1"
 
 catch {
  set input $env(QUERY_STRING)
@@ -20,7 +20,7 @@ Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><result>}
 
-array set res [rega_script "object obj = dom.GetObject($program_id); if (obj) { obj.ProgramExecute(); Write(obj); }"]
+array set res [rega_script "if ($program_id > 0) { object obj = dom.GetObject($program_id); if (obj && obj.IsTypeOf(OT_PROGRAM)) { obj.ProgramExecute(); Write(obj); }}"]
 
 if { $res(STDOUT) != "" } {
  puts -nonewline "<started program_id=\"$program_id\"/>"
