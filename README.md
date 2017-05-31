@@ -54,6 +54,10 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.15
+* fixed bug in `sysvar.cgi` if called without any argument (ise_id) resulting in a SyntaxError in ReGa.
+* fixed bug where calling `runprogram.cgi` with no argument or with an non-program program_id ended up in a ReGa Exec/ScriptRuntimeError.
+
 1.14
 * fixed a bug where `.Timestamp()` was incorrectly used in `protocol.cgi`.
 
