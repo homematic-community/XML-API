@@ -6,7 +6,7 @@ Access-Control-Allow-Origin: *
 <?xml version="1.0" encoding="ISO-8859-1" ?><systemVariables>}
 
 set text "true"
-set ise_id ""
+set ise_id "-1"
 
 catch {
     set input $env(QUERY_STRING)
