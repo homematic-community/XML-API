@@ -90,6 +90,7 @@ string sDPId;
 					Write("<channel name='");
 					WriteXML( oChannel.Name() );
 					Write("' ise_id='" # sChnId);					
+					Write("' index='" # oChannel.ChnNumber());
 					
 					if (oChannel.Internal()) {
 						Write("' visible='" );
