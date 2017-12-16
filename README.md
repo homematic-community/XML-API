@@ -18,7 +18,7 @@ This addon can be added like a usual CCU addon package via the WebUI provided fu
 ## Use
 After installation the XML-API should be avilable via the following URL call:
 ```
-http://[CCU_IP]/config/xmlapi/[ScriptName]
+http://[CCU_IP]/addons/xmlapi/[ScriptName]
 ```
 where [CCU_IP] corresponds to the IP address or name of your CCU device and [ScriptName] being one of the following tool scripts:
 
@@ -46,7 +46,7 @@ where [CCU_IP] corresponds to the IP address or name of your CCU device and [Scr
 
 All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. All of these scripts rely on a `ise_id` device or channel identifier that can be, e.g. used in the following way:
 ```
-http://<CCU-IP>/config/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
+http://<CCU-IP>/addons/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
 ```
 This call, if executed with the right ise_id and IP adress would then set a dimmer to 20%.
 
