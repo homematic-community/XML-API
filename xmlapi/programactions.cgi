@@ -40,5 +40,4 @@ if { $res(STDOUT) != "" } {
 } else {
 	puts -nonewline {<not_found/>}
 }
-
 puts -nonewline {</result>}
