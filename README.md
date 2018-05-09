@@ -30,6 +30,7 @@ where [CCU_IP] corresponds to the IP address or name of your CCU device and [Scr
 | `mastervalue.cgi`             | Returns one or more (1234,5678) devices with their names and values of their master values.<br>`device_id=1234` (returns all master values of device)<br>`requested_name=TEMPERATURE_COMFORT,TEMPERATURE_LOWERING` (returns only master values for specified names)
 | `mastervaluechange.cgi`       | Sets one or more (TEMPERATURE_LOWERING,TEMPERATURE_COMFORT) master values of one or more (1234,5678) devices.<br>`device_id=1234` (sets master values of device)<br>`name=TEMPERATURE_LOWERING` (sets specified master value only)<br>`value=17.0,22.5` (sets master values to specified values)
 | `programlist.cgi`             | Lists all programs.
+| `programactions.cgi`          |change the Programactions active and visible <br><b>Parameter</b>: programactions.cgi?program_id=1234&active=true&visible=true
 | `protocol.cgi`                | Returns the system protocol.<br>`clear=1` (clears the system protocol)
 | `runprogram.cgi`              | Starts the specified program.<br>`program_id=1234` (id of program to start)
 | `roomlist.cgi`                | Lists all rooms with their channels.
@@ -54,6 +55,9 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.16
+* add programactions.cgi for activ and visible Programactions
+
 1.15
 * fixed bug in `sysvar.cgi` if called without any argument (ise_id) resulting in a SyntaxError in ReGa.
 * fixed bug where calling `runprogram.cgi` with no argument or with an non-program program_id ended up in a ReGa Exec/ScriptRuntimeError.
@@ -137,4 +141,4 @@ http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 * cgi.tcl und once.tcl entfernt
 
 ## Authors
-* Uwe Langhammer, Maik, dirch, Philipp, hobbyquaker, jens-maus
+* jens-maus, Maik (Monty1979), Philipp (ultrah), hobbyquaker, dirch, Uwe (uwe111)
