@@ -89,14 +89,14 @@ append hm_script {
                 	Write("<systemVariable");
                     Write(" name='"); WriteXML( fav.Name() );
                     Write("' variable='");
-                    if (oSysVar.ValueSubType() == 6) {
+                    if (fav.ValueSubType() == 6) {
                       WriteXML( fav.AlType());
                     } else {
                       WriteXML( fav.Variable());
                     }
                     Write("' value='"); WriteXML( fav.Value());
                     Write("' value_list='");
-                    if (oSysVar.ValueType() == 16) {
+                    if (fav.ValueType() == 16) {
                       WriteXML( fav.ValueList());
                     }
                     Write("' value_text='"); WriteXML( fav.ValueList().StrValueByIndex(';', fav.Value()));
@@ -107,12 +107,12 @@ append hm_script {
                     Write("' type='" # fav.ValueType() # "' subtype='" # fav.ValueSubType());
                     Write("' timestamp='" # fav.Timestamp().ToInteger());
                     Write("' value_name_0='");
-                    if (oSysVar.ValueType() == 2) {
-                      WriteXML( oSysVar.ValueName0());
+                    if (fav.ValueType() == 2) {
+                      WriteXML( fav.ValueName0());
                     }
                     Write("' value_name_1='");
-                    if (oSysVar.ValueType() == 2) {
-                      WriteXML( oSysVar.ValueName1());
+                    if (fav.ValueType() == 2) {
+                      WriteXML( fav.ValueName1());
                     }
                 	Write("'/>");
                 }
