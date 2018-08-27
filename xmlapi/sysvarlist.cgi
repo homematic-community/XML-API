@@ -34,12 +34,16 @@ append hm_script {;
 		oSysVar     = dom.GetObject(sSysVarId);
                 Write("<systemVariable");                                
                 Write(" name='"); WriteXML( oSysVar.Name() );               
-                Write("' variable='"); WriteXML( oSysVar.Variable());
-                Write("' value='"); WriteXML( oSysVar.Value());
-                if (oSysVar.ValueType() == 16) {
-                        Write("' value_list='"); WriteXML( oSysVar.ValueList());
+                Write("' variable='");
+                if (oSysVar.ValueSubType() == 6) {
+                        WriteXML( oSysVar.AlType());
                 } else {
-                        Write("' value_list='");
+                        WriteXML( oSysVar.Variable());
+                }
+                Write("' value='"); WriteXML( oSysVar.Value());
+                Write("' value_list='");
+                if (oSysVar.ValueType() == 16) {
+                        WriteXML( oSysVar.ValueList());
                 }
                 Write("' ise_id='"); WriteXML( oSysVar.ID());
                 if (sShowText == "true") {
@@ -53,12 +57,13 @@ append hm_script {;
                 Write("' logged='"); WriteXML( oSysVar.DPArchive());
                 Write("' visible='"); WriteXML( oSysVar.Visible());
                 Write("' timestamp='"); WriteXML( oSysVar.Timestamp().ToInteger());
+                Write("' value_name_0='");
                 if (oSysVar.ValueType() == 2) {
-                        Write("' value_name_0='"); WriteXML( oSysVar.ValueName0());
-                        Write("' value_name_1='"); WriteXML( oSysVar.ValueName1());
-                } else {
-                        Write("' value_name_0='");
-                        Write("' value_name_1='");
+                        WriteXML( oSysVar.ValueName0());
+                }
+                Write("' value_name_1='");
+                if (oSysVar.ValueType() == 2) {
+                        WriteXML( oSysVar.ValueName1());
                 }
                 Write("'/>");
 	}

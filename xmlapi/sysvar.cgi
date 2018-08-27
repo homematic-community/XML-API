@@ -38,15 +38,19 @@ append hm_script {;
 			
 		    Write("<systemVariable");
 		    Write(" name='"); WriteXML( oSysVar.Name() );
-                    Write("' variable='"); WriteXML( oSysVar.Variable());
+                    Write("' variable='");
+                    if (oSysVar.ValueSubType() == 6) {
+                      WriteXML( oSysVar.AlType());
+                    } else {
+                      WriteXML( oSysVar.Variable());
+                    }
                     Write("' value='"); WriteXML( oSysVar.Value());
 	
     		    if (sShowText == "true") {
+                  Write("' value_list='");
         	        if (oSysVar.ValueType() == 16) {
-                 		Write("' value_list='"); WriteXML( oSysVar.ValueList());
-                        } else {
-                                Write("' value_list='");
-                    	}
+                 		WriteXML( oSysVar.ValueList());
+                        }
         	        Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
                     }
 	
@@ -58,12 +62,13 @@ append hm_script {;
                     Write("' subtype='"); WriteXML( oSysVar.ValueSubType());
                     Write("' timestamp='"); WriteXML( oSysVar.Timestamp().ToInteger());
 	
+                    Write("' value_name_0='");
                     if (oSysVar.ValueType() == 2) {
-    			Write("' value_name_0='"); WriteXML( oSysVar.ValueName0());
-    			Write("' value_name_1='"); WriteXML( oSysVar.ValueName1());
-                    } else {
-    			Write("' value_name_0='");
-    			Write("' value_name_1='");
+    			            WriteXML( oSysVar.ValueName0());
+                    }
+                    Write("' value_name_1='");
+                    if (oSysVar.ValueType() == 2) {
+    			            WriteXML( oSysVar.ValueName1());
                     }
     		    Write("'/>");
 		}

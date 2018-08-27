@@ -88,9 +88,17 @@ append hm_script {
                 if (favType == "SYSVAR") {
                 	Write("<systemVariable");
                     Write(" name='"); WriteXML( fav.Name() );
-                    Write("' variable='"); WriteXML( fav.Variable());
+                    Write("' variable='");
+                    if (oSysVar.ValueSubType() == 6) {
+                      WriteXML( fav.AlType());
+                    } else {
+                      WriteXML( fav.Variable());
+                    }
                     Write("' value='"); WriteXML( fav.Value());
-                    Write("' value_list='"); WriteXML( fav.ValueList());
+                    Write("' value_list='");
+                    if (oSysVar.ValueType() == 16) {
+                      WriteXML( fav.ValueList());
+                    }
                     Write("' value_text='"); WriteXML( fav.ValueList().StrValueByIndex(';', fav.Value()));
                     Write("' ise_id='" # fav.ID() );
                     Write("' min='"); WriteXML( fav.ValueMin());
@@ -98,6 +106,14 @@ append hm_script {
                     Write("' unit='"); WriteXML( fav.ValueUnit());
                     Write("' type='" # fav.ValueType() # "' subtype='" # fav.ValueSubType());
                     Write("' timestamp='" # fav.Timestamp().ToInteger());
+                    Write("' value_name_0='");
+                    if (oSysVar.ValueType() == 2) {
+                      WriteXML( oSysVar.ValueName0());
+                    }
+                    Write("' value_name_1='");
+                    if (oSysVar.ValueType() == 2) {
+                      WriteXML( oSysVar.ValueName1());
+                    }
                 	Write("'/>");
                 }
                 Write("</channel>");
