@@ -11,6 +11,7 @@ set channel_id ""
 set datapoint_id ""
 set requested_names ""
 set allMasterValues ""
+set tcpport "2001"
 
 catch {
 	set input $env(QUERY_STRING)
@@ -53,7 +54,7 @@ foreach devid $devids {
 	if {$deviceType=="HM-CC-VG-1"} {             
 		set ausgabe [xmlrpc http://127.0.0.1:9292/groups getParamset [list string $deviceAddress] [list string "MASTER"] ]
 	} else {                                                                                                                  
-		set ausgabe [xmlrpc http://127.0.0.1:2001/ getParamset [list string $deviceAddress] [list string "MASTER"] ]      
+		set ausgabe [xmlrpc http://127.0.0.1:$tcpport/ getParamset [list string $deviceAddress] [list string "MASTER"] ]      
 	}                                                                                                                         
 
 	foreach { bezeichnung wert } $ausgabe {                                                                                   
