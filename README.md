@@ -55,6 +55,9 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.17
+* fixed incorrect use of `.Variable()` on alarm type system variables.
+
 1.16
 * add programactions.cgi for activ and visible Programactions
 
