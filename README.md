@@ -55,6 +55,10 @@ This call, if executed with the right ise_id and IP adress would then set a dimm
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## ChangeLog
+1.18
+* implemented mastervalue query + change which can also handle HmIP devices.
+* fixed version output
+
 1.17
 * fixed incorrect use of `.Variable()` on alarm type system variables.
 
