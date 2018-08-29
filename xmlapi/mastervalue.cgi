@@ -50,10 +50,12 @@ foreach devid $devids {
 
 	puts -nonewline $values(STDOUT)              
 
-	if {$deviceType=="HM-CC-VG-1"} {             
+	if {[string first "HM-CC-VG-" $deviceType] >= 0} {
 		set ausgabe [xmlrpc http://127.0.0.1:9292/groups getParamset [list string $deviceAddress] [list string "MASTER"] ]
-	} else {                                                                                                                  
-		set ausgabe [xmlrpc http://127.0.0.1:2001/ getParamset [list string $deviceAddress] [list string "MASTER"] ]      
+	} elseif {[string first "HMIP-" $deviceType] >= 0} {
+		set ausgabe [xmlrpc http://127.0.0.1:2010/ getParamset [list string $deviceAddress] [list string "MASTER"] ]
+        } else {
+		set ausgabe [xmlrpc http://127.0.0.1:2001/ getParamset [list string $deviceAddress] [list string "MASTER"] ]
 	}                                                                                                                         
 
 	foreach { bezeichnung wert } $ausgabe {                                                                                   

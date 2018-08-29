@@ -51,10 +51,12 @@ for {set counter 0} {$counter<[llength $rec_devids]} {incr counter} {
                                               
     puts -nonewline $values(STDOUT)           
                                               
-    if {$deviceType=="HM-CC-VG-1"} {       
+    if {[string first "HM-CC-VG-" $deviceType] >= 0} {
         set ausgabe [xmlrpc http://127.0.0.1:9292/groups putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
-    } else {                                                                                                                                
-        set ausgabe [xmlrpc http://127.0.0.1:2001/ putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]      
+    } elseif {[string first "HMIP-" $deviceType] >= 0} {
+        set ausgabe [xmlrpc http://127.0.0.1:2010/ putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
+    } else {
+        set ausgabe [xmlrpc http://127.0.0.1:2001/ putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
     }                                                                                                                                       
     puts -nonewline {<mastervalue name='}                                                                                                   
     puts -nonewline $item                                                                                                                   
