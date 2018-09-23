@@ -8,8 +8,8 @@
 A HomeMatic CCU Addon implementing a xml request functionality as an interface to all homematic deviced available to a CCU device. This addon provides useful scripts that can be accessed via a HTTP request to a CCU device and allows to query and set all e.g. room- and devicetype names.
 
 ## Supported CCU models
-* [HomeMatic CCU3](https://www.elv.de/homematic-ip-smart-home-zentrale-ccu3-inklusive-mediola-aio-creator-neo-lizenz.html) / [RaspberryMatic](http://raspberrymatic.de/)
-* [HomeMatic CCU2](http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
+* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html) / [RaspberryMatic](http://raspberrymatic.de/)
+* [HomeMatic CCU2](https://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
 * HomeMatic CCU1
 
 ## Installation
