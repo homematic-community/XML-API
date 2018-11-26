@@ -24,7 +24,8 @@ set RSSI_BAD -120.0
 set RSSI_MEDIUM -100.0
 set RSSI_GOOD -20.0
 
-set url "xmlrpc_bin://127.0.0.1:2001"
+read_interfaces
+set url $interfaces(BidCos-RF)
 
 if { [ catch {
     #check if the interface supports rssi

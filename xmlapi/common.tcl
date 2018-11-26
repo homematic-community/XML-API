@@ -154,3 +154,39 @@ proc uniq {liste} {
 
 	return $u_list
 }
+
+set INTERFACES_FILE "/etc/config/InterfacesList.xml"
+array set interfaces ""
+array set interface_descriptions ""
+
+proc read_interfaces {} {
+  global interfaces interface_descriptions INTERFACES_FILE env
+  set retval 1
+  if { [ info exist env(BIDCOS_SERVICE) ] } {
+    set interfaces(default) "$env(BIDCOS_SERVICE)"
+    set interface_descriptions(default) "Default BidCoS Interface"
+  } else {
+    set fd -1
+    catch {set fd [open $INTERFACES_FILE r]}
+    if { $fd >=0 } {
+      set contents [read $fd]
+      while { [regexp -indices {</ipc[^>]*>} $contents range] } {
+        set section [string range $contents 0 [lindex $range 1]]
+        set contents [string range $contents [expr [lindex $range 1] + 1] end]
+        if {
+             [regexp {<name[^>]*>([^<]+)</name} $section dummy name] &&
+             [regexp {<url[^>]*>([^<]+)</url} $section dummy url] &&
+             [regexp {<info[^>]*>([^<]+)</info} $section dummy description ]
+           } {
+             array set interfaces [list $name $url]
+             array set interface_descriptions [list $name $description]
+           }
+      }
+      close $fd
+    } else {
+      puts "Could not open interface file"
+      set retval 0
+    }
+  }
+  return $retval
+}

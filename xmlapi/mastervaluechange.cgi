@@ -1,6 +1,8 @@
 #!/bin/tclsh
 load tclrega.so
 load tclrpc.so
+source common.tcl
+
 puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
@@ -19,6 +21,8 @@ catch {
         }
     }
 }
+
+read_interfaces
 
 set rec_devids [split $device_id "\,"]
 set rec_mvaluename [split $name "\,"]
@@ -50,13 +54,13 @@ for {set counter 0} {$counter<[llength $rec_devids]} {incr counter} {
     set deviceType $values(deviceType)        
                                               
     puts -nonewline $values(STDOUT)           
-                                              
-    if {[string first "HM-CC-VG-" $deviceType] >= 0} {
-        set ausgabe [xmlrpc http://127.0.0.1:9292/groups putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
-    } elseif {[string first "HMIP-" $deviceType] >= 0} {
-        set ausgabe [xmlrpc http://127.0.0.1:2010/ putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
+
+    if {[string compare -nocase -length 9 "HM-CC-VG-" $deviceType] == 0} {
+        set ausgabe [xmlrpc $interfaces(VirtualDevices) putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
+    } elseif {[string compare -nocase -length 5 "HMIP-" $deviceType] == 0} {
+        set ausgabe [xmlrpc $interfaces(HmIP-RF) putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
     } else {
-        set ausgabe [xmlrpc http://127.0.0.1:2001/ putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
+        set ausgabe [xmlrpc $interfaces(BidCos-RF) putParamset [list string $deviceAddress] [list string "MASTER"] [list struct $cmd]]
     }                                                                                                                                       
     puts -nonewline {<mastervalue name='}                                                                                                   
     puts -nonewline $item                                                                                                                   

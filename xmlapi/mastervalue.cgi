@@ -1,6 +1,8 @@
 #!/bin/tclsh
 load tclrega.so
 load tclrpc.so
+source common.tcl
+
 puts -nonewline {Content-Type: text/xml
 Access-Control-Allow-Origin: *
 
@@ -21,6 +23,8 @@ catch {
 		}
 	}
 }
+
+read_interfaces
 
 set devids [split $device_id ,]
 if { $requested_names == "" } {
@@ -50,12 +54,12 @@ foreach devid $devids {
 
 	puts -nonewline $values(STDOUT)              
 
-	if {[string first "HM-CC-VG-" $deviceType] >= 0} {
-		set ausgabe [xmlrpc http://127.0.0.1:9292/groups getParamset [list string $deviceAddress] [list string "MASTER"] ]
-	} elseif {[string first "HMIP-" $deviceType] >= 0} {
-		set ausgabe [xmlrpc http://127.0.0.1:2010/ getParamset [list string $deviceAddress] [list string "MASTER"] ]
-        } else {
-		set ausgabe [xmlrpc http://127.0.0.1:2001/ getParamset [list string $deviceAddress] [list string "MASTER"] ]
+	if {[string compare -nocase -length 9 "HM-CC-VG-" $deviceType] == 0} {
+		set ausgabe [xmlrpc $interfaces(VirtualDevices) getParamset [list string $deviceAddress] [list string "MASTER"] ]
+	} elseif {[string compare -nocase -length 5 "HMIP-" $deviceType] == 0} {
+		set ausgabe [xmlrpc $interfaces(HmIP-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ]
+	} else {
+		set ausgabe [xmlrpc $interfaces(BidCos-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ]
 	}                                                                                                                         
 
 	foreach { bezeichnung wert } $ausgabe {                                                                                   
