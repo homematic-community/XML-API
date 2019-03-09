@@ -15,6 +15,9 @@ A HomeMatic CCU Addon implementing a xml request functionality as an interface t
 ## Installation
 This addon can be added like a usual CCU addon package via the WebUI provided functionality by selecting "System-Konfiguration » Systemsteuerung » Zusatzsoftware", to upload the addon package as a tar.gz and the use »Installieren« to actually install the addon. After a restart of the CCU the xml-api interface can then be selected from the »Zusatzsoftware« tab in the CCU settings.
 
+## Security advice
+The call to one of the API routines is without any authentication. If the HomeMatic control center can be reached via the Internet without special protection, **this is a serious security risk!**
+
 ## Use
 After installation the XML-API should be avilable via the following URL call:
 ```
