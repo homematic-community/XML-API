@@ -36,7 +36,7 @@ where [CCU_IP] corresponds to the IP address or name of your CCU device and [Scr
 | `roomlist.cgi`                | Lists all rooms with their channels.
 | `rssilist.cgi`                | Lists all devices with their signal strength.
 | `scripterrors.cgi`            | Searches the last 10 lines of `/var/log/messages` for homematic-script errors and output these.
-| `state.cgi`                   | Returns for single or multiple devices (1234,5678) the channels and their values.<br>`device_id=1234` (id of the device to return values)<br>`channel_id=5678` (if of the channel to return values)<br>`datapoint_id=12839` (id of data to return only Value())
+| `state.cgi`                   | Returns for single or multiple devices (1234,5678) the channels and their values.<br>`device_id=1234` (id of the device to return values)<br>`channel_id=5678` (id of the channel to return values)<br>`datapoint_id=12839` (id of data to return only Value())
 | `statelist.cgi`               | Lists all devices with channels and current values.<br>`ise_id` (id of devices to list values for)<br>`show_internal=1` (also return internal attribute state)
 | `statechange.cgi`             | Changes one or more channel states.<br>`ise_id=1234,5678` (id of the channels)<br>`new_value=0.20` (new value for channel state)
 | `systemNotification.cgi`      | Returns the current system notifications
@@ -45,7 +45,8 @@ where [CCU_IP] corresponds to the IP address or name of your CCU device and [Scr
 | `sysvar.cgi`                  | Returns single system variable with values.<br>`ise_id=1234` (id of system variable)
 | `version.cgi`                 | Outputs version of XML-API
 
-All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. All of these scripts rely on a `ise_id` device or channel identifier that can be, e.g. used in the following way:
+All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. 
+All of these scripts rely on a `ise_id` device or channel identifier. You can get this `ise_id` for the needed datapoint by analysing the result of `statelist.cgi`. The id can be used in the following way:
 ```
 http://<CCU-IP>/addons/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
 ```
