@@ -19,7 +19,7 @@ case "$1" in
 info)
   VER=`cat ${WWW_DIR}/VERSION`
   echo "Info: <b>XML-API CCU Addon</b><br>"
-  echo "Info: <a href='https://github.com/hobbyquaker/XML-API'>https://github.com/hobbyquaker/XML-API</a>"
+  echo "Info: <a href='https://github.com/homematic-community/XML-API'>https://github.com/homematic-community/XML-API</a>"
   echo "Version: $(cat ${WWW_DIR}/VERSION)"
   echo "Name: XML-API"
   echo "Operations: uninstall"
