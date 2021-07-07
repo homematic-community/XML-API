@@ -4,6 +4,11 @@ ADDON_DIR=/usr/local/etc/config/addons/www/xmlapi
 RCD_DIR=/usr/local/etc/config/rc.d
 CONFIG_DIR=/usr/local/etc/config
 
+# check for unsupported platforms
+if grep -qim1 busmatic /www/api/methods/ccu/downloadFirmware.tcl; then
+  exit 13
+fi
+
 if [ "$1" = "" ]; then
   echo "CCU1"
   lcdtool "installing XML-API      "
