@@ -39,7 +39,7 @@
 		<td>Liste alle Ger&auml;te mit Kan&auml;len und aktuellen Werten
     		<br><b>Parameter:</b> ise_id, show_internal=1 (gibt zus&auml;tzlich das Attribut state aus)
     		<br><br><b>HMW-RCV-50 BidCoS-Wir!</b>
-    		<br>Damit die virtuellen Wired Kan&auml;le der CCU angezeigt werden, muss der Name "HMW-RCV-50 BidCoS-Wir" der Komponente auf der CCU in einen X Beliebigen umbenannt werden.</br>     		
+    		<br>Damit die virtuellen Wired Kanäle der CCU angezeigt werden, muss der Name "HMW-RCV-50 BidCoS-Wir" der Komponente auf der CCU in einen X Beliebigen umbenannt werden.</br>     		
     	</td>    	
     </tr>
     		
@@ -49,8 +49,7 @@
 	<tr><td><a href="./programlist.cgi">programlist.cgi</a></td><td>Liste aller Programme</td></tr>
 	<tr><td><a href="./programactions.cgi">programactions.cgi</a></td><td>&auml;ndern der Programmaktionen activ und sichtbar <br><b>Parameter</b>: programactions.cgi?program_id=1234&active=true&visible=true</td></tr>
 	<tr><td><a href="./protocol.cgi">protocol.cgi</a></td><td>Gibt das Systemprotokoll aus<br><b>Parameter:</b> protocol.cgi?clear=1 l&ouml;scht das Systemprotokoll</td></tr>
-	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm ohne Bedingungspr&uuml;fung mit der angegebenen ID (es wird immer das 1. DANN ausgef&uuml;hrt!) <br><b>Parameter</b>: z.B. runprogram.cgi?program_id=1234</td></tr>
-	<tr><td><a href="./runprogram-cc.cgi">runprogram_cc.cgi</a></td><td>Startet ein Programm mit Bedingungspr&uuml;fung mit der angegebenen ID (es wird der Block ausgef&uuml;hrt der WAHR ergibt, andernfalls das SONST... wenn vorhanden!) <br><b>Parameter</b>: z.B. runprogram-cc.cgi?program_id=1234</td></tr>
+	<tr><td><a href="./runprogram.cgi">runprogram.cgi</a></td><td>Startet ein Programm mit der angegebenen ID <br><b>Parameter</b>: z.B. runprogram.cgi?program_id=1234</td></tr>
 	<tr><td><a href="./roomlist.cgi">roomlist.cgi</a></td><td>Liste aller R&auml;ume mit Kan&auml;len</td></tr>
     <tr><td><a href="./rssilist.cgi">rssilist.cgi</a></td><td>Liste aller Ger&auml;te mit Signalst&auml;rke</td></tr>    
 </table>
