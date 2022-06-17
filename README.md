@@ -1,8 +1,8 @@
 # XML-API CCU Addon
 
-[![Release](https://img.shields.io/github/release/hobbyquaker/XML-API.svg)](https://github.com/hobbyquaker/XML-API/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/hobbyquaker/XML-API/latest/total.svg)](https://github.com/hobbyquaker/XML-API/releases/latest)
-[![Issues](https://img.shields.io/github/issues/hobbyquaker/XML-API.svg)](https://github.com/hobbyquaker/XML-API/issues)
+[![Release](https://img.shields.io/github/release/homematic-community/XML-API.svg)](https://github.com/homematic-community/XML-API/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/homematic-community/XML-API/latest/total.svg)](https://github.com/homematic-community/XML-API/releases/latest)
+[![Issues](https://img.shields.io/github/issues/homematic-community/XML-API.svg)](https://github.com/homematic-community/XML-API/issues)
 [![License](https://img.shields.io/badge/license-GPL%203.0-green.svg)](https://opensource.org/licenses/GPL-3.0)
 
 A HomeMatic CCU Addon implementing a xml request functionality as an interface to all homematic deviced available to a CCU device. This addon provides useful scripts that can be accessed via a HTTP request to a CCU device and allows to query and set all e.g. room- and devicetype names.
