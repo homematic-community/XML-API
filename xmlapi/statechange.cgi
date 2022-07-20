@@ -28,6 +28,7 @@ regsub -all {%2F} $new_value {/} new_value
 regsub -all {%3C} $new_value {<} new_value
 regsub -all {%3E} $new_value {>} new_value
 regsub -all {%3F} $new_value {?} new_value
+regsub -all {%5E} $new_value {^} new_value
 
 if { [string match "rgb*" $new_value ]} {
 	array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
