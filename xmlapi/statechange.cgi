@@ -31,7 +31,7 @@ regsub -all {%3F} $new_value {?} new_value
 regsub -all {%3D} $new_value {=} new_value
 regsub -all {%2C} $new_value {,} new_value
 
-if { [string match "rgb*" $new_value ] || ![string match "ise_id=*" $new_value ]} {
+if { [string match "rgb*" $new_value ] || [string match "*=*" $new_value ]} {
 	array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
 
 	if {$res(STDOUT) != "null"} {
