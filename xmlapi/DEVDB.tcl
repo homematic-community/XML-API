@@ -11,7 +11,7 @@ source once.tcl
 ################################################################################
 
 set DEVDB_DIRECTORY "/www/config/devdescr"
-set DEVDB_FILE      "/var/tmp/devdb.txt"
+set DEVDB_FILE      "$DEVDB_DIRECTORY/DEVDB.tcl"
 
 ################################################################################
 # Globale Variablen                                                            #
@@ -228,9 +228,9 @@ proc DEVDB_load { } {
 # Einsprungpunkt                                                               #
 ################################################################################
 
-if { ![file exists $DEVDB_FILE] } then {
-  DEVDB_create
-  DEVDB_save
-} else {
+#if { ![file exists $DEVDB_FILE] } then {
+#  DEVDB_create
+#  DEVDB_save
+#} else {
   DEVDB_load
-}
+#}

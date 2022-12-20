@@ -1,10 +1,9 @@
 #!/bin/tclsh
 
-load tclrega.so
 source once.tcl
+sourceOnce session.tcl
 sourceOnce cgi.tcl
 sourceOnce xml.tcl
-
 
 cgi_eval {
 
@@ -27,10 +26,10 @@ cgi_eval {
   catch { import FirstRequest  }
   
 
-  cgi_content_type "text/xml"
+  cgi_content_type "text/xml; charset=iso-8859-1"
   cgi_http_head
 
-  puts -nonewline {<?xml version="1.0" ?>}  
+  puts -nonewline {<?xml version="1.0" encoding="ISO-8859-1" ?>}
   puts -nonewline {<result>} 
 
   set script "string DeviceId=\"$DeviceId\";\nstring DeviceCount=\"$DeviceCount\";\n"
@@ -78,8 +77,14 @@ cgi_eval {
 
 #	puts $script
 
-array set res [rega_script $script ]
-  puts -nonewline $res(STDOUT)
-  puts -nonewline {<refreshRssi/><refreshStatelist/>}
-  puts -nonewline {</result>}
+if {[info exists sid] && [check_session $sid]} {
+  array set res [rega_script $script ]
+    puts -nonewline $res(STDOUT)
+    puts -nonewline {<refreshRssi/><refreshStatelist/>}
+    puts -nonewline {</result>}
+  }
+} else {
+  puts "Content-Type: text/xml; charset=iso-8859-1"
+  puts ""
+  puts "<?xml version='1.0' encoding='ISO-8859-1' ?><result><not_authenticated/></result>"
 }

@@ -5,7 +5,7 @@
 # Erstellt die XML-Liste der verfügbaren HomeMatic- Gerätetypen.
 #
 # Präfix : DeviceTypeList
-# Zugriff: gültige Session Id, unbeschränkt
+# Zugriff: gültige Session Id
 #
 # Autor      : Falk Werner
 # Erstellt am: 02.05.2008
@@ -18,7 +18,7 @@
 source once.tcl
  
 sourceOnce cgi.tcl
-#sourceOnce sessionid.tcl
+sourceOnce session.tcl
 sourceOnce DEVDB.tcl
 sourceOnce xml.tcl
 
@@ -50,8 +50,8 @@ proc DeviceTypeList_putCircle { form } {
   
   puts -nonewline "<form type='circle'"
   puts -nonewline " name='[xml_escape $name]'"
-  puts -nonewline " x='[xml_escape $x]</x>'"
-  puts -nonewline " y='[xml_escape $y]</y>'"
+  puts -nonewline " x='[xml_escape $x]'"
+  puts -nonewline " y='[xml_escape $y]'"
   puts -nonewline " radius='[xml_escape $radius]'"
   puts -nonewline "/>"
   
@@ -185,7 +185,7 @@ proc DeviceTypeList_putOffset { form } {
 proc DeviceTypeList_putXML { } {
   global DEV_LIST DEV_DESCRIPTION DEV_HIGHLIGHT
   
-  puts -nonewline "<?xml version='1.0' ?>"
+  puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?>"
   puts -nonewline "<deviceTypeList>"
   foreach device $DEV_LIST {
     puts -nonewline "<deviceType "
@@ -198,15 +198,15 @@ proc DeviceTypeList_putXML { } {
     foreach form $DEV_HIGHLIGHT($device) {
       set type [lindex $form 1]
       switch -exact $type {
-        1 { DeviceTypeList_putCircle    $form }
+        1 { DeviceTypeList_putCircle $form }
         2 { DeviceTypeList_putRectangle $form }
-        3 { DeviceTypeList_putText      $form }
-        4 { DeviceTypeList_putEllipse   $form }
-        5 { DeviceTypeList_putFormset   $form }
-        6 { DeviceTypeList_putLine      $form }
-        7 { DeviceTypeList_putOffset    $form }      
+        3 { DeviceTypeList_putText $form }
+        4 { DeviceTypeList_putEllipse $form }
+        5 { DeviceTypeList_putFormset $form }
+        6 { DeviceTypeList_putLine $form }
+        7 { DeviceTypeList_putOffset $form }
       }
-   }
+    }
     
     puts -nonewline "</deviceType>"
   }
@@ -220,7 +220,7 @@ proc DeviceTypeList_putXML { } {
 # Diese Liste wird ausgegeben, wenn die Session Id ungültig ist.
 #*******************************************************************************
 proc DeviceTypeList_putEmptyXML { } {
-  puts -nonewline "<?xml version='1.0' ?>"
+  puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?>"
   puts -nonewline "<deviceTypeList>"
   puts -nonewline "</deviceTypeList>"
 }
@@ -228,19 +228,17 @@ proc DeviceTypeList_putEmptyXML { } {
 ################################################################################
 # Einsprungpunkt                                                               #
 ################################################################################
-
-cgi_eval {
-
-  cgi_input
-  cgi_content_type "text/xml"
-  cgi_http_head
-#  if { 0 < [SessionId_isValid $SessionId_UPL(GUEST)] } then {
-#    DeviceTypeList_putXML
-#  } else {
-#    DeviceTypeList_putEmptyXML
-#  }
-
-# ohne Prüfen der SessionId
-  DeviceTypeList_putXML
+if {[info exists sid] && [check_session $sid]} {
+  cgi_eval {
   
+    cgi_input
+    cgi_content_type "text/xml; charset=iso-8859-1"
+    cgi_http_head
+    DeviceTypeList_putXML
+
+  }
+} else {
+  puts "Content-Type: text/xml; charset=iso-8859-1"
+  puts ""
+  puts "<?xml version='1.0' encoding='ISO-8859-1' ?><deviceTypeList><not_authenticated/></deviceTypeList>"
 }

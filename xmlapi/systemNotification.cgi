@@ -1,53 +1,50 @@
 #!/bin/tclsh
-load tclrega.so
-puts -nonewline {Content-Type: text/xml
-Access-Control-Allow-Origin: *
+source session.tcl
 
-<?xml version="1.0" encoding="ISO-8859-1" ?><systemNotification>}
+puts "Content-Type: text/xml; charset=iso-8859-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><systemNotification>"
 
-catch {
-  set input $env(QUERY_STRING)
-	set pairs [split $input &]
-	foreach pair $pairs {
-		if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
-			set $varname $val
-		}
-	}
-}
+if {[info exists sid] && [check_session $sid]} {
 
-append hm_script {;
-  object oTmpArray = dom.GetObject(ID_SERVICES);
-    
-	if( oTmpArray ) {
-		string sTmp;
-    
-		foreach(sTmp, oTmpArray.EnumIDs()){
-    	
-			object oTmp = dom.GetObject( sTmp );
+  set hm_script {
+    object oTmpArray = dom.GetObject(ID_SERVICES);
+
+    if( oTmpArray ) {
+      string sTmp;
+
+      foreach(sTmp, oTmpArray.EnumIDs()){
         
-			if( oTmp ){
-  			if( oTmp.IsTypeOf( OT_ALARMDP ) && ( oTmp.AlState() == asOncoming ) ){
-  				
-  			  var trigDP = dom.GetObject(oTmp.AlTriggerDP());
-  			  if( trigDP ) {
-  				  Write("<notification ise_id='");
-  				  !WriteXML( oTmp.ID());
-  				  WriteXML( oTmp.AlTriggerDP());
-  				  Write("' name='");
-  				  WriteXML( trigDP.Name());
-  				  Write("' type='");
-  				  WriteXML(trigDP.HssType());
-  				  Write("' timestamp='");
-  				  WriteXML(trigDP.Timestamp().ToInteger());
-  				  Write("'/>");
-  			  }
-  		  }
+        object oTmp = dom.GetObject( sTmp );
+
+        if( oTmp ){
+          if( oTmp.IsTypeOf( OT_ALARMDP ) && ( oTmp.AlState() == asOncoming ) ){
+
+            var trigDP = dom.GetObject(oTmp.AlTriggerDP());
+            if( trigDP ) {
+              Write("<notification ise_id='");
+              !WriteXML( oTmp.ID());
+              WriteXML( oTmp.AlTriggerDP());
+              Write("' name='");
+              WriteXML( trigDP.Name());
+              Write("' type='");
+              WriteXML(trigDP.HssType());
+              Write("' timestamp='");
+              WriteXML(trigDP.Timestamp().ToInteger());
+              Write("'/>");
+            }
+          }
+        }
       }
-		}
-  }	
+    }
+  }
+
+  array set res [rega_script $hm_script]
+
+  if { $res(STDOUT) != "" } {
+    puts -nonewline $res(STDOUT)
+  }
+} else {
+  puts -nonewline {<not_authenticated/>}
 }
-
-array set res [rega_script $hm_script]
-
-puts -nonewline $res(STDOUT)
-puts -nonewline {</systemNotification>}
+puts "</systemNotification>"
