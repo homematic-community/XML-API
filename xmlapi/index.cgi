@@ -44,6 +44,13 @@ if {[info exists sid] && [check_session $sid]} {
     </td></tr>
     <tr><td><a href=./functionlist.cgi?sid=$sid>functionlist.cgi</a></td><td><b>Lists all functions including channels.</b>
     </td></tr>
+    <tr><td><a href=./login.cgi>login.cgi</a></td><td><b>Logs in using the supplied username and password and returns a reusable session id (sid).</b><br/>
+      <i>username=string</i> - login credential (username)<br/>
+      <i>password=string</i> - login credential (password)
+    </td></tr>
+    <tr><td><a href=./logout.cgi?sid=$sid>logout.cgi</a></td><td><b>Logs an existing session out</b><br/>
+      <i>sid=string</i> - session id (@XXXXXX@)<br/>
+    </td></tr>
     <tr><td><a href=./mastervalue.cgi?sid=$sid>mastervalue.cgi</a></td><td><b>Outputs a single or several '1234,5678' devices with their names and master values.</b><br/>
       <i>device_id=list</i> - returns master values of specified devices (e.g. "1234,5678")<br/>
       <i>requested_names=list</i> - returns only master values of selected types (e.g. "TEMPERATURE_COMFORT,TEMPERATURE_LOWERING")
@@ -106,7 +113,7 @@ if {[info exists sid] && [check_session $sid]} {
     </td></tr>
   }]
 } else {
-  puts "no valid session"
+  puts "not authenticated"
 }
 puts "</body>"
 puts "</html>"
