@@ -10,10 +10,7 @@ puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><mastervalue>"
 if {[info exists sid] && [check_session $sid]} {
 
   set device_id ""
-  set channel_id ""
-  set datapoint_id ""
   set requested_names ""
-  set allMasterValues ""
   catch {
     set input $env(QUERY_STRING)
     set pairs [split $input &]
@@ -22,20 +19,8 @@ if {[info exists sid] && [check_session $sid]} {
         set device_id $val
         continue
       }
-      if {0 != [regexp "^channel_id=(.*)$" $pair dummy val]} {
-        set channel_id $val
-        continue
-      }
-      if {0 != [regexp "^datapoint_id=(.*)$" $pair dummy val]} {
-        set datapoint_id $val
-        continue
-      }
       if {0 != [regexp "^requested_names=(.*)$" $pair dummy val]} {
         set requested_names $val
-        continue
-      }
-      if {0 != [regexp "^allMasterValues=(.*)$" $pair dummy val]} {
-        set allMasterValues $val
         continue
       }
     }
@@ -47,6 +32,7 @@ if {[info exists sid] && [check_session $sid]} {
   if { $requested_names == "" } {
     set allMasterValues "*"
   } else {
+    set allMasterValues ""
     set requestedNames [split $requested_names ,]
   }
 
