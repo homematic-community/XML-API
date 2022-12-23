@@ -129,6 +129,8 @@ if {[info exists sid] && [check_session $sid]} {
       }
   }
 
+  array set res [rega_script "$hm_script"]
+
   if { $res(STDOUT) != "" } {
     puts -nonewline $res(STDOUT)
   }
