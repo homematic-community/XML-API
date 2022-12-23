@@ -32,10 +32,10 @@ if {[info exists sid] && [check_session $sid]} {
   array set res [rega_script "
       if ($program_id > 0) { object obj = dom.GetObject($program_id);
         if (obj && obj.IsTypeOf(OT_PROGRAM)) {
-          if ($active == false || $active == true){
+          if (($active == false) || ($active == true)){
             obj.Active($active);
           }
-          if ($visible == false || $visible == true){
+          if (($visible == false) || ($visible == true)){
             obj.Visible($visible);
           }
           Write(obj);
