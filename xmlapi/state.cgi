@@ -70,7 +70,7 @@ if {[info exists sid] && [check_session $sid]} {
 
       string sDevId;
       foreach(sDevId, sDevIds.Split(",")) {
-        
+
         object oDevice = dom.GetObject(sDevId);
 
         if(oDevice.ReadyConfig() && (oDevice.Name() != "Zentrale") && (oDevice.Name() != "HMW-RCV-50 BidCoS-Wir") && oDevice.IsTypeOf(OT_DEVICE)) {

@@ -16,7 +16,7 @@
 ################################################################################
 
 source once.tcl
- 
+
 sourceOnce cgi.tcl
 sourceOnce session.tcl
 sourceOnce DEVDB.tcl
@@ -47,14 +47,14 @@ proc DeviceTypeList_putCircle { form } {
   set x      [lindex $form 2]
   set y      [lindex $form 3]
   set radius [lindex $form 4]
-  
+
   puts -nonewline "<form type='circle'"
   puts -nonewline " name='[xml_escape $name]'"
   puts -nonewline " x='[xml_escape $x]'"
   puts -nonewline " y='[xml_escape $y]'"
   puts -nonewline " radius='[xml_escape $radius]'"
   puts -nonewline "/>"
-  
+
 }
 
 #*******************************************************************************
@@ -67,7 +67,7 @@ proc DeviceTypeList_putRectangle { form } {
   set y      [lindex $form 3]
   set width  [lindex $form 4]
   set height [lindex $form 5]
-  
+
   puts -nonewline "<form type='rectangle'"
   puts -nonewline " name='[xml_escape $name]'"
   puts -nonewline " x='[xml_escape $x]'"
@@ -86,9 +86,9 @@ proc DeviceTypeList_putText { form } {
   set x          [lindex $form 2]
   set y          [lindex $form 3]
   set value      [lindex $form 4]
-  set size       [lindex $form 5]  
-  set fontFamily [lindex $form 6]  
-  set fontStyle  [lindex $form 7]  
+  set size       [lindex $form 5]
+  set fontFamily [lindex $form 6]
+  set fontStyle  [lindex $form 7]
 
   puts -nonewline "<form type='text'"
   puts -nonewline " name='[xml_escape $name]'"
@@ -111,7 +111,7 @@ proc DeviceTypeList_putEllipse { form } {
   set y      [lindex $form 3]
   set width  [lindex $form 4]
   set height [lindex $form 5]
-  
+
   puts -nonewline "<form type='ellipse'"
   puts -nonewline " name='[xml_escape $name]'"
   puts -nonewline " x='[xml_escape $x]'"
@@ -145,11 +145,11 @@ proc DeviceTypeList_putFormset { form } {
 proc DeviceTypeList_putLine { form } {
   set name     [lindex $form 0]
   set x1       [lindex $form 2]
-  set y1       [lindex $form 3]  
+  set y1       [lindex $form 3]
   set x2       [lindex $form 4]
-  set y2       [lindex $form 5]  
-  set stroke   [lindex $form 6]  
-  
+  set y2       [lindex $form 5]
+  set stroke   [lindex $form 6]
+
   puts -nonewline "<form type='line'"
   puts -nonewline " name='[xml_escape $name]'"
   puts -nonewline " x1='[xml_escape $x1]'"
@@ -169,7 +169,7 @@ proc DeviceTypeList_putOffset { form } {
   set formName [DeviceTypeList_getFormName [lindex $form 2]]
   set x        [lindex $form 3]
   set y        [lindex $form 4]
-  
+
   puts -nonewline "<form type='offset'"
   puts -nonewline " name='[xml_escape $name]'"
   puts -nonewline " formName=\"[xml_escape $formName]\""
@@ -184,7 +184,7 @@ proc DeviceTypeList_putOffset { form } {
 #*******************************************************************************
 proc DeviceTypeList_putXML { } {
   global DEV_LIST DEV_DESCRIPTION DEV_HIGHLIGHT
-  
+
   puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?>"
   puts -nonewline "<deviceTypeList>"
   foreach device $DEV_LIST {
@@ -194,7 +194,7 @@ proc DeviceTypeList_putXML { } {
     puts -nonewline " thumbnailPath='[xml_escape [DEV_getImagePath $device 50]]'"
     puts -nonewline " imagePath='[xml_escape [DEV_getImagePath $device 250]]'"
     puts -nonewline ">"
-    
+
     foreach form $DEV_HIGHLIGHT($device) {
       set type [lindex $form 1]
       switch -exact $type {
@@ -207,7 +207,7 @@ proc DeviceTypeList_putXML { } {
         7 { DeviceTypeList_putOffset $form }
       }
     }
-    
+
     puts -nonewline "</deviceType>"
   }
   puts -nonewline "</deviceTypeList>"
@@ -230,7 +230,7 @@ proc DeviceTypeList_putEmptyXML { } {
 ################################################################################
 if {[info exists sid] && [check_session $sid]} {
   cgi_eval {
-  
+
     cgi_input
     cgi_content_type "text/xml; charset=iso-8859-1"
     cgi_http_head

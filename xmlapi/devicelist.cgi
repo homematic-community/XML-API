@@ -53,9 +53,9 @@ if {[info exists sid] && [check_session $sid]} {
           foreach(sChnId, oDevice.Channels())
           {
             object oChannel = dom.GetObject(sChnId);
-            
+
             boolean show = false;
-            
+
             if (false == oChannel.Internal() ) {
               show = true;
             }
@@ -63,7 +63,7 @@ if {[info exists sid] && [check_session $sid]} {
             if ( show_internal == "1"){
               show = true;
             }
-            
+
             if (show == true){
               integer iChnDir     = oChannel.ChnDirection();
               string  sChnDir     = "UNKNOWN";
