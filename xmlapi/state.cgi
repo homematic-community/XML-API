@@ -114,6 +114,7 @@ if {[info exists sid] && [check_session $sid]} {
                     Write("' valuetype='" # oDP.ValueType());
                     Write("' valueunit='" # oDP.ValueUnit());
                     Write("' timestamp='" # oDP.Timestamp().ToInteger());
+                    Write("' lastdpactiontime='" # oDP.LastDPActionTime().ToInteger());
                     Write("' />");
                   }
                 }
