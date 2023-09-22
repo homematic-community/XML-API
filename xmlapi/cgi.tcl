@@ -22,14 +22,14 @@ proc cgi_http_head {args} {
     set _cgi(http_head_in_progress) 1
 
     if {0 == [llength $args]} {
-	cgi_content_type
+       cgi_content_type
     cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
     } else {
-	if {[catch {uplevel 1 [lindex $args 0]} errMsg]} {
-	    set savedInfo $errorInfo
-	    cgi_content_type
+       if {[catch {uplevel 1 [lindex $args 0]} errMsg]} {
+           set savedInfo $errorInfo
+           cgi_content_type
         cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
-	}
+       }
     }
     cgi_puts ""
 
@@ -37,7 +37,7 @@ proc cgi_http_head {args} {
     set _cgi(http_head_done) 1
 
     if {[info exists savedInfo]} {
-	error $errMsg $savedInfo
+       error $errMsg $savedInfo
     }
 }
 
@@ -63,18 +63,18 @@ proc cgi_content_type {args} {
     global _cgi
 
     if {0==[llength $args]} {
-	set t text/html
+       set t text/html
     } else {
-	set t [lindex $args 0]
-	if {[regexp ^multipart/ $t]} {
-	    set _cgi(multipart) 1
-	}
+       set t [lindex $args 0]
+       if {[regexp ^multipart/ $t]} {
+           set _cgi(multipart) 1
+       }
     }
 
     if {[info exists _cgi(http_head_in_progress)]} {
-	cgi_puts "Content-type: $t"
+       cgi_puts "Content-type: $t"
     } else {
-	cgi_http_head [list cgi_content_type $t]
+       cgi_http_head [list cgi_content_type $t]
     }
 }
 
@@ -82,13 +82,13 @@ proc cgi_redirect {t} {
     global _cgi
 
     if {[info exists _cgi(http_head_in_progress)]} {
-	cgi_status 302 Redirected
-	cgi_puts "Uri: $t"
-	cgi_puts "Location: $t"
+       cgi_status 302 Redirected
+       cgi_puts "Uri: $t"
+       cgi_puts "Location: $t"
     } else {
-	cgi_http_head {
-	    cgi_redirect $t
-	}
+       cgi_http_head {
+           cgi_redirect $t
+       }
     }
 }
 
@@ -97,9 +97,9 @@ proc cgi_location {t} {
     global _cgi
 
     if {[info exists _cgi(http_head_in_progress)]} {
-	cgi_puts "Location: $t"
+       cgi_puts "Location: $t"
     } else {
-	cgi_http_head "cgi_location $t"
+       cgi_http_head "cgi_location $t"
     }
 }
 
@@ -107,7 +107,7 @@ proc cgi_target {t} {
     global _cgi
 
     if {![info exists _cgi(http_head_in_progress)]} {
-	error "cgi_target must be set from within cgi_http_head."
+       error "cgi_target must be set from within cgi_http_head."
     }
     cgi_puts "Window-target: $t"
 }
@@ -118,12 +118,12 @@ proc cgi_refresh {seconds {url ""}} {
     global _cgi
 
     if {![info exists _cgi(http_head_in_progress)]} {
-	error "cgi_refresh must be set from within cgi_http_head.  Try using cgi_http_equiv instead."
+       error "cgi_refresh must be set from within cgi_http_head.  Try using cgi_http_equiv instead."
     }
     cgi_put "Refresh: $seconds"
 
     if {0!=[string compare $url ""]} {
-	cgi_put "; $url"
+       cgi_put "; $url"
     }
     cgi_puts ""
 }
@@ -133,7 +133,7 @@ proc cgi_pragma {arg} {
     global _cgi
 
     if {![info exists _cgi(http_head_in_progress)]} {
-	error "cgi_pragma must be set from within cgi_http_head."
+       error "cgi_pragma must be set from within cgi_http_head."
     }
     cgi_puts "Pragma: $arg"
 }
@@ -142,9 +142,9 @@ proc cgi_pragma {arg} {
 # support for debugging or other crucial things we need immediately
 ##################################################
 
-proc cgi_comment	{args}	{}	;# need this asap
+proc cgi_comment       {args}       {}       ;# need this asap
 
-proc cgi_html_comment	{args}	{
+proc cgi_html_comment       {args}       {
     regsub -all {>} $args {\&gt;} args
     cgi_put "<!--[_cgi_list_to_string $args] -->"
 }
@@ -156,51 +156,51 @@ proc cgi_debug {args} {
     set old $_cgi(debug)
     set arg [lindex $args 0]
     if {$arg == "-on"} {
-	set _cgi(debug) -on
-	set args [lrange $args 1 end]
+       set _cgi(debug) -on
+       set args [lrange $args 1 end]
     } elseif {$arg == "-off"} {
-	set _cgi(debug) -off
-	set args [lrange $args 1 end]
+       set _cgi(debug) -off
+       set args [lrange $args 1 end]
     } elseif {[regexp "^-t" $arg]} {
-	set temp 1
-	set _cgi(debug) -on
-	set args [lrange $args 1 end]
+       set temp 1
+       set _cgi(debug) -on
+       set args [lrange $args 1 end]
     } elseif {[regexp "^-noprint$" $arg]} {
-	set noprint 1
-	set args [lrange $args 1 end]
+       set noprint 1
+       set args [lrange $args 1 end]
     }
 
     set arg [lindex $args 0]
     if {$arg == "--"} {
-	set args [lrange $args 1 end]
+       set args [lrange $args 1 end]
     }
 
     if {[llength $args]} {
-	if {$_cgi(debug) == "-on"} {
+       if {$_cgi(debug) == "-on"} {
 
-	    _cgi_close_tag
-	    # force http head and open html, head, body
-	    catch {
-		if {[info exists noprint]} {
-		    uplevel 1 [lindex $args 0]
-		} else {
-		    cgi_html {
-			cgi_head {
-			    cgi_title "debugging before complete HTML head"
-			}
-			# force body open and leave open
-			_cgi_body_start
-			uplevel 1 [lindex $args 0]
-			# bop back out to catch, so we don't close body
-			error "ignore"
-		    }
-		}
-	    }
-	}
+           _cgi_close_tag
+           # force http head and open html, head, body
+           catch {
+              if {[info exists noprint]} {
+                  uplevel 1 [lindex $args 0]
+              } else {
+                  cgi_html {
+                     cgi_head {
+                         cgi_title "debugging before complete HTML head"
+                     }
+                     # force body open and leave open
+                     _cgi_body_start
+                     uplevel 1 [lindex $args 0]
+                     # bop back out to catch, so we don't close body
+                     error "ignore"
+                  }
+              }
+           }
+       }
     }
 
     if {[info exists temp]} {
-	set _cgi(debug) $old
+       set _cgi(debug) $old
     }
     return $old
 }
@@ -212,19 +212,19 @@ proc cgi_uid_check {user} {
     if {[regexp "^-off$" $user]} return
 
     if {[info exists env(USER)]} {
-	set whoami $env(USER)
+       set whoami $env(USER)
     } elseif {0==[catch {exec whoami} whoami]} {
-	# "who am i" on some Linux hosts returns "" so try whoami first
+       # "who am i" on some Linux hosts returns "" so try whoami first
     } elseif {0==[catch {exec who am i} whoami]} {
-	# skip over "host!"
-	regexp "(.*!)?(\[^ \t]*)" $whoami dummy dummy whoami
+       # skip over "host!"
+       regexp "(.*!)?(\[^ \t]*)" $whoami dummy dummy whoami
     } elseif {0==[catch {package require registry}]} {
-	set whoami [registry get HKEY_LOCAL_MACHINE\\Network\\Logon username]
+       set whoami [registry get HKEY_LOCAL_MACHINE\\Network\\Logon username]
     } else {
-	set whoami $user  ;# give up and let go
+       set whoami $user  ;# give up and let go
     }
     if {$whoami != "$user"} {
-	error "Warning: This CGI script expects to run with uid \"$user\".  However, this script is running as \"$whoami\"."
+       error "Warning: This CGI script expects to run with uid \"$user\".  However, this script is running as \"$whoami\"."
     }
 }
 
@@ -233,21 +233,21 @@ proc cgi_uid_check {user} {
 proc cgi_parray {a {pattern *}} {
     upvar 1 $a array
     if {![array exists array]} {
-	error "\"$a\" isn't an array"
+       error "\"$a\" isn't an array"
     }
 
     set maxl 0
     foreach name [lsort [array names array $pattern]] {
-	if {[string length $name] > $maxl} {
-	    set maxl [string length $name]
-	}
+       if {[string length $name] > $maxl} {
+           set maxl [string length $name]
+       }
     }
     cgi_preformatted {
-	set maxl [expr {$maxl + [string length $a] + 2}]
-	foreach name [lsort [array names array $pattern]] {
-	    set nameString [format %s(%s) $a $name]
-	    cgi_puts [cgi_quote_html [format "%-*s = %s" $maxl $nameString $array($name)]]
-	}
+       set maxl [expr {$maxl + [string length $a] + 2}]
+       foreach name [lsort [array names array $pattern]] {
+           set nameString [format %s(%s) $a $name]
+           cgi_puts [cgi_quote_html [format "%-*s = %s" $maxl $nameString $array($name)]]
+       }
     }
 }
 
@@ -258,67 +258,67 @@ proc cgi_eval {cmd} {
     set _cgi(body) $cmd
 
     uplevel 1 {
-	global env _cgi errorInfo
+       global env _cgi errorInfo
 
-	if {1==[catch $_cgi(body) errMsg]} {
-	    # error occurred, handle it
-	    set _cgi(errorInfo) $errorInfo
+       if {1==[catch $_cgi(body) errMsg]} {
+           # error occurred, handle it
+           set _cgi(errorInfo) $errorInfo
 
-	    if {![info exists env(REQUEST_METHOD)]} {
-		puts stderr $_cgi(errorInfo)
-		return
-	    }
-	    # the following code is all to force browsers into a state
-	    # such that diagnostics can be reliably shown
+           if {![info exists env(REQUEST_METHOD)]} {
+              puts stderr $_cgi(errorInfo)
+              return
+           }
+           # the following code is all to force browsers into a state
+           # such that diagnostics can be reliably shown
 
-	    # close irrelevant things
-	    _cgi_close_procs
-	    # force http head and open html, head, body
-	    cgi_html {
-		cgi_body {
-		    if {[info exists _cgi(client_error)]} {
-			cgi_h3 "Client Error"
-			cgi_p "$errMsg  Report this to your system administrator or browser vendor."
-		    } else {
-			cgi_put [cgi_anchor_name cgierror]
-			cgi_h3 "An internal error was detected in the service\
-				software.  The diagnostics are being emailed to\
-				the service system administrator ($_cgi(admin_email))."
+           # close irrelevant things
+           _cgi_close_procs
+           # force http head and open html, head, body
+           cgi_html {
+              cgi_body {
+                  if {[info exists _cgi(client_error)]} {
+                     cgi_h3 "Client Error"
+                     cgi_p "$errMsg  Report this to your system administrator or browser vendor."
+                  } else {
+                     cgi_put [cgi_anchor_name cgierror]
+                     cgi_h3 "An internal error was detected in the service\
+                            software.  The diagnostics are being emailed to\
+                            the service system administrator ($_cgi(admin_email))."
 
-			if {$_cgi(debug) == "-on"} {
-			    cgi_puts "Heck, since you're debugging, I'll show you the\
-				    errors right here:"
-			    # suppress formatting
-			    cgi_preformatted {
-				cgi_puts [cgi_quote_html $_cgi(errorInfo)]
-			    }
-			} else {
-			    cgi_mail_start $_cgi(admin_email)
-			    cgi_mail_add "Subject: [cgi_name] CGI problem"
-			    cgi_mail_add
-			    cgi_mail_add "CGI environment:"
-			    cgi_mail_add "REQUEST_METHOD: $env(REQUEST_METHOD)"
-			    cgi_mail_add "SCRIPT_NAME: $env(SCRIPT_NAME)"
-			    # this next few things probably don't need
-			    # a catch but I'm not positive
-			    catch {cgi_mail_add "HTTP_USER_AGENT: $env(HTTP_USER_AGENT)"}
-			    catch {cgi_mail_add "HTTP_REFERER: $env(HTTP_REFERER)"}
-			    catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
-			    catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
-			    catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
-			    cgi_mail_add "cgi.tcl version: 1.8.0"
-			    cgi_mail_add "input:"
-			    catch {cgi_mail_add $_cgi(input)}
-			    cgi_mail_add "cookie:"
-			    catch {cgi_mail_add $env(HTTP_COOKIE)}
-			    cgi_mail_add "errorInfo:"
-			    cgi_mail_add "$_cgi(errorInfo)"
-			    cgi_mail_end
-			}
-		    }
-		} ;# end cgi_body
-	    } ;# end cgi_html
-	} ;# end catch
+                     if {$_cgi(debug) == "-on"} {
+                         cgi_puts "Heck, since you're debugging, I'll show you the\
+                                errors right here:"
+                         # suppress formatting
+                         cgi_preformatted {
+                            cgi_puts [cgi_quote_html $_cgi(errorInfo)]
+                         }
+                     } else {
+                         cgi_mail_start $_cgi(admin_email)
+                         cgi_mail_add "Subject: [cgi_name] CGI problem"
+                         cgi_mail_add
+                         cgi_mail_add "CGI environment:"
+                         cgi_mail_add "REQUEST_METHOD: $env(REQUEST_METHOD)"
+                         cgi_mail_add "SCRIPT_NAME: $env(SCRIPT_NAME)"
+                         # this next few things probably don't need
+                         # a catch but I'm not positive
+                         catch {cgi_mail_add "HTTP_USER_AGENT: $env(HTTP_USER_AGENT)"}
+                         catch {cgi_mail_add "HTTP_REFERER: $env(HTTP_REFERER)"}
+                         catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
+                         catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
+                         catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
+                         cgi_mail_add "cgi.tcl version: 1.8.0"
+                         cgi_mail_add "input:"
+                         catch {cgi_mail_add $_cgi(input)}
+                         cgi_mail_add "cookie:"
+                         catch {cgi_mail_add $env(HTTP_COOKIE)}
+                         cgi_mail_add "errorInfo:"
+                         cgi_mail_add "$_cgi(errorInfo)"
+                         cgi_mail_end
+                     }
+                  }
+              } ;# end cgi_body
+           } ;# end cgi_html
+       } ;# end catch
     } ;# end uplevel
 }
 
@@ -341,9 +341,9 @@ proc cgi_root {args} {
     global _cgi
 
     if {[llength $args]} {
-	set _cgi(root) [lindex $args 0]
+       set _cgi(root) [lindex $args 0]
     } else {
-	set _cgi(root)
+       set _cgi(root)
     }
 }
 
@@ -353,35 +353,35 @@ proc cgi_cgi {args} {
 
     set root $_cgi(root)
     if {0!=[string compare $root ""]} {
-	if {![regexp "/$" $root]} {
-		append root "/"
-	}
+       if {![regexp "/$" $root]} {
+              append root "/"
+       }
     }
-		
+
     set suffix [cgi_suffix]
 
     set arg [lindex $args 0]
     if {0==[string compare $arg "-suffix"]} {
-	set suffix [lindex $args 1]
-	set args [lrange $args 2 end]
+       set suffix [lindex $args 1]
+       set args [lrange $args 2 end]
     }
 
     if {[llength $args]==1} {
-	return $root[lindex $args 0]$suffix
+       return $root[lindex $args 0]$suffix
     } else {
-	return $root[lindex $args 0]$suffix?[join [lrange $args 1 end] &]
+       return $root[lindex $args 0]$suffix?[join [lrange $args 1 end] &]
     }
 }
 
 proc cgi_suffix {args} {
     global _cgi
     if {[llength $args] > 0} {
-	set _cgi(suffix) [lindex $args 0]
+       set _cgi(suffix) [lindex $args 0]
     }
     if {![info exists _cgi(suffix)]} {
-	return .cgi
+       return .cgi
     } else {
-	return $_cgi(suffix)
+       return $_cgi(suffix)
     }
 }
 
@@ -405,14 +405,14 @@ proc cgi_link {args} {
 
     set tag [lindex $args 0]
     switch -- [llength $args] {
-	1 {
-	    set label $_cgi_link($tag,label)
-	} 2 {
-	    set label [lindex $args end]
-	} default {
-	    set _cgi_link($tag,label) [set label [lindex $args 1]]
-	    set _cgi_link($tag,url) [lrange $args 2 end]
-	}
+       1 {
+           set label $_cgi_link($tag,label)
+       } 2 {
+           set label [lindex $args end]
+       } default {
+           set _cgi_link($tag,label) [set label [lindex $args 1]]
+           set _cgi_link($tag,url) [lrange $args 2 end]
+       }
     }
 
     return [eval cgi_url [list $label] $_cgi_link($tag,url)]
@@ -425,7 +425,7 @@ proc cgi_imglink {args} {
 
     set tag [lindex $args 0]
     if {[llength $args] >= 2} {
-	set _cgi_imglink($tag) [eval cgi_img [lrange $args 1 end]]
+       set _cgi_imglink($tag) [eval cgi_img [lrange $args 1 end]]
     }
     return $_cgi_imglink($tag)
 }
@@ -452,11 +452,11 @@ proc cgi_url {display args} {
 
     set buf "<a href=\"[lindex $args 0]\""
     foreach a [lrange $args 1 end] {
-	if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
-	    append buf " $attr=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
+           append buf " $attr=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     return "$buf>$display</a>"
 }
@@ -480,13 +480,13 @@ proc cgi_img {args} {
 
     set buf "<img src=\"[lindex $args 0]\""
     foreach a [lrange $args 1 end] {
-	if {[regexp "^(alt|lowsrc|usemap)=(.*)" $a dummy attr str]} {
-	    append buf " $attr=[cgi_dquote_html $str]"
-	} elseif {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
-	    append buf " $attr=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp "^(alt|lowsrc|usemap)=(.*)" $a dummy attr str]} {
+           append buf " $attr=[cgi_dquote_html $str]"
+       } elseif {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
+           append buf " $attr=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     return "$buf />"
 }
@@ -501,13 +501,13 @@ proc cgi_base {args} {
 
     cgi_put "<base"
     foreach a $args {
-	if {[regexp "^href=(.*)" $a dummy str]} {
-	    cgi_put " href=[cgi_dquote_html $str]"
-	} elseif {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^href=(.*)" $a dummy str]} {
+           cgi_put " href=[cgi_dquote_html $str]"
+       } elseif {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts " / >"
 }
@@ -518,67 +518,67 @@ proc cgi_base {args} {
 
 if {[info tclversion] >= 8.2} {
     proc cgi_unquote_input buf {
-	# rewrite "+" back to space
-	# protect \ from quoting another \ and throwing off other things
-	# replace line delimiters with newlines
-	set buf [string map -nocase [list + { } "\\" "\\\\" %0d%0a \n] $buf]
+       # rewrite "+" back to space
+       # protect \ from quoting another \ and throwing off other things
+       # replace line delimiters with newlines
+       set buf [string map -nocase [list + { } "\\" "\\\\" %0d%0a \n] $buf]
 
-	# prepare to process all %-escapes
-	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
+       # prepare to process all %-escapes
+       regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
 
-	# process \u unicode mapped chars
-	encoding convertfrom [subst -novar -nocommand $buf]
+       # process \u unicode mapped chars
+       encoding convertfrom [subst -novar -nocommand $buf]
     }
 } elseif {[info tclversion] >= 8.1} {
     proc cgi_unquote_input buf {
-	# rewrite "+" back to space
-	regsub -all {\+} $buf { } buf
-	# protect \ from quoting another \ and throwing off other things
-	regsub -all {\\} $buf {\\\\} buf
+       # rewrite "+" back to space
+       regsub -all {\+} $buf { } buf
+       # protect \ from quoting another \ and throwing off other things
+       regsub -all {\\} $buf {\\\\} buf
 
-	# replace line delimiters with newlines
-	regsub -all -nocase "%0d%0a" $buf "\n" buf
+       # replace line delimiters with newlines
+       regsub -all -nocase "%0d%0a" $buf "\n" buf
 
-	# prepare to process all %-escapes
-	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
-	# process \u unicode mapped chars
-	return [subst -novar -nocommand $buf]
+       # prepare to process all %-escapes
+       regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
+       # process \u unicode mapped chars
+       return [subst -novar -nocommand $buf]
     }
 } else {
     proc cgi_unquote_input {buf} {
-	# rewrite "+" back to space
-	regsub -all {\+} $buf { } buf
-	# protect \ from quoting another \ and throwing off other things first
-	# protect $ from doing variable expansion
-	# protect [ from doing evaluation
-	# protect " from terminating string
-	regsub -all {([\\["$])} $buf {\\\1} buf
-	
-	# replace line delimiters with newlines
-	regsub -all -nocase "%0d%0a" $buf "\n" buf
-	# Mosaic sends just %0A.  This is handled in the next command.
+       # rewrite "+" back to space
+       regsub -all {\+} $buf { } buf
+       # protect \ from quoting another \ and throwing off other things first
+       # protect $ from doing variable expansion
+       # protect [ from doing evaluation
+       # protect " from terminating string
+       regsub -all {([\\["$])} $buf {\\\1} buf
 
-	# prepare to process all %-escapes 
-	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {[format %c 0x\1]} buf
-	# process %-escapes and undo all protection
-	eval return \"$buf\"
+       # replace line delimiters with newlines
+       regsub -all -nocase "%0d%0a" $buf "\n" buf
+       # Mosaic sends just %0A.  This is handled in the next command.
+
+       # prepare to process all %-escapes
+       regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {[format %c 0x\1]} buf
+       # process %-escapes and undo all protection
+       eval return \"$buf\"
     }
 }
 
 # return string but with html-special characters escaped,
 # necessary if you want to send unknown text to an html-formatted page.
 proc cgi_quote_html {s} {
-    regsub -all {&}	$s {\&amp;}	s	;# must be first!
-    regsub -all {"}	$s {\&quot;}	s
-    regsub -all {<}	$s {\&lt;}	s
-    regsub -all {>}	$s {\&gt;}	s
-    regsub -all {ä}	$s {\&auml;}	s
-    regsub -all {Ä}	$s {\&Auml;}	s
-    regsub -all {ö}	$s {\&ouml;}	s
-    regsub -all {Ö}	$s {\&Ouml;}	s
-    regsub -all {ü}	$s {\&uuml;}	s
-    regsub -all {Ü}	$s {\&Uuml;}	s
-    regsub -all {ß}	$s {\&szlig;}	s
+    regsub -all {&}       $s {\&amp;}       s       ;# must be first!
+    regsub -all {"}       $s {\&quot;}       s
+    regsub -all {<}       $s {\&lt;}       s
+    regsub -all {>}       $s {\&gt;}       s
+    regsub -all {ä}       $s {\&auml;}       s
+    regsub -all {Ä}       $s {\&Auml;}       s
+    regsub -all {ö}       $s {\&ouml;}       s
+    regsub -all {Ö}       $s {\&Ouml;}       s
+    regsub -all {ü}       $s {\&uuml;}       s
+    regsub -all {Ü}       $s {\&Uuml;}       s
+    regsub -all {ß}       $s {\&szlig;}       s
     return $s
 }
 
@@ -603,7 +603,7 @@ proc cgi_quote_url {in} {
 proc cgi_br {args} {
     cgi_put "<br"
     if {[llength $args]} {
-	cgi_put "[_cgi_list_to_string $args]"
+       cgi_put "[_cgi_list_to_string $args]"
     }
     cgi_put " />"
 }
@@ -615,8 +615,8 @@ for {set _cgi(tmp) 1} {$_cgi(tmp)<8} {incr _cgi(tmp)} {
 proc cgi_h {num args} {
     cgi_put "<h$num"
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
-	set args [lrange $args end end]
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       set args [lrange $args end end]
     }
     cgi_put ">[lindex $args 0]</h$num>"
 }
@@ -624,8 +624,8 @@ proc cgi_h {num args} {
 proc cgi_p {args} {
     cgi_put "<p"
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
-	set args [lrange $args end end]
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       set args [lrange $args end end]
     }
     cgi_put ">[lindex $args 0]</p>"
 }
@@ -639,7 +639,7 @@ proc cgi_blockquote   {s} {cgi_puts <blockquote>$s</blockquote>}
 
 # Shorthand for <div align=center>.  We used to use <center> tags but that
 # is now officially unsupported.
-proc cgi_center	{cmd}	{
+proc cgi_center       {cmd}       {
     uplevel 1 "cgi_division align=center [list $cmd]"
 }
 
@@ -648,7 +648,7 @@ proc cgi_division {args} {
     _cgi_close_proc_push "cgi_put </div>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr {[llength $args]-2}]]"
+       cgi_put "[_cgi_lrange $args 0 [expr {[llength $args]-2}]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -660,7 +660,7 @@ proc cgi_preformatted {args} {
     _cgi_close_proc_push "cgi_put </pre>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -674,7 +674,7 @@ proc cgi_preformatted {args} {
 proc cgi_li {args} {
     cgi_put <li
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">[lindex $args end]</li>"
 }
@@ -684,7 +684,7 @@ proc cgi_number_list {args} {
     _cgi_close_proc_push "cgi_put </ol>"
 
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -697,7 +697,7 @@ proc cgi_bullet_list {args} {
     _cgi_close_proc_push "cgi_put </ul>"
 
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -737,17 +737,17 @@ proc cgi_directory_list {cmd} {
 # text support
 ##################################################
 
-proc cgi_put	    {s} {cgi_puts -nonewline $s}
+proc cgi_put           {s} {cgi_puts -nonewline $s}
 
 # some common special characters
-proc cgi_lt	     {}  {return "&lt;"}
-proc cgi_gt	     {}  {return "&gt;"}
-proc cgi_amp	     {}  {return "&amp;"}
-proc cgi_quote	     {}  {return "&quot;"}
+proc cgi_lt            {}  {return "&lt;"}
+proc cgi_gt            {}  {return "&gt;"}
+proc cgi_amp            {}  {return "&amp;"}
+proc cgi_quote            {}  {return "&quot;"}
 proc cgi_enspace     {}  {return "&ensp;"}
 proc cgi_emspace     {}  {return "&emsp;"}
 proc cgi_nbspace     {}  {return "&#160;"} ;# nonbreaking space
-proc cgi_tm	     {}  {return "&#174;"} ;# registered trademark
+proc cgi_tm            {}  {return "&#174;"} ;# registered trademark
 proc cgi_copyright   {}  {return "&#169;"}
 proc cgi_isochar     {n} {return "&#$n;"}
 proc cgi_breakable   {}  {return "<wbr />"}
@@ -763,28 +763,28 @@ proc cgi_unbreakable {cmd} {
 proc cgi_nl          {args} {
     set buf "<br"
     if {[llength $args]} {
-	append buf "[_cgi_list_to_string $args]"
+       append buf "[_cgi_list_to_string $args]"
     }
     return "$buf />"
 }
 
-proc cgi_bold	    {s} {return "<b>$s</b>"}
+proc cgi_bold           {s} {return "<b>$s</b>"}
 proc cgi_italic     {s} {return "<i>$s</i>"}
 proc cgi_underline  {s} {return "<u>$s</u>"}
 proc cgi_strikeout  {s} {return "<s>$s</s>"}
 proc cgi_subscript  {s} {return "<sub>$s</sub>"}
 proc cgi_superscript {s} {return "<sup>$s</sup>"}
 proc cgi_typewriter {s} {return "<tt>$s</tt>"}
-proc cgi_blink	    {s} {return "<blink>$s</blink>"}
+proc cgi_blink           {s} {return "<blink>$s</blink>"}
 proc cgi_emphasis   {s} {return "<em>$s</em>"}
-proc cgi_strong	    {s} {return "<strong>$s</strong>"}
-proc cgi_cite	    {s} {return "<cite>$s</cite>"}
+proc cgi_strong           {s} {return "<strong>$s</strong>"}
+proc cgi_cite           {s} {return "<cite>$s</cite>"}
 proc cgi_sample     {s} {return "<samp>$s</samp>"}
 proc cgi_keyboard   {s} {return "<kbd>$s</kbd>"}
 proc cgi_variable   {s} {return "<var>$s</var>"}
 proc cgi_definition {s} {return "<dfn>$s</dfn>"}
-proc cgi_big	    {s} {return "<big>$s</big>"}
-proc cgi_small	    {s} {return "<small>$s</small>"}
+proc cgi_big           {s} {return "<big>$s</big>"}
+proc cgi_small           {s} {return "<small>$s</small>"}
 
 proc cgi_basefont   {size} {cgi_put "<basefont size=$size />"}
 
@@ -793,11 +793,11 @@ proc cgi_font {args} {
 
     set buf "<font"
     foreach a [lrange $args 0 [expr [llength $args]-2]] {
-	if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
-	    append buf " $attr=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
+           append buf " $attr=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     return "$buf>[lindex $args end]</font>"
 }
@@ -808,7 +808,7 @@ proc cgi_buffer {cmd} {
     global _cgi
 
     if {0==[info exists _cgi(returnIndex)]} {
-	set _cgi(returnIndex) 0
+       set _cgi(returnIndex) 0
     }
 
     rename cgi_puts cgi_puts$_cgi(returnIndex)
@@ -816,20 +816,20 @@ proc cgi_buffer {cmd} {
     set _cgi(return[set _cgi(returnIndex)]) ""
 
     proc cgi_puts args {
-	global _cgi
-	upvar #0 _cgi(return[set _cgi(returnIndex)]) buffer
+       global _cgi
+       upvar #0 _cgi(return[set _cgi(returnIndex)]) buffer
 
-	append buffer [lindex $args end]
-	if {[llength $args] == 1} {
-	    append buffer $_cgi(buffer_nl)
-	}
+       append buffer [lindex $args end]
+       if {[llength $args] == 1} {
+           append buffer $_cgi(buffer_nl)
+       }
     }
 
     # must restore things before allowing the eval to fail
     # so catch here and rethrow later
     if {[catch {uplevel 1 $cmd} errMsg]} {
-	global errorInfo
-	set savedInfo $errorInfo
+       global errorInfo
+       set savedInfo $errorInfo
     }
 
     # not necessary to put remainder of code in close_proc_push since it's
@@ -842,7 +842,7 @@ proc cgi_buffer {cmd} {
     rename cgi_puts$_cgi(returnIndex) cgi_puts
 
     if {[info exists savedInfo]} {
-	error $errMsg $savedInfo
+       error $errMsg $savedInfo
     }
     return $buffer
 }
@@ -864,9 +864,9 @@ proc cgi_html {args} {
     set html [lindex $args end]
     set argc [llength $args]
     if {$argc > 1} {
-	eval _cgi_html_start [lrange $args 0 [expr {$argc-2}]]
+       eval _cgi_html_start [lrange $args 0 [expr {$argc-2}]]
     } else {
-	_cgi_html_start
+       _cgi_html_start
     }
     uplevel 1 $html
     _cgi_html_end
@@ -874,7 +874,7 @@ proc cgi_html {args} {
 
 proc _cgi_html_start {args} {
     global _cgi
-    
+
     if {[info exists _cgi(html_in_progress)]} return
     _cgi_http_head_implicit
 
@@ -883,11 +883,11 @@ proc _cgi_html_start {args} {
 
     append buf "<html"
     foreach a $args {
-	if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
-	    append buf " $attr=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp $_cgi(attr,regexp) $a dummy attr str]} {
+           append buf " $attr=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     cgi_puts "$buf>"
 }
@@ -916,14 +916,14 @@ proc cgi_head {{head {}}} {
     global _cgi
 
     if {[info exists _cgi(head_done)]} {
-	return
+       return
     }
 
     # allow us to be recalled so that we can display errors
     if {0 == [info exists _cgi(head_in_progress)]} {
-	_cgi_http_head_implicit
-	set _cgi(head_in_progress) 1
-	cgi_puts "<head>"
+       _cgi_http_head_implicit
+       set _cgi(head_in_progress) 1
+       cgi_puts "<head>"
     }
 
     # prevent cgi_html (during error handling) from generating html tags
@@ -932,15 +932,15 @@ proc cgi_head {{head {}}} {
     # them up
 
     if {0 == [string length $head]} {
-	if {[catch {cgi_title}]} {
-	    set head "cgi_title untitled"
-	}
+       if {[catch {cgi_title}]} {
+           set head "cgi_title untitled"
+       }
     }
     uplevel 1 $head
     if {![info exists _cgi(head_suppress_tag)]} {
-	cgi_puts "</head>"
+       cgi_puts "</head>"
     } else {
-	unset _cgi(head_suppress_tag)
+       unset _cgi(head_suppress_tag)
     }
 
     set _cgi(head_done) 1
@@ -957,17 +957,17 @@ proc cgi_title {args} {
     set title [lindex $args 0]
 
     if {[llength $args]} {
-	_cgi_http_head_implicit
+       _cgi_http_head_implicit
 
-	# we could just generate <head></head> tags, but head-level commands
-	# might follow so just suppress the head tags entirely
-	if {![info exists _cgi(head_in_progress)]} {
-	    set _cgi(head_in_progress) 1
-	    set _cgi(head_suppress_tag) 1
-	}
+       # we could just generate <head></head> tags, but head-level commands
+       # might follow so just suppress the head tags entirely
+       if {![info exists _cgi(head_in_progress)]} {
+           set _cgi(head_in_progress) 1
+           set _cgi(head_suppress_tag) 1
+       }
 
-	set _cgi(title) $title
-	cgi_puts "<title>$title</title>"
+       set _cgi(title) $title
+       cgi_puts "<title>$title</title>"
     }
     return $_cgi(title)
 }
@@ -986,11 +986,11 @@ proc cgi_http_equiv {type contents} {
 proc cgi_meta {args} {
     cgi_put "<meta"
     foreach a $args {
-	if {[regexp "^(name|content|http-equiv)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=[cgi_dquote_html $str]"
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^(name|content|http-equiv)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=[cgi_dquote_html $str]"
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts " />"
 }
@@ -998,13 +998,13 @@ proc cgi_meta {args} {
 proc cgi_relationship {rel href args} {
     cgi_puts "<link rel=$rel href=\"$href\""
     foreach a $args {
-	if {[regexp "^title=(.*)" $a dummy str]} {
-	    cgi_put " title=[cgi_dquote_html $str]"
-	} elseif {[regexp "^type=(.*)" $a dummy str]} {
-	    cgi_put " type=[cgi_dquote_html $str]"
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^title=(.*)" $a dummy str]} {
+           cgi_put " title=[cgi_dquote_html $str]"
+       } elseif {[regexp "^type=(.*)" $a dummy str]} {
+           cgi_put " type=[cgi_dquote_html $str]"
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts "></link>"
 }
@@ -1013,7 +1013,7 @@ proc cgi_name {args} {
     global _cgi
 
     if {[llength $args]} {
-	set _cgi(name) [lindex $args 0]
+       set _cgi(name) [lindex $args 0]
     }
     return $_cgi(name)
 }
@@ -1027,12 +1027,12 @@ proc cgi_body {args} {
 
     # allow user to "return" from the body without missing _cgi_body_end
     if {1==[catch {
-	eval _cgi_body_start [lrange $args 0 [expr [llength $args]-2]]
-	uplevel 1 [lindex $args end]
+       eval _cgi_body_start [lrange $args 0 [expr [llength $args]-2]]
+       uplevel 1 [lindex $args end]
     } errMsg]} {
-	set savedInfo $errorInfo
-	set savedCode $errorCode
-	error $errMsg $savedInfo $savedCode
+       set savedInfo $errorInfo
+       set savedCode $errorCode
+       error $errMsg $savedInfo $savedCode
     }
     _cgi_body_end
 }
@@ -1047,38 +1047,38 @@ proc _cgi_body_start {args} {
 
     cgi_put "<body"
     foreach a "$args $_cgi(body_args)" {
-	if {[regexp "^(background|bgcolor|text|link|vlink|alink|onLoad|onUnload)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^(background|bgcolor|text|link|vlink|alink|onLoad|onUnload)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts ">"
 
     cgi_debug {
-	global env
-	catch {cgi_puts "Input: <pre>$_cgi(input)</pre>"}
-	catch {cgi_puts "Cookie: <pre>$env(HTTP_COOKIE)</pre>"}
+       global env
+       catch {cgi_puts "Input: <pre>$_cgi(input)</pre>"}
+       catch {cgi_puts "Cookie: <pre>$env(HTTP_COOKIE)</pre>"}
     }
 
     if {![info exists _cgi(errorInfo)]} {
-	uplevel 2 app_body_start
+       uplevel 2 app_body_start
     }
 }
 
 proc _cgi_body_end {} {
     global _cgi
     if {![info exists _cgi(errorInfo)]} {
-	uplevel 2 app_body_end
+       uplevel 2 app_body_end
     }
     unset _cgi(body_in_progress)
     cgi_puts "</body>"
 
     if {[info exists _cgi(multipart)]} {
-	unset _cgi(http_head_done)
-	catch {unset _cgi(http_status_done)}
-	unset _cgi(head_done)
-	catch {unset _cgi(head_suppress_tag)}
+       unset _cgi(http_head_done)
+       catch {unset _cgi(http_status_done)}
+       unset _cgi(head_done)
+       catch {unset _cgi(head_suppress_tag)}
     }
 }
 
@@ -1129,7 +1129,7 @@ proc cgi_param {nameval} {
     regexp "(\[^=]*)(=?)(.*)" $nameval dummy name q value
 
     if {$q != "="} {
-	set value ""
+       set value ""
     }
     cgi_puts "<param name=\"$name\" value=[cgi_dquote_html $value]></param>"
 }
@@ -1138,7 +1138,7 @@ proc cgi_param {nameval} {
 proc _cgi_close_proc_push {p} {
     global _cgi
     if {![info exists _cgi(close_proc)]} {
-	set _cgi(close_proc) ""
+       set _cgi(close_proc) ""
     }
     set _cgi(close_proc) "$p; $_cgi(close_proc)"
 }
@@ -1159,7 +1159,7 @@ proc _cgi_close_procs {} {
 
     _cgi_close_tag
     if {[info exists _cgi(close_proc)]} {
-	uplevel #0 $_cgi(close_proc)
+       uplevel #0 $_cgi(close_proc)
     }
 }
 
@@ -1167,8 +1167,8 @@ proc _cgi_close_tag {} {
     global _cgi
 
     if {[info exists _cgi(tag_in_progress)]} {
-	cgi_put ">"
-	unset _cgi(tag_in_progress)
+       cgi_put ">"
+       unset _cgi(tag_in_progress)
     }
 }
 
@@ -1179,11 +1179,11 @@ proc _cgi_close_tag {} {
 proc cgi_hr {args} {
     set buf "<hr"
     foreach a $args {
-	if {[regexp "^width=(.*)" $a dummy str]} {
-	    append buf " width=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp "^width=(.*)" $a dummy str]} {
+           append buf " width=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     cgi_put "$buf />"
 }
@@ -1201,22 +1201,22 @@ proc cgi_form {action args} {
     _cgi_close_proc_push _cgi_form_end
     cgi_put "<form action="
     if {[regexp {^[a-z]*:} $action]} {
-	cgi_put "\"$action\""
+       cgi_put "\"$action\""
     } else {
-	cgi_put "\"[cgi_cgi $action]\""
+       cgi_put "\"[cgi_cgi $action]\""
     }
     set method "method=post"
     foreach a [lrange $args 0 [expr [llength $args]-2]] {
-	if {[regexp "^method=" $a]} {
-	    set method $a
-	} elseif {[regexp "^(target|onReset|onSubmit)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} elseif {[regexp "^enctype=(.*)" $a dummy str]} {
-	    cgi_put " enctype=\"$str\""
-	    set _cgi(form,enctype) $str
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^method=" $a]} {
+           set method $a
+       } elseif {[regexp "^(target|onReset|onSubmit)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } elseif {[regexp "^enctype=(.*)" $a dummy str]} {
+           cgi_put " enctype=\"$str\""
+           set _cgi(form,enctype) $str
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put " $method>"
     uplevel 1 [lindex $args end]
@@ -1233,7 +1233,7 @@ proc _cgi_form_end {} {
 proc _cgi_form_multiple_check {} {
     global _cgi
     if {[info exists _cgi(form_in_progress)]} {
-	error "Cannot create form (or isindex) with form already in progress."
+       error "Cannot create form (or isindex) with form already in progress."
     }
 }
 
@@ -1242,13 +1242,13 @@ proc cgi_isindex {args} {
 
     cgi_put "<isindex"
     foreach a $args {
-	if {[regexp "^href=(.*)" $a dummy str]} {
-	    cgi_put " href=\"$str\""
-	} elseif {[regexp "^prompt=(.*)" $a dummy str]} {
-	    cgi_put " prompt=[cgi_dquote_html $str]"
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^href=(.*)" $a dummy str]} {
+           cgi_put " href=\"$str\""
+       } elseif {[regexp "^prompt=(.*)" $a dummy str]} {
+           cgi_put " prompt=[cgi_dquote_html $str]"
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "></isindex>"
 }
@@ -1264,76 +1264,76 @@ proc cgi_input {{fakeinput {}} {fakecookie {}}} {
     set _cgi(uservars,autolist) {}
 
     if {[info exists env(CONTENT_TYPE)] && [regexp ^multipart/form-data $env(CONTENT_TYPE)]} {
-	if {![info exists env(REQUEST_METHOD)]} {
-	    # running by hand
-	    set fid [open $fakeinput]
-	} else {
-	    set fid stdin
-	}
-	if {([info tclversion] >= 8.1) || [catch exp_version] || [info exists _cgi(no_binary_upload)]} {
-	    _cgi_input_multipart $fid
-	} else {
-	    _cgi_input_multipart_binary $fid
-	}
+       if {![info exists env(REQUEST_METHOD)]} {
+           # running by hand
+           set fid [open $fakeinput]
+       } else {
+           set fid stdin
+       }
+       if {([info tclversion] >= 8.1) || [catch exp_version] || [info exists _cgi(no_binary_upload)]} {
+           _cgi_input_multipart $fid
+       } else {
+           _cgi_input_multipart_binary $fid
+       }
     } else {
-	if {![info exists env(REQUEST_METHOD)]} {
-	    set input $fakeinput
-	    set env(HTTP_COOKIE) $fakecookie
-	} elseif { $env(REQUEST_METHOD) == "GET" } {
-	    set input ""
-	    catch {set input $env(QUERY_STRING)} ;# doesn't have to be set
-	} elseif { $env(REQUEST_METHOD) == "HEAD" } {
-	    set input ""
-	} elseif {![info exists env(CONTENT_LENGTH)]} {
-	    set _cgi(client_error) 1
-	    error "Your browser failed to generate the content-length during a POST method."
-	} else {
-	    set length $env(CONTENT_LENGTH)
-	    if {0!=[string compare $length "-1"]} {
-		set input [read stdin $env(CONTENT_LENGTH)]		
-	    } else {
-		set _cgi(client_error) 1
-		error "Your browser generated a content-length of -1 during a POST method."
-	    }
-	}
-	# save input for possible diagnostics later
-	set _cgi(input) $input
+       if {![info exists env(REQUEST_METHOD)]} {
+           set input $fakeinput
+           set env(HTTP_COOKIE) $fakecookie
+       } elseif { $env(REQUEST_METHOD) == "GET" } {
+           set input ""
+           catch {set input $env(QUERY_STRING)} ;# doesn't have to be set
+       } elseif { $env(REQUEST_METHOD) == "HEAD" } {
+           set input ""
+       } elseif {![info exists env(CONTENT_LENGTH)]} {
+           set _cgi(client_error) 1
+           error "Your browser failed to generate the content-length during a POST method."
+       } else {
+           set length $env(CONTENT_LENGTH)
+           if {0!=[string compare $length "-1"]} {
+              set input [read stdin $env(CONTENT_LENGTH)]
+           } else {
+              set _cgi(client_error) 1
+              error "Your browser generated a content-length of -1 during a POST method."
+           }
+       }
+       # save input for possible diagnostics later
+       set _cgi(input) $input
 
-	set pairs [split $input &]
-	foreach pair $pairs {
-	    if {0 == [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
-		# if no match, unquote and leave it at that
-		# this is typical of <isindex>-style queries
-		set varname anonymous
-		set val $pair
-	    }
+       set pairs [split $input &]
+       foreach pair $pairs {
+           if {0 == [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
+              # if no match, unquote and leave it at that
+              # this is typical of <isindex>-style queries
+              set varname anonymous
+              set val $pair
+           }
 
-	    set varname [cgi_unquote_input $varname]
-	    set val [cgi_unquote_input $val]
-	    _cgi_set_uservar $varname $val
-	}
+           set varname [cgi_unquote_input $varname]
+           set val [cgi_unquote_input $val]
+           _cgi_set_uservar $varname $val
+       }
     }
 
     # O'Reilly's web server incorrectly uses COOKIE
     catch {set env(HTTP_COOKIE) $env(COOKIE)}
     if {![info exists env(HTTP_COOKIE)]} return
     foreach pair [split $env(HTTP_COOKIE) ";"] {
-	# pairs are actually split by "; ", sigh
-	set pair [string trimleft $pair " "]
-	# spec is not clear but seems to allow = unencoded
-	# only sensible interpretation is to assume no = in var names
-	# appears MS IE can omit "=val"
-	set val ""
-	regexp (\[^=]*)=?(.*) $pair dummy varname val
+       # pairs are actually split by "; ", sigh
+       set pair [string trimleft $pair " "]
+       # spec is not clear but seems to allow = unencoded
+       # only sensible interpretation is to assume no = in var names
+       # appears MS IE can omit "=val"
+       set val ""
+       regexp (\[^=]*)=?(.*) $pair dummy varname val
 
-	set varname [cgi_unquote_input $varname]
-	set val [cgi_unquote_input $val]
+       set varname [cgi_unquote_input $varname]
+       set val [cgi_unquote_input $val]
 
-	if {[info exists _cgi_cookie($varname)]} {
-	    lappend _cgi_cookie_shadowed($varname) $val
-	} else {
-	    set _cgi_cookie($varname) $val
-	}
+       if {[info exists _cgi_cookie($varname)]} {
+           lappend _cgi_cookie_shadowed($varname) $val
+       } else {
+           set _cgi_cookie($varname) $val
+       }
     }
 }
 
@@ -1347,7 +1347,7 @@ proc _cgi_read_line {fin bufvar crlfvar} {
         append _cgi_read_line_buffer [read $fin 65536]
         set line_end [string first "\r\n" $_cgi_read_line_buffer]
     }
-    if {$line_end >= 0} { 
+    if {$line_end >= 0} {
         incr line_end -1
         set buffer [string range $_cgi_read_line_buffer 0 $line_end]
         set crlf "\r\n"
@@ -1365,24 +1365,24 @@ proc _cgi_input_multipart {fin} {
     global env _cgi _cgi_uservar _cgi_userfile
 
     cgi_debug -noprint {
-	# save file for debugging purposes
-	set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
-	# explicitly flush all writes to fout, because sometimes the writer
-	# can hang and we won't get to the termination code
-	set dbg_fout [open $dbg_filename w]
-	set _cgi(input) $dbg_filename
-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
+       # save file for debugging purposes
+       set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
+       # explicitly flush all writes to fout, because sometimes the writer
+       # can hang and we won't get to the termination code
+       set dbg_fout [open $dbg_filename w]
+       set _cgi(input) $dbg_filename
+       catch {fconfigure $dbg_fout -translation binary -encoding binary}
     }
 
     # figure out boundary
     if {0==[regexp boundary=(.*) $env(CONTENT_TYPE) dummy boundary]} {
-	set _cgi(client_error) 1
-	error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
+       set _cgi(client_error) 1
+       error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
     }
 
     set boundary "--$boundary"
     set boundary_length [string length $boundary]
-    
+
     # don't corrupt or modify uploads yet allow Tcl 7.4 to work
     catch {fconfigure $fin -translation binary -encoding binary}
 
@@ -1393,51 +1393,51 @@ proc _cgi_input_multipart {fin} {
     set filecount 0
     set crlf ""
     while {1} {
-	# process Content-Disposition:
-	if { ! [_cgi_read_line $fin buf crlf] } break
-	if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-	catch {unset filename}
-	catch {unset varname}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
-	if {0==[info exists varname]} {
-	    set _cgi(client_error) 1
-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-	}	    
-	# Lame-o encoding (on Netscape at least) doesn't escape field
-	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-	# at end of line, assuming nothing follows.  Sigh.
-	regexp {filename="(.*)"} $buf dummy filename
+       # process Content-Disposition:
+       if { ! [_cgi_read_line $fin buf crlf] } break
+       if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+       catch {unset filename}
+       catch {unset varname}
+       foreach b $buf {
+           regexp {^name="(.*)"} $b dummy varname
+       }
+       if {0==[info exists varname]} {
+           set _cgi(client_error) 1
+           error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+       }
+       # Lame-o encoding (on Netscape at least) doesn't escape field
+       # delimiters (like quotes)!!  Since all we've ever seen is filename=
+       # at end of line, assuming nothing follows.  Sigh.
+       regexp {filename="(.*)"} $buf dummy filename
 
-	# Skip remaining headers until blank line.
-	# Content-Type: can appear here.
-	set conttype ""
-	while {1} {
+       # Skip remaining headers until blank line.
+       # Content-Type: can appear here.
+       set conttype ""
+       while {1} {
             if { ! [_cgi_read_line $fin buf crlf] } break
-	    if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-	    if {0==[string compare $buf ""]} break
-	    regexp -nocase "^Content-Type:\[ \t]+(.*)\r\n" $buf$crlf x conttype
-	}
+           if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+           if {0==[string compare $buf ""]} break
+           regexp -nocase "^Content-Type:\[ \t]+(.*)\r\n" $buf$crlf x conttype
+       }
 
-	if {[info exists filename]} {
+       if {[info exists filename]} {
             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading file $filename"; flush $dbg_fout}
-	    # read the part into a file
-	    set foutname /tmp/CGI[pid].[incr filecount]
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
-	    set fout [open $foutname w]
-	    # "catch" permits this to work with Tcl 7.4
-	    catch {fconfigure $fout -translation binary -encoding binary}
-	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
-	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
-            
+           # read the part into a file
+           set foutname /tmp/CGI[pid].[incr filecount]
+           set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+           set fout [open $foutname w]
+           # "catch" permits this to work with Tcl 7.4
+           catch {fconfigure $fout -translation binary -encoding binary}
+           _cgi_set_uservar $varname [list $foutname $filename $conttype]
+           set _cgi_userfile($varname) [list $foutname $filename $conttype]
+
             set leftover ""
             while { 1 } {
                 if { ! [_cgi_read_line $fin buf crlf] } {
                     set _cgi(client_error) 1
                     error "Unexpected end of input data."
                 }
-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+              if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
                 if {[string compare -length $boundary_length $buf $boundary] == 0} {
                     if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
                     break;
@@ -1446,30 +1446,30 @@ proc _cgi_input_multipart {fin} {
                 set leftover $crlf
             }
             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Read file $filename"; flush $dbg_fout}
-	    close $fout
-	    unset fout
-        
-	} else {
-	    # read the part into a variable
+           close $fout
+           unset fout
+
+       } else {
+           # read the part into a variable
             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading variable $varname"; flush $dbg_fout}
-	    set val ""
+           set val ""
             set leftover ""
             while { 1 } {
                 if { ! [_cgi_read_line $fin buf crlf] } {
                     set _cgi(client_error) 1
                     error "Unexpected end of input data."
                 }
-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+              if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
                 if {[string compare -length $boundary_length $buf $boundary] == 0} {
                     if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
                     break;
                 }
                 append val $leftover$buf
                 set leftover $crlf
-	    }
-	    _cgi_set_uservar $varname $val
+           }
+           _cgi_set_uservar $varname $val
             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>$varname=$val"; flush $dbg_fout}
-	}
+       }
         if {[info exists eof]} break
     }
     if {[info exists dbg_fout]} {close $dbg_fout}
@@ -1479,19 +1479,19 @@ proc _cgi_input_multipart_buggy {fin} {
     global env _cgi _cgi_uservar _cgi_userfile
 
     cgi_debug -noprint {
-	# save file for debugging purposes
-	set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
-	# explicitly flush all writes to fout, because sometimes the writer
-	# can hang and we won't get to the termination code
-	set dbg_fout [open $dbg_filename w]
-	set _cgi(input) $dbg_filename
-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
+       # save file for debugging purposes
+       set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
+       # explicitly flush all writes to fout, because sometimes the writer
+       # can hang and we won't get to the termination code
+       set dbg_fout [open $dbg_filename w]
+       set _cgi(input) $dbg_filename
+       catch {fconfigure $dbg_fout -translation binary -encoding binary}
     }
 
     # figure out boundary
     if {0==[regexp boundary=(.*) $env(CONTENT_TYPE) dummy boundary]} {
-	set _cgi(client_error) 1
-	error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
+       set _cgi(client_error) 1
+       error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
     }
 
     # make boundary into a legal regsub pattern by protecting #
@@ -1513,90 +1513,90 @@ proc _cgi_input_multipart_buggy {fin} {
 
     set filecount 0
     while {1} {
-	# process Content-Disposition:
-	if {-1 == [gets $fin buf]} break
-	if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
-	catch {unset filename}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
-	if {0==[info exists varname]} {
-	    set _cgi(client_error) 1
-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-	}	    
-	# Lame-o encoding (on Netscape at least) doesn't escape field
-	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-	# at end of line, assuming nothing follows.  Sigh.
-	regexp {filename="(.*)"} $buf dummy filename
+       # process Content-Disposition:
+       if {-1 == [gets $fin buf]} break
+       if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+       catch {unset filename}
+       foreach b $buf {
+           regexp {^name="(.*)"} $b dummy varname
+       }
+       if {0==[info exists varname]} {
+           set _cgi(client_error) 1
+           error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+       }
+       # Lame-o encoding (on Netscape at least) doesn't escape field
+       # delimiters (like quotes)!!  Since all we've ever seen is filename=
+       # at end of line, assuming nothing follows.  Sigh.
+       regexp {filename="(.*)"} $buf dummy filename
 
-	# Skip remaining headers until blank line.
-	# Content-Type: can appear here.
-	set conttype ""
-	while {1} {
-	    if {-1 == [gets $fin buf]} break
-	    if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
-	    if {0==[string compare $buf "\r"]} break
-	    regexp -nocase "^Content-Type:\[ \t]+(.*)\r" $buf x conttype
-	}
+       # Skip remaining headers until blank line.
+       # Content-Type: can appear here.
+       set conttype ""
+       while {1} {
+           if {-1 == [gets $fin buf]} break
+           if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+           if {0==[string compare $buf "\r"]} break
+           regexp -nocase "^Content-Type:\[ \t]+(.*)\r" $buf x conttype
+       }
 
-	if {[info exists filename]} {
-	    # read the part into a file
-	    set foutname /tmp/CGI[pid].[incr filecount]
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
-	    set fout [open $foutname w]
-	    # "catch" permits this to work with Tcl 7.4
-	    catch {fconfigure $fout -translation binary -encoding binary}
-	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
-	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
-	    #
-	    # Look for a boundary line preceded by \r\n.
-	    #
-	    # To do this, we buffer line terminators that might
-	    # be the start of the special \r\n$boundary sequence.
-	    # The buffer is called "leftover" and is just inserted
-	    # into the front of the next output (assuming it's
-	    # not a boundary line).
+       if {[info exists filename]} {
+           # read the part into a file
+           set foutname /tmp/CGI[pid].[incr filecount]
+           set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+           set fout [open $foutname w]
+           # "catch" permits this to work with Tcl 7.4
+           catch {fconfigure $fout -translation binary -encoding binary}
+           _cgi_set_uservar $varname [list $foutname $filename $conttype]
+           set _cgi_userfile($varname) [list $foutname $filename $conttype]
+           #
+           # Look for a boundary line preceded by \r\n.
+           #
+           # To do this, we buffer line terminators that might
+           # be the start of the special \r\n$boundary sequence.
+           # The buffer is called "leftover" and is just inserted
+           # into the front of the next output (assuming it's
+           # not a boundary line).
 
-	    set leftover ""
-	    while {1} {
-		if {-1 == [gets $fin buf]} break
-		if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+           set leftover ""
+           while {1} {
+              if {-1 == [gets $fin buf]} break
+              if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
 
-		if {0 == [string compare "\r\n" $leftover]} {
-		    if {[regexp ^[set boundary](--)?\r?$ $buf dummy dashdash]} {
-			if {$dashdash == "--"} {set eof 1}
-			break
-		    }
-		}
-		if {[regexp (.*)\r$ $buf x data]} {
-		    puts -nonewline $fout $leftover$data
-		    set leftover "\r\n"
-		} else {
-		    puts -nonewline $fout $leftover$buf
-		    set leftover "\n"
-		}
-	    }
-	    close $fout
-	    unset fout
-        
-	} else {
-	    # read the part into a variable
-	    set val ""
-	    while {1} {
-		if {-1 == [gets $fin buf]} break
-		if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
-		if {[regexp ^[set boundary](--)?\r?$ $buf dummy dashdash]} {
-		    if {$dashdash == "--"} {set eof 1}
-		    break
-		}
-		if {0!=[string compare $val ""]} {
-		    append val \n
-		}
-		regexp (.*)\r$ $buf dummy buf
-		append val $buf
-	    }
-	    _cgi_set_uservar $varname $val
-	}
+              if {0 == [string compare "\r\n" $leftover]} {
+                  if {[regexp ^[set boundary](--)?\r?$ $buf dummy dashdash]} {
+                     if {$dashdash == "--"} {set eof 1}
+                     break
+                  }
+              }
+              if {[regexp (.*)\r$ $buf x data]} {
+                  puts -nonewline $fout $leftover$data
+                  set leftover "\r\n"
+              } else {
+                  puts -nonewline $fout $leftover$buf
+                  set leftover "\n"
+              }
+           }
+           close $fout
+           unset fout
+
+       } else {
+           # read the part into a variable
+           set val ""
+           while {1} {
+              if {-1 == [gets $fin buf]} break
+              if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+              if {[regexp ^[set boundary](--)?\r?$ $buf dummy dashdash]} {
+                  if {$dashdash == "--"} {set eof 1}
+                  break
+              }
+              if {0!=[string compare $val ""]} {
+                  append val \n
+              }
+              regexp (.*)\r$ $buf dummy buf
+              append val $buf
+           }
+           _cgi_set_uservar $varname $val
+       }
         if {[info exists eof]} break
     }
     if {[info exists dbg_fout]} {close $dbg_fout}
@@ -1609,35 +1609,35 @@ proc _cgi_input_multipart_binary {fin} {
     set timeout -1
 
     cgi_debug -noprint {
-	# save file for debugging purposes
-	set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
-	set _cgi(input) $dbg_filename
-	spawn -open [open $dbg_filename w]
-	set dbg_sid $spawn_id
+       # save file for debugging purposes
+       set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
+       set _cgi(input) $dbg_filename
+       spawn -open [open $dbg_filename w]
+       set dbg_sid $spawn_id
     }
     spawn -open $fin
     set fin_sid $spawn_id
     remove_nulls 0
 
     if {0} {
-	# dump input to screen
-	cgi_debug {
-	    puts "<xmp>"
-	    expect {
-		-i $fin_sid
-		-re ^\r {puts -nonewline "CR"; exp_continue}
-		-re ^\n {puts "NL"; exp_continue}
-		-re . {puts -nonewline $expect_out(buffer); exp_continue}
-	    }
-	    puts "</xmp>"
-	    exit
-	}
+       # dump input to screen
+       cgi_debug {
+           puts "<xmp>"
+           expect {
+              -i $fin_sid
+              -re ^\r {puts -nonewline "CR"; exp_continue}
+              -re ^\n {puts "NL"; exp_continue}
+              -re . {puts -nonewline $expect_out(buffer); exp_continue}
+           }
+           puts "</xmp>"
+           exit
+       }
     }
 
     # figure out boundary
     if {0==[regexp boundary=(.*) $env(CONTENT_TYPE) dummy boundary]} {
-	set _cgi(client_error) 1
-	error "Your browser failed to generate a \"boundary=\" definition in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
+       set _cgi(client_error) 1
+       error "Your browser failed to generate a \"boundary=\" definition in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
     }
 
     # make boundary into a legal regsub pattern by protecting #
@@ -1653,189 +1653,189 @@ proc _cgi_input_multipart_binary {fin} {
 
     # get first boundary line
     expect {
-	-i $fin_sid
-	-re $linepat {
-	    set buf $expect_out(1,string)
-	    if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
-	}
-	eof {
-	    set _cgi(client_error) 1
-	    error "Your browser failed to provide an initial boundary ($boundary) in a multipart response.  Please upgrade (or fix) your browser."
-	}
+       -i $fin_sid
+       -re $linepat {
+           set buf $expect_out(1,string)
+           if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
+       }
+       eof {
+           set _cgi(client_error) 1
+           error "Your browser failed to provide an initial boundary ($boundary) in a multipart response.  Please upgrade (or fix) your browser."
+       }
     }
 
     set filecount 0
     while {1} {
-	# process Content-Disposition:
-	expect {
-	    -i $fin_sid
-	    -re $linepat {
-		set buf $expect_out(1,string)
-		if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
-	    }
-	    eof break
-	}
-	catch {unset filename}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
-	if {0==[info exists varname]} {
-	    set _cgi(client_error) 1
-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-	}	    
+       # process Content-Disposition:
+       expect {
+           -i $fin_sid
+           -re $linepat {
+              set buf $expect_out(1,string)
+              if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
+           }
+           eof break
+       }
+       catch {unset filename}
+       foreach b $buf {
+           regexp {^name="(.*)"} $b dummy varname
+       }
+       if {0==[info exists varname]} {
+           set _cgi(client_error) 1
+           error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+       }
 
-	# Lame-o encoding (on Netscape at least) doesn't escape field
-	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-	# at end of line, assuming nothing follows.  Sigh.
-	regexp {filename="(.*)"} $buf dummy filename
+       # Lame-o encoding (on Netscape at least) doesn't escape field
+       # delimiters (like quotes)!!  Since all we've ever seen is filename=
+       # at end of line, assuming nothing follows.  Sigh.
+       regexp {filename="(.*)"} $buf dummy filename
 
-	# Skip remaining headers until blank line.
-	# Content-Type: can appear here.
-	set conttype ""
-	expect {
-	    -i $fin_sid
-	    -re $linepat {
-		set buf $expect_out(1,string)
-		if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
-		if {0!=[string compare $buf ""]} exp_continue
-		regexp -nocase "^Content-Type:\[ \t]+(.*)\r" $buf x conttype
-	    }
-	    eof break
-	}
+       # Skip remaining headers until blank line.
+       # Content-Type: can appear here.
+       set conttype ""
+       expect {
+           -i $fin_sid
+           -re $linepat {
+              set buf $expect_out(1,string)
+              if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
+              if {0!=[string compare $buf ""]} exp_continue
+              regexp -nocase "^Content-Type:\[ \t]+(.*)\r" $buf x conttype
+           }
+           eof break
+       }
 
-	if {[info exists filename]} {
-	    # read the part into a file
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
-	    spawn -open [open $foutname w]
-	    set fout_sid $spawn_id
+       if {[info exists filename]} {
+           # read the part into a file
+           set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+           spawn -open [open $foutname w]
+           set fout_sid $spawn_id
 
-	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
-	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
+           _cgi_set_uservar $varname [list $foutname $filename $conttype]
+           set _cgi_userfile($varname) [list $foutname $filename $conttype]
 
-	    # This is tricky stuff - be very careful changing anything here!
-	    # In theory, all we have to is record everything up to
-	    # \r\n$boundary\r\n.  Unfortunately, we can't simply wait on
-	    # such a pattern because the input can overflow any possible
-	    # buffer we might choose.  We can't simply catch buffer_full
-	    # because the boundary might straddle a buffer.  I doubt that
-	    # doing my own buffering would be any faster than taking the
-	    # approach I've done here.
-	    #
-	    # The code below basically implements a simple scanner that
-	    # keeps track of whether it's seen crlfs or pieces of them.
-	    # The idea is that we look for crlf pairs, separated by
-	    # things that aren't crlfs (or pieces of them).  As we encounter
-	    # things that aren't crlfs (or pieces of them), or when we decide
-	    # they can't be, we mark them for output and resume scanning for
-	    # new pairs.
-	    #
-	    # The scanner runs tolerably fast because the [...]+ pattern picks
-	    # up most things.  The \r and \n are ^-anchored so the pattern
-	    # match is pretty fast and these don't happen that often so the
-	    # huge \n action is executed rarely (once per line on text files).
-	    # The null pattern is, of course, only used when everything
-	    # else fails.
+           # This is tricky stuff - be very careful changing anything here!
+           # In theory, all we have to is record everything up to
+           # \r\n$boundary\r\n.  Unfortunately, we can't simply wait on
+           # such a pattern because the input can overflow any possible
+           # buffer we might choose.  We can't simply catch buffer_full
+           # because the boundary might straddle a buffer.  I doubt that
+           # doing my own buffering would be any faster than taking the
+           # approach I've done here.
+           #
+           # The code below basically implements a simple scanner that
+           # keeps track of whether it's seen crlfs or pieces of them.
+           # The idea is that we look for crlf pairs, separated by
+           # things that aren't crlfs (or pieces of them).  As we encounter
+           # things that aren't crlfs (or pieces of them), or when we decide
+           # they can't be, we mark them for output and resume scanning for
+           # new pairs.
+           #
+           # The scanner runs tolerably fast because the [...]+ pattern picks
+           # up most things.  The \r and \n are ^-anchored so the pattern
+           # match is pretty fast and these don't happen that often so the
+           # huge \n action is executed rarely (once per line on text files).
+           # The null pattern is, of course, only used when everything
+           # else fails.
 
-	    # crlf	== "\r\n" if we've seen one, else == ""
-	    # cr	== "\r" if we JUST saw one, else == ""
-	    #           Yes, strange, but so much more efficient
-	    #		that I'm willing to sacrifice readability, sigh.
-	    # buf	accumulated data between crlf pairs
+           # crlf       == "\r\n" if we've seen one, else == ""
+           # cr       == "\r" if we JUST saw one, else == ""
+           #           Yes, strange, but so much more efficient
+           #              that I'm willing to sacrifice readability, sigh.
+           # buf       accumulated data between crlf pairs
 
-	    set buf ""
-	    set cr ""
-	    set crlf ""
+           set buf ""
+           set cr ""
+           set crlf ""
 
-	    expect {
-		-i $fin_sid
-		-re "^\r" {
-		    if {$cr == "\r"} {
-			append buf "\r"
-		    }
-		    set cr \r
-		    exp_continue
-		} -re "^\n" {
-		    if {$cr == "\r"} {
-			if {$crlf == "\r\n"} {
-			    # do boundary test
-			    if {[regexp ^[set boundary](--)?$ $buf dummy dashdash]} {
-				if {$dashdash == "--"} {
-				    set eof 1
-				}
-			    } else {
-				# boundary test failed
-				if {[info exists dbg_sid]} {send -i $dbg_sid -- \r\n$buf}
-				send -i $fout_sid \r\n$buf ; set buf ""
-				set cr ""
-				exp_continue
-			    }
-			} else {
-			    set crlf "\r\n"
-			    set cr ""
-			    if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf}
-			    send -i $fout_sid -- $buf ; set buf ""
-			    exp_continue
-			}
-		    } else {
-			if {[info exists dbg_sid]} {send -i $dbg_sid -- $crlf$buf\n}
-			send -i $fout_sid -- $crlf$buf\n ; set buf ""
-			set crlf ""
-			exp_continue
-		    }
-		} -re "\[^\r\n]+" {
-		    if {$cr == "\r"} {
-			set buf $crlf$buf\r$expect_out(buffer)
-			set crlf ""
-			set cr ""
-		    } else {
-			append buf $expect_out(buffer)
-		    }
-		    exp_continue
-		} null {
-		    if {[info exists dbg_sid]} {
-			send -i $dbg_sid -- $crlf$buf$cr
-			send -i $dbg_sid -null
-		    }
-		    send -i $fout_sid -- $crlf$buf$cr ; set buf ""
-		    send -i $fout_sid -null
-		    set cr ""
-		    set crlf ""
-		    exp_continue
-		} eof {
-		    set _cgi(client_error) 1
-		    error "Your browser failed to provide an ending boundary ($boundary) in a multipart response.  Please upgrade (or fix) your browser."
-		}
-	    }
-	    exp_close -i $fout_sid    ;# implicitly closes fout
-	    exp_wait -i $fout_sid
-	    unset fout_sid
-	} else {
-	    # read the part into a variable
-	    set val ""
-	    expect {
-		-i $fin_sid
-		-re $linepat {
-		    set buf $expect_out(1,string)
-		    if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
-		    if {[regexp ^[set boundary](--)?$ $buf dummy dashdash]} {
-			if {$dashdash == "--"} {set eof 1}
-		    } else {
-			regexp (.*)\r$ $buf dummy buf
-			if {0!=[string compare $val ""]} {
-			    append val \n
-			}
-			append val $buf
-			exp_continue
-		    }
-		}
-	    }
-	    _cgi_set_uservar $varname $val
-	}	    
+           expect {
+              -i $fin_sid
+              -re "^\r" {
+                  if {$cr == "\r"} {
+                     append buf "\r"
+                  }
+                  set cr \r
+                  exp_continue
+              } -re "^\n" {
+                  if {$cr == "\r"} {
+                     if {$crlf == "\r\n"} {
+                         # do boundary test
+                         if {[regexp ^[set boundary](--)?$ $buf dummy dashdash]} {
+                            if {$dashdash == "--"} {
+                                set eof 1
+                            }
+                         } else {
+                            # boundary test failed
+                            if {[info exists dbg_sid]} {send -i $dbg_sid -- \r\n$buf}
+                            send -i $fout_sid \r\n$buf ; set buf ""
+                            set cr ""
+                            exp_continue
+                         }
+                     } else {
+                         set crlf "\r\n"
+                         set cr ""
+                         if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf}
+                         send -i $fout_sid -- $buf ; set buf ""
+                         exp_continue
+                     }
+                  } else {
+                     if {[info exists dbg_sid]} {send -i $dbg_sid -- $crlf$buf\n}
+                     send -i $fout_sid -- $crlf$buf\n ; set buf ""
+                     set crlf ""
+                     exp_continue
+                  }
+              } -re "\[^\r\n]+" {
+                  if {$cr == "\r"} {
+                     set buf $crlf$buf\r$expect_out(buffer)
+                     set crlf ""
+                     set cr ""
+                  } else {
+                     append buf $expect_out(buffer)
+                  }
+                  exp_continue
+              } null {
+                  if {[info exists dbg_sid]} {
+                     send -i $dbg_sid -- $crlf$buf$cr
+                     send -i $dbg_sid -null
+                  }
+                  send -i $fout_sid -- $crlf$buf$cr ; set buf ""
+                  send -i $fout_sid -null
+                  set cr ""
+                  set crlf ""
+                  exp_continue
+              } eof {
+                  set _cgi(client_error) 1
+                  error "Your browser failed to provide an ending boundary ($boundary) in a multipart response.  Please upgrade (or fix) your browser."
+              }
+           }
+           exp_close -i $fout_sid    ;# implicitly closes fout
+           exp_wait -i $fout_sid
+           unset fout_sid
+       } else {
+           # read the part into a variable
+           set val ""
+           expect {
+              -i $fin_sid
+              -re $linepat {
+                  set buf $expect_out(1,string)
+                  if {[info exists dbg_sid]} {send -i $dbg_sid -- $buf\n}
+                  if {[regexp ^[set boundary](--)?$ $buf dummy dashdash]} {
+                     if {$dashdash == "--"} {set eof 1}
+                  } else {
+                     regexp (.*)\r$ $buf dummy buf
+                     if {0!=[string compare $val ""]} {
+                         append val \n
+                     }
+                     append val $buf
+                     exp_continue
+                  }
+              }
+           }
+           _cgi_set_uservar $varname $val
+       }
         if {[info exists eof]} break
     }
     if {[info exists fout]} {
-	exp_close -i $dbg_sid
-	exp_wait -i $dbg_sid
+       exp_close -i $dbg_sid
+       exp_wait -i $dbg_sid
     }
 
     # no need to close fin, fin_sid, or dbg_sid
@@ -1851,24 +1851,24 @@ proc _cgi_set_uservar {varname val} {
     # has to be (or become a list)
 
     if {!$exists} {
-	lappend _cgi(uservars) $varname
+       lappend _cgi(uservars) $varname
     }
 
     if {[regexp List$ $varname]} {
-	set isList 1
+       set isList 1
     } elseif {$exists} {
-	# vars that we've seen before but aren't marked as lists
-	# need to be "listified" so we can do appends later
-	if {-1 == [lsearch $_cgi(uservars,autolist) $varname]} {
-	    # remember that we've listified it
-	    lappend _cgi(uservars,autolist) $varname
-	    set _cgi_uservar($varname) [list $_cgi_uservar($varname)]
-	}
+       # vars that we've seen before but aren't marked as lists
+       # need to be "listified" so we can do appends later
+       if {-1 == [lsearch $_cgi(uservars,autolist) $varname]} {
+           # remember that we've listified it
+           lappend _cgi(uservars,autolist) $varname
+           set _cgi_uservar($varname) [list $_cgi_uservar($varname)]
+       }
     }
     if {$isList} {
-	lappend _cgi_uservar($varname) $val
+       lappend _cgi_uservar($varname) $val
     } else {
-	set _cgi_uservar($varname) $val
+       set _cgi_uservar($varname) $val
     }
 }
 
@@ -1877,7 +1877,7 @@ proc cgi_export {nameval} {
     regexp "(\[^=]*)(=?)(.*)" $nameval dummy name q value
 
     if {$q != "="} {
-	set value [uplevel 1 set [list $name]]
+       set value [uplevel 1 set [list $name]]
     }
 
     cgi_put "<input type=hidden name=\"$name\" value=[cgi_dquote_html $value]/>"
@@ -1935,13 +1935,13 @@ proc cgi_import_file {type name} {
 
     set var $_cgi_userfile($name)
     switch -- $type {
-	"-server" {
-	    lindex $var 0
-	} "-client" {
-	    lindex $var 1
-	} "-type" {
-	    lindex $var 2
-	}
+       "-server" {
+           lindex $var 0
+       } "-client" {
+           lindex $var 1
+       } "-type" {
+           lindex $var 2
+       }
     }
 }
 
@@ -1952,10 +1952,10 @@ proc cgi_import_filename {type name} {
 
     set var $_cgi_userfile($name)
     if {$type == "-server" || $type == "-local"} {
-	# -local is deprecated
-	lindex $var 0
+       # -local is deprecated
+       lindex $var 0
     } else {
-	lindex $var 1
+       lindex $var 1
     }
 }
 
@@ -1967,11 +1967,11 @@ proc cgi_import_filename {type name} {
 proc cgi_button {value args} {
     cgi_put "<input type=button value=[cgi_dquote_html $value]"
     foreach a $args {
-	if {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -1982,11 +1982,11 @@ proc cgi_button_link {args} {
 
     set tag [lindex $args 0]
     if {[llength $args] == 2} {
-	set label [lindex $args end]
+       set label [lindex $args end]
     } else {
-	set label $_cgi_link($tag,label)
+       set label $_cgi_link($tag,label)
     }
-    
+
     cgi_button $label onClick=$_cgi_link($tag,url)
 }
 
@@ -1994,15 +1994,15 @@ proc cgi_submit_button {{nameval {=Submit Query}} args} {
     regexp "(\[^=]*)=(.*)" $nameval dummy name value
     cgi_put "<input type=submit"
     if {0!=[string compare "" $name]} {
-	cgi_put " name=\"$name\""
+       cgi_put " name=\"$name\""
     }
     cgi_put " value=[cgi_dquote_html $value]"
     foreach a $args {
-	if {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2012,11 +2012,11 @@ proc cgi_reset_button {{value Reset} args} {
     cgi_put "<input type=reset value=[cgi_dquote_html $value]"
 
     foreach a $args {
-	if {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2027,20 +2027,20 @@ proc cgi_radio_button {nameval args} {
     cgi_put "<input type=radio name=\"$name\" value=[cgi_dquote_html $value]"
 
     foreach a $args {
-	if {[regexp "^checked_if_equal=(.*)" $a dummy default]} {
-	    if {0==[string compare $default $value]} {
-		cgi_put " checked"
-	    }
-	} elseif {[regexp "^checked=(.*)" $a dummy checked]} {
-	    # test explicitly to avoid forcing user eval
-	    if {$checked} {
-		cgi_put " checked"
-	    }
-	} elseif {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^checked_if_equal=(.*)" $a dummy default]} {
+           if {0==[string compare $default $value]} {
+              cgi_put " checked"
+           }
+       } elseif {[regexp "^checked=(.*)" $a dummy checked]} {
+           # test explicitly to avoid forcing user eval
+           if {$checked} {
+              cgi_put " checked"
+           }
+       } elseif {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2049,15 +2049,15 @@ proc cgi_image_button {nameval args} {
     regexp "(\[^=]*)=(.*)" $nameval dummy name value
     cgi_put "<input type=image"
     if {0!=[string compare "" $name]} {
-	cgi_put " name=\"$name\""
+       cgi_put " name=\"$name\""
     }
     cgi_put " src=\"$value\""
     foreach a $args {
-	if {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2074,11 +2074,11 @@ proc cgi_map {name cmd} {
 proc cgi_area {args} {
     cgi_put "<area"
     foreach a $args {
-	if {[regexp "^(coords|shape|href|target|onMouseOut|alt)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^(coords|shape|href|target|onMouseOut|alt)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "></area>"
 }
@@ -2092,24 +2092,24 @@ proc cgi_checkbox {nameval args} {
     cgi_put "<input type=checkbox name=\"$name\""
 
     if {0!=[string compare "" $value]} {
-	cgi_put " value=[cgi_dquote_html $value]"
+       cgi_put " value=[cgi_dquote_html $value]"
     }
 
     foreach a $args {
-	if {[regexp "^checked_if_equal=(.*)" $a dummy default]} {
-	    if {0==[string compare $default $value]} {
-		cgi_put " checked"
-	    }
-	} elseif {[regexp "^checked=(.*)" $a dummy checked]} {
-	    # test explicitly to avoid forcing user eval
-	    if {$checked} {
-		cgi_put " checked"
-	    }
-	} elseif {[regexp "^onClick=(.*)" $a dummy str]} {
-	    cgi_put " onClick=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^checked_if_equal=(.*)" $a dummy default]} {
+           if {0==[string compare $default $value]} {
+              cgi_put " checked"
+           }
+       } elseif {[regexp "^checked=(.*)" $a dummy checked]} {
+           # test explicitly to avoid forcing user eval
+           if {$checked} {
+              cgi_put " checked"
+           }
+       } elseif {[regexp "^onClick=(.*)" $a dummy str]} {
+           cgi_put " onClick=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2124,16 +2124,16 @@ proc cgi_text {nameval args} {
     cgi_put "<input name=\"$name\""
 
     if {$q != "="} {
-	set value [uplevel 1 set [list $name]]
+       set value [uplevel 1 set [list $name]]
     }
     cgi_put " value=[cgi_dquote_html $value]"
 
     foreach a $args {
-	if {[regexp "^on(Select|Focus|Blur|Change)=(.*)" $a dummy event str]} {
-	    cgi_put " on$event=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^on(Select|Focus|Blur|Change)=(.*)" $a dummy event str]} {
+           cgi_put " on$event=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put "/>"
 }
@@ -2147,16 +2147,16 @@ proc cgi_textarea {nameval args} {
 
     cgi_put "<textarea name=\"$name\""
     foreach a $args {
-	if {[regexp "^on(Select|Focus|Blur|Change)=(.*)" $a dummy event str]} {
-	    cgi_put " on$event=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^on(Select|Focus|Blur|Change)=(.*)" $a dummy event str]} {
+           cgi_put " on$event=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_put ">"
 
     if {$q != "="} {
-	set value [uplevel 1 set [list $name]]
+       set value [uplevel 1 set [list $name]]
     }
     cgi_put "[cgi_quote_html $value]</textarea>"
 }
@@ -2169,7 +2169,7 @@ proc cgi_textarea {nameval args} {
 proc cgi_file_button {name args} {
     global _cgi
     if {[info exists _cgi(formtype)] && ("multipart/form-data" != $_cgi(form,enctype))} {
-	error "cgi_file_button requires that cgi_form have the argument enctype=multipart/form-data"
+       error "cgi_file_button requires that cgi_form have the argument enctype=multipart/form-data"
     }
     cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
 }
@@ -2182,20 +2182,20 @@ proc cgi_select {name args} {
     cgi_put "<select name=\"$name\""
     _cgi_close_proc_push "cgi_put </select>"
     foreach a [lrange $args 0 [expr [llength $args]-2]] {
-	if {[regexp "^on(Focus|Blur|Change)=(.*)" $a dummy event str]} {
-	    cgi_put " on$event=\"$str\""
-	} else {
-	    if {0==[string compare multiple $a]} {
-		;# sanity check
-		if {![regexp "List$" $name]} {
-		    cgi_puts ">" ;# prevent error from being absorbed
-		    error "When selecting multiple options, select variable \
-			    must end in \"List\" to allow the value to be \
-			    recognized as a list when it is processed later."
-		}
-	    }
-	    cgi_put " $a"
-	}
+       if {[regexp "^on(Focus|Blur|Change)=(.*)" $a dummy event str]} {
+           cgi_put " on$event=\"$str\""
+       } else {
+           if {0==[string compare multiple $a]} {
+              ;# sanity check
+              if {![regexp "List$" $name]} {
+                  cgi_puts ">" ;# prevent error from being absorbed
+                  error "When selecting multiple options, select variable \
+                         must end in \"List\" to allow the value to be \
+                         recognized as a list when it is processed later."
+              }
+           }
+           cgi_put " $a"
+       }
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2207,17 +2207,17 @@ proc cgi_option {o args} {
     set value $o
     set selected 0
     foreach a $args {
-	if {[regexp "^selected_if_equal=(.*)" $a dummy selected_if_equal]} {
-	} elseif {[regexp "^value=(.*)" $a dummy value]} {
-	    cgi_put " value=[cgi_dquote_html $value]"
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^selected_if_equal=(.*)" $a dummy selected_if_equal]} {
+       } elseif {[regexp "^value=(.*)" $a dummy value]} {
+           cgi_put " value=[cgi_dquote_html $value]"
+       } else {
+           cgi_put " $a"
+       }
     }
     if {[info exists selected_if_equal]} {
-	if {0 == [string compare $selected_if_equal $value]} {
-	    cgi_put " selected=\"selected\""
-	}
+       if {0 == [string compare $selected_if_equal $value]} {
+           cgi_put " selected=\"selected\""
+       }
     }
     cgi_puts ">[cgi_quote_html $o]</option>"
 }
@@ -2230,18 +2230,18 @@ proc cgi_embed {src wh args} {
     regexp (.*)x(.*) $wh dummy width height
     cgi_put "<embed src=[cgi_dquote_html $src] width=\"$width\" height=\"$height\""
     foreach a $args {
-	if {[regexp "^palette=(.*)" $a dummy str]} {
-	    cgi_put " palette=\"$str\""
-	} elseif {[regexp -- "-quote" $a]} {
-	    set quote 1
-	} else {
-	    if {[info exists quote]} {
-		regexp "(\[^=]*)=(.*)" $a dummy var val
-		cgi_put " var=[cgi_dquote_html $var]"
-	    } else {
-		cgi_put " $a"
-	    }
-	}
+       if {[regexp "^palette=(.*)" $a dummy str]} {
+           cgi_put " palette=\"$str\""
+       } elseif {[regexp -- "-quote" $a]} {
+           set quote 1
+       } else {
+           if {[info exists quote]} {
+              regexp "(\[^=]*)=(.*)" $a dummy var val
+              cgi_put " var=[cgi_dquote_html $var]"
+           } else {
+              cgi_put " $a"
+           }
+       }
     }
     cgi_put "></embed>"
 }
@@ -2255,7 +2255,7 @@ proc cgi_mail_addr {args} {
     global _cgi
 
     if {[llength $args]} {
-	set _cgi(email) [lindex $args 0]
+       set _cgi(email) [lindex $args 0]
     }
     return $_cgi(email)
 }
@@ -2280,7 +2280,7 @@ proc cgi_mail_add {{arg {}}} {
     global _cgi
 
     puts $_cgi(mailfid) $arg
-}	
+}
 
 # end the outgoing mail and send it
 proc cgi_mail_end {} {
@@ -2289,48 +2289,48 @@ proc cgi_mail_end {} {
     flush $_cgi(mailfid)
 
     if {[file executable /usr/lib/sendmail]} {
-	exec /usr/lib/sendmail -t -odb < $_cgi(mailfile)
-	# Explanation:
-	# -t   means: pick up recipient from body
-	# -odb means: deliver in background
-	# note: bogus local address cause sendmail to fail immediately
+       exec /usr/lib/sendmail -t -odb < $_cgi(mailfile)
+       # Explanation:
+       # -t   means: pick up recipient from body
+       # -odb means: deliver in background
+       # note: bogus local address cause sendmail to fail immediately
     } elseif {[file executable /usr/sbin/sendmail]} {
-	exec /usr/sbin/sendmail -t -odb < $_cgi(mailfile)
-	# sendmail is in /usr/sbin on some BSD4.4-derived systems.
+       exec /usr/sbin/sendmail -t -odb < $_cgi(mailfile)
+       # sendmail is in /usr/sbin on some BSD4.4-derived systems.
     } else {
-	# fallback for sites without sendmail
+       # fallback for sites without sendmail
 
-	if {0==[info exists _cgi(mail_relay)]} {
-	    regexp "@(.*)" $_cgi(mailto) dummy _cgi(mail_relay)
-	}
+       if {0==[info exists _cgi(mail_relay)]} {
+           regexp "@(.*)" $_cgi(mailto) dummy _cgi(mail_relay)
+       }
 
-	set s [socket $_cgi(mail_relay) 25]
-	gets $s answer
-	if {[lindex $answer 0] != 220} {error $answer} 
+       set s [socket $_cgi(mail_relay) 25]
+       gets $s answer
+       if {[lindex $answer 0] != 220} {error $answer}
 
-	puts $s "HELO [info host]";flush $s
-	gets $s answer
-	if {[lindex $answer 0] != 250} {error $answer}  
+       puts $s "HELO [info host]";flush $s
+       gets $s answer
+       if {[lindex $answer 0] != 250} {error $answer}
 
-	puts $s "MAIL FROM:<$_cgi(email)>";flush $s
-	gets $s answer
-	if {[lindex $answer 0] != 250} {error $answer}  
+       puts $s "MAIL FROM:<$_cgi(email)>";flush $s
+       gets $s answer
+       if {[lindex $answer 0] != 250} {error $answer}
 
-	puts $s "RCPT TO:<$_cgi(mailto)>";flush $s
-	gets $s answer
-	if {[lindex $answer 0] != 250} {error $answer}  
+       puts $s "RCPT TO:<$_cgi(mailto)>";flush $s
+       gets $s answer
+       if {[lindex $answer 0] != 250} {error $answer}
 
-	puts $s DATA;flush $s
-	gets $s answer
-	if {[lindex $answer 0] != 354} {error $answer}  
+       puts $s DATA;flush $s
+       gets $s answer
+       if {[lindex $answer 0] != 354} {error $answer}
 
-	seek $_cgi(mailfid) 0 start
-	puts $s [read $_cgi(mailfid)];flush $s
-	puts $s .;flush $s
-	gets $s answer
-	if {[lindex $answer 0] != 250} {error $answer}  
+       seek $_cgi(mailfid) 0 start
+       puts $s [read $_cgi(mailfid)];flush $s
+       puts $s .;flush $s
+       gets $s answer
+       if {[lindex $answer 0] != 250} {error $answer}
 
-	close $s
+       close $s
     }
     close $_cgi(mailfid)
     file delete -force $_cgi(mailfile)
@@ -2355,23 +2355,23 @@ proc cgi_cookie_set {nameval args} {
     global _cgi
 
     if {![info exists _cgi(http_head_in_progress)]} {
-	error "Cookies must be set from within cgi_http_head."
+       error "Cookies must be set from within cgi_http_head."
     }
     cgi_puts -nonewline "Set-Cookie: [cgi_cookie_encode $nameval];"
 
     foreach a $args {
-	if {[regexp "^expires=(.*)" $a dummy expiration]} {
-	    if {0==[string compare $expiration "never"]} {
-		set expiration "Friday, 11-Jan-2038 23:59:59 GMT"
-	    } elseif {0==[string compare $expiration "now"]} {
-		set expiration "Friday, 31-Dec-1990 23:59:59 GMT"
-	    }
-	    cgi_puts -nonewline " expires=$expiration;"
-	} elseif {[regexp "^(domain|path)=(.*)" $a dummy attr str]} {
-	    cgi_puts -nonewline " $attr=[cgi_cookie_encode $str];"
-	} elseif {[regexp "^secure$" $a]} {
-	    cgi_puts -nonewline " secure;"
-	}
+       if {[regexp "^expires=(.*)" $a dummy expiration]} {
+           if {0==[string compare $expiration "never"]} {
+              set expiration "Friday, 11-Jan-2038 23:59:59 GMT"
+           } elseif {0==[string compare $expiration "now"]} {
+              set expiration "Friday, 31-Dec-1990 23:59:59 GMT"
+           }
+           cgi_puts -nonewline " expires=$expiration;"
+       } elseif {[regexp "^(domain|path)=(.*)" $a dummy attr str]} {
+           cgi_puts -nonewline " $attr=[cgi_cookie_encode $str];"
+       } elseif {[regexp "^secure$" $a]} {
+           cgi_puts -nonewline " secure;"
+       }
     }
     cgi_puts ""
 }
@@ -2390,19 +2390,19 @@ proc cgi_cookie_get {args} {
 
     set flag [lindex $args 0]
     if {$flag == "-all"} {
-	set args [lrange $args 1 end]
-	set all 1
+       set args [lrange $args 1 end]
+       set all 1
     }
     set name [lindex $args 0]
 
     if {$all} {
-	global _cgi_cookie_shadowed
+       global _cgi_cookie_shadowed
 
-	if {[info exists _cgi_cookie_shadowed($name)]} {
-	    return [concat $_cgi_cookie($name) $_cgi_cookie_shadowed($name)]
-	} else {
-	    return [concat $_cgi_cookie($name)]
-	}
+       if {[info exists _cgi_cookie_shadowed($name)]} {
+           return [concat $_cgi_cookie($name) $_cgi_cookie_shadowed($name)]
+       } else {
+           return [concat $_cgi_cookie($name)]
+       }
     }
     return $_cgi_cookie($name)
 }
@@ -2425,7 +2425,7 @@ proc cgi_table {args} {
     _cgi_close_proc_push "cgi_put </table>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2437,7 +2437,7 @@ proc cgi_caption {args} {
     _cgi_close_proc_push "cgi_put </caption>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2448,7 +2448,7 @@ proc cgi_table_row {args} {
     cgi_put "<tr"
     _cgi_close_proc_push "cgi_put </tr>"
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2459,11 +2459,11 @@ proc cgi_table_row {args} {
 proc cgi_tr {args} {
     cgi_put <tr
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     foreach i [lindex $args end] {
-	cgi_td $i
+       cgi_td $i
     }
     cgi_put </tr>
 }
@@ -2473,7 +2473,7 @@ proc cgi_table_head {args} {
     _cgi_close_proc_push "cgi_put </th>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2485,7 +2485,7 @@ proc cgi_th {args} {
     cgi_put "<th"
 
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">[lindex $args end]</th>"
 }
@@ -2495,7 +2495,7 @@ proc cgi_table_data {args} {
     _cgi_close_proc_push "cgi_put </td>"
 
     if {[llength $args]} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">"
     uplevel 1 [lindex $args end]
@@ -2507,7 +2507,7 @@ proc cgi_td {args} {
     cgi_put "<td"
 
     if {[llength $args] > 1} {
-	cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
+       cgi_put "[_cgi_lrange $args 0 [expr [llength $args]-2]]"
     }
     cgi_put ">[lindex $args end]</td>"
 }
@@ -2523,13 +2523,13 @@ proc cgi_stylesheet {href} {
 proc cgi_span {args} {
     set buf "<span"
     foreach a [lrange $args 0 [expr [llength $args]-2]] {
-	if {[regexp "style=(.*)" $a dummy str]} {
-	    append buf " style=\"$str\""
-	} elseif {[regexp "class=(.*)" $a dummy str]} {
-	    append buf " class=\"$str\""
-	} else {
-	    append buf " $a"
-	}
+       if {[regexp "style=(.*)" $a dummy str]} {
+           append buf " style=\"$str\""
+       } elseif {[regexp "class=(.*)" $a dummy str]} {
+           append buf " class=\"$str\""
+       } else {
+           append buf " $a"
+       }
     }
     return "$buf>[lindex $args end]</span>"
 }
@@ -2545,11 +2545,11 @@ proc cgi_frameset {args} {
     _cgi_close_proc_push "cgi_puts </frameset>"
 
     foreach a [lrange $args 0 [expr [llength $args]-2]] {
-	if {[regexp "^(rows|cols|onUnload|onLoad|onBlur)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^(rows|cols|onUnload|onLoad|onBlur)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts ">"
     uplevel 1 [lindex $args end]
@@ -2562,19 +2562,19 @@ proc cgi_frame {namesrc args} {
     regexp "(\[^=]*)(=?)(.*)" $namesrc dummy name q src
 
     if {$name != ""} {
-	cgi_put " name=\"$name\""
+       cgi_put " name=\"$name\""
     }
 
     if {$src != ""} {
-	cgi_put " src=\"$src\""
+       cgi_put " src=\"$src\""
     }
 
     foreach a $args {
-	if {[regexp "^(marginwidth|marginheight|scrolling|onFocus)=(.*)" $a dummy attr str]} {
-	    cgi_put " $attr=\"$str\""
-	} else {
-	    cgi_put " $a"
-	}
+       if {[regexp "^(marginwidth|marginheight|scrolling|onFocus)=(.*)" $a dummy attr str]} {
+           cgi_put " $attr=\"$str\""
+       } else {
+           cgi_put " $a"
+       }
     }
     cgi_puts "></frame>"
 }
@@ -2595,7 +2595,7 @@ proc cgi_admin_mail_addr {args} {
     global _cgi
 
     if {[llength $args]} {
-	set _cgi(admin_email) [lindex $args 0]
+       set _cgi(admin_email) [lindex $args 0]
     }
     return $_cgi(admin_email)
 }
@@ -2606,15 +2606,15 @@ proc cgi_admin_mail_addr {args} {
 
 if {[info tclversion] >= 7.5} {
     foreach _cgi(old) [info procs cgi_*] {
-	regexp "^cgi_(.*)" $_cgi(old) _cgi(dummy) _cgi(new)
-	if {[llength [info commands $_cgi(new)]]} continue
-	interp alias {} $_cgi(new) {} $_cgi(old)
+       regexp "^cgi_(.*)" $_cgi(old) _cgi(dummy) _cgi(new)
+       if {[llength [info commands $_cgi(new)]]} continue
+       interp alias {} $_cgi(new) {} $_cgi(old)
     }
 } else {
     foreach _cgi(old) [info procs cgi_*] {
-	regexp "^cgi_(.*)" $_cgi(old) _cgi(dummy) _cgi(new)
-	if {[llength [info commands $_cgi(new)]]} continue
-	proc $_cgi(new) {args} "uplevel 1 $_cgi(old) \$args"
+       regexp "^cgi_(.*)" $_cgi(old) _cgi(dummy) _cgi(new)
+       if {[llength [info commands $_cgi(new)]]} continue
+       proc $_cgi(new) {args} "uplevel 1 $_cgi(old) \$args"
     }
 }
 
@@ -2631,7 +2631,7 @@ if {[info tclversion] >= 7.5} {
 proc _cgi_list_to_string {list} {
     set string ""
     foreach l $list {
-	append string " $l"
+       append string " $l"
     }
     # remove first space if possible
     # regexp "^ ?(.*)" $string dummy string
@@ -2664,9 +2664,9 @@ proc cgi_puts {args} {
 
 # User-defined procedure to generate DOCTYPE declaration
 proc cgi_doctype {} {
-	#Zeile hinzugefügt: 22.02.2007, Badberg, ELV
-	#puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
-	puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
+       #Zeile hinzugefügt: 22.02.2007, Badberg, ELV
+       #puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
+       puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
 }
 
 ##################################################
@@ -2678,7 +2678,7 @@ cgi_root ""
 cgi_body_args ""
 
 # email addr of person responsible for this service
-cgi_admin_mail_addr "root"	;# you should override this!
+cgi_admin_mail_addr "root"       ;# you should override this!
 
 # most services won't have an actual email addr
 cgi_mail_addr "CGI script - do not reply"
@@ -2686,13 +2686,13 @@ cgi_mail_addr "CGI script - do not reply"
 # deduce tmp directory
 switch $tcl_platform(platform) {
     unix {
-	set _cgi(tmpdir) /tmp
+       set _cgi(tmpdir) /tmp
     } macintosh {
-	set _cgi(tmpdir) [pwd]
+       set _cgi(tmpdir) [pwd]
     } default {
-	set _cgi(tmpdir) [pwd]
-	catch {set _cgi(tmpdir) $env(TMP)}
-	catch {set _cgi(tmpdir) $env(TEMP)}
+       set _cgi(tmpdir) [pwd]
+       catch {set _cgi(tmpdir) $env(TMP)}
+       catch {set _cgi(tmpdir) $env(TEMP)}
     }
 }
 

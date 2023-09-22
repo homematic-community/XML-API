@@ -2,7 +2,7 @@
 
 ADDON_DIR=/usr/local/etc/config/addons/www/xmlapi
 RCD_DIR=/usr/local/etc/config/rc.d
-CONFIG_DIR=/usr/local/etc/config
+CONFIG_DIR=/usr/local/etc/config/addons/xmlapi
 
 # check for unsupported platforms
 if grep -qim1 busmatic /www/api/methods/ccu/downloadFirmware.tcl; then
@@ -25,6 +25,8 @@ mkdir -p $ADDON_DIR
 chmod 755 $ADDON_DIR
 mkdir -p $RCD_DIR
 chmod 755 $RCD_DIR
+mkdir -p $CONFIG_DIR
+chmod 755 $CONFIG_DIR
 
 # remove old stuff
 rm -f $ADDON_DIR/*

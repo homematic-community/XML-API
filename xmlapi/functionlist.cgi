@@ -1,36 +1,43 @@
 #!/bin/tclsh
-load tclrega.so
-puts -nonewline {Content-Type: text/xml
-Access-Control-Allow-Origin: *
+source session.tcl
 
-<?xml version="1.0" encoding="ISO-8859-1" ?><functionList>}
+puts "Content-Type: text/xml; charset=iso-8559-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><functionList>"
 
-array set res [rega_script {
-  !*****************************************************************************
-  ! Gibt die Gewerkeliste als XML-Datei zurück.
-  !*****************************************************************************
+if {[info exists sid] && [check_session $sid]} {
 
-	object oFunction;
-	string sFunctionId;
-	string sChannelId;
+  array set res [rega_script {
+    !*****************************************************************************
+    ! Gibt die Gewerkeliste als XML-Datei zurück.
+    !*****************************************************************************
 
-	foreach (sFunctionId, dom.GetObject(ID_FUNCTIONS).EnumUsedIDs())
-	{
-		oFunction     = dom.GetObject(sFunctionId);
+    object oFunction;
+    string sFunctionId;
+    string sChannelId;
 
-		Write("<function name='");WriteXML( oFunction.Name() );
-		Write("' description='");WriteXML( oFunction.EnumInfo() );
-		Write("' ise_id='" # sFunctionId # "'>");
+    foreach (sFunctionId, dom.GetObject(ID_FUNCTIONS).EnumUsedIDs())
+    {
+      oFunction = dom.GetObject(sFunctionId);
 
-		foreach(sChannelId, oFunction.EnumUsedIDs())
-		{
-			Write("<channel address='"); WriteXML( dom.GetObject(sChannelId).Address() );
-			Write("' ise_id='" # sChannelId # "'/>");
-		}
+      Write("<function name='");WriteXML( oFunction.Name() );
+      Write("' description='");WriteXML( oFunction.EnumInfo() );
+      Write("' ise_id='" # sFunctionId # "'>");
 
-		Write("</function>");
-	}
-}]
-puts -nonewline $res(STDOUT)
-puts -nonewline {</functionList>}
+      foreach(sChannelId, oFunction.EnumUsedIDs())
+      {
+        Write("<channel address='"); WriteXML( dom.GetObject(sChannelId).Address() );
+        Write("' ise_id='" # sChannelId # "'/>");
+      }
 
+      Write("</function>");
+    }
+  }]
+
+  if { $res(STDOUT) != "" } {
+    puts -nonewline $res(STDOUT)
+  }
+} else {
+  puts -nonewline {<not_authenticated/>}
+}
+puts "</functionList>"

@@ -1,60 +1,68 @@
 #!/bin/tclsh
+source session.tcl
 
-load tclrega.so
+puts "Content-Type: text/xml; charset=iso-8859-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><result>"
 
-set ise_id ""
-set new_value ""
+if {[info exists sid] && [check_session $sid]} {
 
-catch {
-  set input $env(QUERY_STRING)
-  set pairs [split $input &]
-  foreach pair $pairs {
-    if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
-      set $varname $val      
-    }    
+  set ise_id ""
+  set new_value ""
+  catch {
+    set input $env(QUERY_STRING)
+    set pairs [split $input &]
+    foreach pair $pairs {
+      if {0 != [regexp "^ise_id=(.*)$" $pair dummy val]} {
+        set ise_id $val
+        continue
+      }
+      if {0 != [regexp "^new_value=(.*)$" $pair dummy val]} {
+        set new_value $val
+        continue
+      }
+    }
   }
-}
-puts -nonewline {Content-Type: text/xml
-Access-Control-Allow-Origin: *
 
-<?xml version="1.0" encoding="ISO-8859-1" ?><result>}
+  regsub -all {%20} $new_value { } new_value
+  regsub -all {%21} $new_value {!} new_value
+  regsub -all {%23} $new_value {#} new_value
+  regsub -all {%25} $new_value {%} new_value
+  regsub -all {%2A} $new_value {*} new_value
+  regsub -all {%2F} $new_value {/} new_value
+  regsub -all {%3C} $new_value {<} new_value
+  regsub -all {%3E} $new_value {>} new_value
+  regsub -all {%3F} $new_value {?} new_value
+  regsub -all {%5E} $new_value {^} new_value
+  regsub -all {%3D} $new_value {=} new_value
+  regsub -all {%2C} $new_value {,} new_value
 
-regsub -all {%20} $new_value { } new_value
-regsub -all {%21} $new_value {!} new_value
-regsub -all {%23} $new_value {#} new_value
-regsub -all {%25} $new_value {%} new_value
-regsub -all {%2A} $new_value {*} new_value
-regsub -all {%2F} $new_value {/} new_value
-regsub -all {%3C} $new_value {<} new_value
-regsub -all {%3E} $new_value {>} new_value
-regsub -all {%3F} $new_value {?} new_value
-regsub -all {%5E} $new_value {^} new_value
+  if { [string match "rgb*" $new_value ] || [string match "*=*" $new_value ] } {
+    array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
 
-if { [string match "rgb*" $new_value ]} {
-	array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
+    if {$res(STDOUT) != "null"} {
+      puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" />";
+    } else {
+      puts -nonewline "<not_found />";
+    }
 
-	if {$res(STDOUT) != "null"} {
-		puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" />";
-	} else {
-		puts -nonewline "<not_found />";
-	}
-	
+  } else {
+
+    set rec_new_value [split $new_value "\,"]
+    set rec_ise_id [split $ise_id "\,"]
+
+    for {set x 0} {$x<[llength $rec_ise_id]} {incr x} {
+
+      array set res [rega_script "Write(dom.GetObject([lindex $rec_ise_id $x]).State('[lindex $rec_new_value $x]'));"]
+
+      if {$res(STDOUT) != "null"} {
+        puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" />";
+      } else {
+        puts -nonewline "<not_found />";
+      }
+    }
+  }
 } else {
-
-	set rec_new_value [split $new_value "\,"]
-	set rec_ise_id [split $ise_id "\,"]
-
-	for {set x 0} {$x<[llength $rec_ise_id]} {incr x} {
-
-	array set res [rega_script "Write(dom.GetObject([lindex $rec_ise_id $x]).State('[lindex $rec_new_value $x]'));"]
-
-		if {$res(STDOUT) != "null"} {
-		  puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" />";
-		  } else {
-			puts -nonewline "<not_found />";
-		  }
-	}
+  puts -nonewline {<not_authenticated/>}
 }
-
-puts -nonewline {</result>}
-
+puts "</result>"

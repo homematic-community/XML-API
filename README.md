@@ -15,141 +15,55 @@ A HomeMatic CCU Addon implementing a xml request functionality as an interface t
 ## Installation
 This addon can be added like a usual CCU addon package via the WebUI provided functionality by selecting "System-Konfiguration » Systemsteuerung » Zusatzsoftware", to upload the addon package as a tar.gz and the use »Installieren« to actually install the addon. After a restart of the CCU the xml-api interface can then be selected from the »Zusatzsoftware« tab in the CCU settings.
 
-## Security advice
-The call to one of the API routines is without any authentication. If the HomeMatic control center can be reached via the Internet without special protection, **this is a serious security risk!**
-
 ## Use
 After installation the XML-API should be avilable via the following URL call:
 ```
-http://[CCU_IP]/addons/xmlapi/[ScriptName]
+http://[CCU_IP]/addons/xmlapi/[ScriptName]?sid=[TOKEN_ID]
 ```
-where [CCU_IP] corresponds to the IP address or name of your CCU device and [ScriptName] being one of the following tool scripts:
+where [TOKEN_ID] corresponds to a stateless token-based authentication id a user can register using the `tokenregister.cgi` script listed below. In addition, [CCU_IP] corresponds to the IP address or hostname of your CCU device and [ScriptName] being one of the following scripts:
 
 | ScriptName                    | Description / Parameters  
 | ----------------------------- |-------------------------
-| `devicelist.cgi`              | Lists all devices with their channels. Contains name, serial number, device types and ids.<br> `show_internal=1` (outputs all internal channels also)
-| `functionlist.cgi`            | Lists all functions with their channels.     
-| `favoritelist.cgi`            | Lists all favorites and users.<br>`show_datapoint` (outputs also attribute `datapoint_id` and `datapoint_type`)
-| `mastervalue.cgi`             | Returns one or more (1234,5678) devices with their names and values of their master values.<br>`device_id=1234` (returns all master values of device)<br>`requested_name=TEMPERATURE_COMFORT,TEMPERATURE_LOWERING` (returns only master values for specified names)
-| `mastervaluechange.cgi`       | Sets one or more (TEMPERATURE_LOWERING,TEMPERATURE_COMFORT) master values of one or more (1234,5678) devices.<br>`device_id=1234` (sets master values of device)<br>`name=TEMPERATURE_LOWERING` (sets specified master value only)<br>`value=17.0,22.5` (sets master values to specified values)
+| `checkuptodate.cgi`           | ???
+| `devicelist.cgi`              | Lists all devices with channels. Contain names, serial number, device type and ids.<br> `show_internal=0/1` - adds internal channels also (default=0)
+| `devicetypelist.cgi`          | Lists all possible device types with their possible meta data.
+| `exec.cgi`                    | Allows to execute arbitrary ReGaHss script commands (as POST data).
+| `favoritelist.cgi`            | Lists all favorites and users.<br>`show_datapoint=0/1` - outputs datapoint_id and datapoint_type also (default=0)<br>`show_internal=0/1` - adds internal channels also (default=0)
+| `functionlist.cgi`            | Lists all functions including channels.
+| `mastervalue.cgi`             | Outputs a single or several '1234,5678' devices with their names and master values.<br>`device_id=list` - returns master values of specified devices (e.g. "1234,5678")<br>`requested_names=list` - returns only master values of selected types (e.g. "TEMPERATURE_COMFORT,TEMPERATURE_LOWERING")
+| `mastervaluechange.cgi`       | Sets one or more master values for a list of devices.<br>`device_id=list` - sets master values of specified devices (e.g. "1234,5678")<br>`name=list` - sets only master values of selected types (e.g. "TEMPERATURE_LOWERING,TEMPERATURE_COMFORT")<br>`value=list` - sets master values to specified values (e.g. "17.0,22.5")
+| `programactions.cgi`          | Allows to change active and visible program options.<br>`program_id=int` - id of program to modify (e.g. "1234")<br>`active=true/false` - sets active status of program to true/false<br>`visible=true/false` - sets visible status of program to true/false
 | `programlist.cgi`             | Lists all programs.
-| `programactions.cgi`          |change the Programactions active and visible <br><b>Parameter</b>: programactions.cgi?program_id=1234&active=true&visible=true
-| `protocol.cgi`                | Returns the system protocol.<br>`clear=1` (clears the system protocol)
-| `runprogram.cgi`              | Starts the specified program.<br>`program_id=1234` (id of program to start)
-| `roomlist.cgi`                | Lists all rooms with their channels.
-| `rssilist.cgi`                | Lists all devices with their signal strength.
-| `scripterrors.cgi`            | Searches the last 10 lines of `/var/log/messages` for homematic-script errors and output these.
-| `state.cgi`                   | Returns for single or multiple devices (1234,5678) the channels and their values.<br>`device_id=1234` (id of the device to return values)<br>`channel_id=5678` (id of the channel to return values)<br>`datapoint_id=12839` (id of data to return only Value())
-| `statelist.cgi`               | Lists all devices with channels and current values.<br>`ise_id` (id of devices to list values for)<br>`show_internal=1` (also return internal attribute state)
-| `statechange.cgi`             | Changes one or more channel states.<br>`ise_id=1234,5678` (id of the channels)<br>`new_value=0.20` (new value for channel state)
-| `systemNotification.cgi`      | Returns the current system notifications
-| `systemNotificationClear.cgi` | Clears all current clearable system notifications.
-| `sysvarlist.cgi`              | Lists all system variable with values.<br>`text=true` (return current value of system variable in attribute value_text)
-| `sysvar.cgi`                  | Returns single system variable with values.<br>`ise_id=1234` (id of system variable)
-| `version.cgi`                 | Outputs version of XML-API
+| `protocol.cgi`                | Outputs the system protocol.<br>`start=int` - start of the protocol<br>`show=int` - number of entries to output<br>`clear=0/1` - allows to clear the system protocol
+| `roomlist.cgi`                | Lists all configured rooms including channels.
+| `rssilist.cgi`                | Lists RSSI values of all RF devices.
+| `runprogram.cgi`              | Starts a program with the specified id.<br>`program_id=int` - id of program to modify (e.g. "1234")
+| `scripterrors.cgi`            | Searches for the last 10 lines in `/var/log/messages` containing script runtime errors and outputs them.
+| `state.cgi`                   | Outputs one or more devices with their channels and current values.<br>`device_id=list` - returns values of specified devices (e.g. "1234,5678")<br>`channel_id=list` - returns values of specified channels (e.g. "1234,5678")<br>`datapoint_id=list` - returns Value() for datapoint with id (e.g. "1234,5678")
+| `statechange.cgi`             | Allows to change the state of one or more devices.<br>`ise_id=list` - selects the devices with the specified ids (e.g. "1234,5678")<br>`new_value=list` - new values for device states (e.g. "0.20,1.45")
+| `statelist.cgi`               | Outputs all devices with channels and their current values.<br>`ise_id=int` - output only channels and values of device with specified id (e.g. "1234")<br>`show_internal=0/1` - adds internal channels also (default=0)
+| `systemNotification.cgi`      | Outputs the currently existing system notifications.
+| `systemNotificationClear.cgi` | Clears the current active system notifications (if not sticky).
+| `sysvar.cgi`                  | Outputs a single system variable with its corresponding values.<br>`ise_id=int` - the id of the system variable to output (e.g. "1234")<br>`text=true/false` - outputs or suppressed the text for string variables (default=true)
+| `sysvarlist.cgi`              | Outputs all system variables with their corresponding values.<br>`text=true/false` - outputs or suppressed the text for string variables (default=false)
+| `tokenlist.cgi`               | Lists all registered security access tokens.
+| `tokenregister.cgi`           | Registers a new security access token.<br>`desc=string` - description for new token id
+| `tokenrevoke.cgi`             | Revokes an existing security access token.<br>`sid=string` - security access token id
+| `update.cgi`                  | ????<br>`checkupdate=list` - ???<br>`maxdurchlaeufe=int` - ??? (default=7)
+| `version.cgi`                 | Outputs version of XML-API.
 
-All of these scripts, if called, generate a xml structured output that can then be used by third-party applications to display or modify certain information. 
-All of these scripts rely on a `ise_id` device or channel identifier. You can get this `ise_id` for the needed datapoint by analysing the result of `statelist.cgi`. The id can be used in the following way:
+All of these scripts, in addition to the listed parameters require a security access token id to be specified via a mandatory `?sid=[TOKEN_ID]` URL parameter with an adequate token ID specified. Such a security token can be generated using `tokenregister.cgi` from within the standard CCU addon webui page (`Settings -> Control panel -> Additional software -> XML-API -> Set`) or by using an already registered security token. Furthermore, already registered tokens can be listed via `tokenlist.cgi` and revoked via `tokenrevoke.cgi` with the token id supplied.
+
+If a script will be correctly called, it generates a xml structured output that can then be used by third-party applications to display or modify certain information. 
+
+In addition many of these scripts rely on additional URL parameter to be specifeid (e.g. `ise_id` device or channel identifier). And example of such script executing URL can be seen here:
 ```
-http://<CCU-IP>/addons/xmlapi/statechange.cgi?ise_id=12345&new_value=0.20
+http://<CCU-IP>/addons/xmlapi/statechange.cgi?sid=[TOKEN_ID]&ise_id=12345&new_value=0.20
 ```
-This call, if executed with the right ise_id and IP adress would then set a dimmer to 20%.
+This call, if executed with a registered [TOKEN_ID] and the right ise_id and IP address would then e.g. set a dimmer to 20%.
 
 ## Support
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
-
-## ChangeLog
-1.18
-* implemented mastervalue query + change which can also handle HmIP devices.
-* fixed version output
-
-1.17
-* fixed incorrect use of `.Variable()` on alarm type system variables.
-
-1.16
-* add programactions.cgi for activ and visible Programactions
-
-1.15
-* fixed bug in `sysvar.cgi` if called without any argument (ise_id) resulting in a SyntaxError in ReGa.
-* fixed bug where calling `runprogram.cgi` with no argument or with an non-program program_id ended up in a ReGa Exec/ScriptRuntimeError.
-
-1.14
-* fixed a bug where `.Timestamp()` was incorrectly used in `protocol.cgi`.
-
-1.13
-* Support to query and set master values via `mastervalue.cgi` and `mastervaluechange.cgi`
-* Fixed `systemNotification.cgi` to not use `.AlDestMapDP()` incorrectly.
-
-1.12
-* Workaround für Osram Lightify
-
-1.11
-* Kompatibilität zu RaspberryMatic (HM-RASPBERRYMATIC) hergestellt.
-
-1.10
-* Die XML-API kann jetzt als Addon/Zusatzsoftware über das WebUI installiert/deinstalliert werden 
-* statechange.cgi - aendern eines oder mehrere Kanaele-Zustaende
-* sysvar.cgi - Anpassung wegen Variablen Name "Timer>>"
-
-1.9
-* devicelist.cgi - operate und show_internal hinzugefügt
-
-1.8
-* programlist.cgi  - operate und visible hinzugefügt
-* statelist.cgi - channel visible, operate und operations hinzugefügt
-
-1.7
-* statechange.cgi - encoden von Hexadezimalwerten
-* protocol.cgi - Timestamp hinzugefügt
-* state.cgi - einzelne Datenpunktausgabe (<state>...</state>) entfernt
-
-1.6
-* state.cgi - Abfrage Abfrage von mehreren IDs hinzugefügt (z.Bsp.: state.cgi?device_id=12796,1245789 )
-* neues cgi systemNotification.cgi - Gibt die System Meldungen aus
-* neues cgi systemNotificationClear.cgi -	Löcht die vorhandenen System Meldungen
-
-1.5
-* Bugfix
-* Anpassung für CCU2
-
-1.4
-* Datenpunktausgabe "value_name_0 und value_name_1" in sysvar.cgi und sysvarlist.cgi hinzugefügt
-
-1.3
-* Datenpunktausgabe "unit" in state.cgi und statelist.cgi hinzugefügt
-* scripterrors.cgi - Sucht in den letzten 10 Zeilen von /var/log/messages nach Homematic-Script Fehlermeldungen
-
-1.2-hq10
-* Ausgabe von version.cgi von 1.3 auf 1.2 zurück-geändert um Probleme mit Homedroid zu vermeiden
-* statechange.cgi - Anführungszeichen hinzugefügt damit auch Varialben vom Typ Zeichenkette gesetzt werden können
-
-1.2-hq9
-* neues cgi scripterrors.cgi hinzugefügt. Gibt aus den letzten 10 Zeilen der /var/log/messages Homematic-Script Fehlermeldungen aus
-
-1.2-hq8
-* Fehler in sysvarlist.cgi behoben, 3 Attribute haben gefehlt. (Danke Monty)
-
-1.2-hq7
-* Datenpunktausgabe in favoritelist.cgi arbeitet nun wie erwartet (gleiches verhalten wie state.cgi, danke Monty).
-
-1.2-hq6
-* exec.cgi (von http://homematic-forum.de/forum/viewtopic.php?f=31&t=7014) hinzugefügt. Liefert zwar json und kein xml - passt aber thematisch imho trotzdem dazu
-* favoritelist.cgi - Parameter show_datapoint aktiviert Ausgabe der zugehörigen Datenpunkte bzw systemvariablen (übernommen aus statelist.cgi und sysvar.cgi). Paramter show_internal siehe statelist.cgi
-* statelist.cgi - Parameter show_internal=1 aktiviert nun die Ausgabe des Datenpunkt-Attributs state
-* info.html aktualisiert
-
-1.2-hq5
-* version.cgi liefert nun 1.3 zurück
-* protocol.cgi hinzugefügt: Gibt das Systemprotokol zurück. Parameter: start, show, clear. clear=1 löscht das Protokoll
-
-1.2-hq4
-* allow-origin Header hinzugefügt
-* info.html aktualisiert
-
-1.2-hq3
-* sysvar.cgi hinzugefügt: Gibt eine einzelne Variable zurück. Liefert Wertelisten. Parameter: ise_id
-* sysvarlist.cgi: neuer Parameter text um die neuen Attribute value_list and value_text zu aktivieren (text=true)
-* cgi.tcl und once.tcl entfernt
 
 ## Authors
 * jens-maus, Maik (Monty1979), Philipp (ultrah), hobbyquaker, dirch, Uwe (uwe111)

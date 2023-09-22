@@ -1,6 +1,6 @@
 #!/bin/tclsh
 source once.tcl
-sourceOnce cgi.tcl
+
 array set TYPE_MAP {
     "BOOL" "bool"
     "ENUM" "int"
@@ -10,12 +10,11 @@ array set TYPE_MAP {
     "ACTION" "bool"
 }
 
-#source cgi.tcl
 loadOnce tclrpc.so
 
-proc decr {x {cnt 1}} { 
-	upvar $x xx
-	set xx [expr $xx - $cnt]
+proc decr {x {cnt 1}} {
+       upvar $x xx
+       set xx [expr $xx - $cnt]
 }
 proc max {x y} { expr { $x > $y ? $x : $y } }
 proc min {x y} { expr { $x > $y ? $y : $x } }
@@ -27,15 +26,15 @@ proc in {list element} {expr [lsearch -exact $list $element] >= 0}
 proc array_clear {name} {
     upvar $name arr
     foreach key [array names arr] {
-		unset arr($key)
+              unset arr($key)
     }
 }
 
 proc array_copy {src_name dst_name} {
 
-	global $src_name $dst_name
+       global $src_name $dst_name
     array_clear $dst_name
-	array set $dst_name [array get $src_name]
+       array set $dst_name [array get $src_name]
 }
 
 #Liest eine Datei ein mit dem Format
@@ -47,29 +46,29 @@ proc array_copy {src_name dst_name} {
 proc read_assignment_file {filename value_array} {
 
     upvar $value_array arr
-	
-	set ret -1
 
-	if { ! [catch {open $filename RDONLY} f] } then {
+       set ret -1
 
-		while {1} {
+       if { ! [catch {open $filename RDONLY} f] } then {
 
-			gets $f zeile
+              while {1} {
 
-			#                 Weiche EOF-Marke
-			if { [eof $f] || [string equal $zeile "<."] } break
+                     gets $f zeile
 
-			set data [split $zeile =]
+                     #                 Weiche EOF-Marke
+                     if { [eof $f] || [string equal $zeile "<."] } break
 
-			if {$zeile == "" || [lindex $data 0] == ""} then {continue}
+                     set data [split $zeile =]
 
-			set arr([lindex $data 0]) [lindex $data 1]
-		}
-		
-		close $f
-	}
-	
-	return $ret
+                     if {$zeile == "" || [lindex $data 0] == ""} then {continue}
+
+                     set arr([lindex $data 0]) [lindex $data 1]
+              }
+
+              close $f
+       }
+
+       return $ret
 }
 
 #Schreibt ein Array in eine Datei. Format, siehe read_assignment_file
@@ -77,23 +76,23 @@ proc write_assignment_file {filename value_array {soft_eof 1}} {
 
     upvar $value_array arr
 
-	set ret -1
-	
-	if { ! [catch {open $filename w} f] } then {
-	
-		foreach key [array names arr] {
-			puts $f "$key=$arr($key)"
-		}
+       set ret -1
 
-		#Weiche EOF-Marke
-		if {$soft_eof} then { puts $f "<." }
+       if { ! [catch {open $filename w} f] } then {
 
-		close $f
+              foreach key [array names arr] {
+                     puts $f "$key=$arr($key)"
+              }
 
-		set ret 1
-	}
+              #Weiche EOF-Marke
+              if {$soft_eof} then { puts $f "<." }
 
-	return $ret
+              close $f
+
+              set ret 1
+       }
+
+       return $ret
 }
 
 #Abgewandelt von http://wiki.tcl.tk/1017
@@ -101,58 +100,58 @@ proc write_assignment_file {filename value_array {soft_eof 1}} {
 #15.02.2007
 proc eval_script {script} {
 
-	set cmd ""
-	set ret -1
+       set cmd ""
+       set ret -1
 
-	foreach line [split $script \n] {
+       foreach line [split $script \n] {
 
-		if {$line == ""} {continue}
-		append cmd $line\n
-		
-		if { [info complete $cmd] } {
-			#puts -nonewline $cmd
-			set ret [uplevel 1 $cmd]
-			set cmd ""
-		}
-	}
+              if {$line == ""} {continue}
+              append cmd $line\n
 
-	return $ret
+              if { [info complete $cmd] } {
+                     #puts -nonewline $cmd
+                     set ret [uplevel 1 $cmd]
+                     set cmd ""
+              }
+       }
+
+       return $ret
 }
 
 proc BitsSet {b_testee b_set} {
 
-	if {$b_testee == "" || $b_set == "" || $b_testee == 0 || $b_set == 0} then { return 0 }
+       if {$b_testee == "" || $b_set == "" || $b_testee == 0 || $b_set == 0} then { return 0 }
 
-	return [expr [expr $b_set & $b_testee] == $b_testee]
+       return [expr [expr $b_set & $b_testee] == $b_testee]
 }
 
 proc putimage {img_path} {
 
-	set in [open $img_path]
+       set in [open $img_path]
 
-	catch {fconfigure stdout -translation binary}
-	catch {fconfigure stdout -encoding binary}
-	catch {fconfigure $in    -translation binary}
-	catch {fconfigure $in    -encoding binary}
+       catch {fconfigure stdout -translation binary}
+       catch {fconfigure stdout -encoding binary}
+       catch {fconfigure $in    -translation binary}
+       catch {fconfigure $in    -encoding binary}
 
-	puts -nonewline stdout [read $in]
-	
-	close $in
+       puts -nonewline stdout [read $in]
+
+       close $in
 }
 
 proc uniq {liste} {
 
-	set u_list ""
-	set last_e ""
-	
-	foreach e [lsort $liste] {
-		if {$e != $last_e} then {
-			lappend u_list $e
-			set last_e $e
-		}
-	}
+       set u_list ""
+       set last_e ""
 
-	return $u_list
+       foreach e [lsort $liste] {
+              if {$e != $last_e} then {
+                     lappend u_list $e
+                     set last_e $e
+              }
+       }
+
+       return $u_list
 }
 
 set INTERFACES_FILE "/etc/config/InterfacesList.xml"
