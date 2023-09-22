@@ -33,6 +33,7 @@ if {[info exists sid] && [check_session $sid]} {
   regsub -all {%3C} $new_value {<} new_value
   regsub -all {%3E} $new_value {>} new_value
   regsub -all {%3F} $new_value {?} new_value
+  regsub -all {%5E} $new_value {^} new_value
   regsub -all {%3D} $new_value {=} new_value
   regsub -all {%2C} $new_value {,} new_value
 
