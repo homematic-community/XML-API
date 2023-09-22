@@ -1,33 +1,39 @@
 #!/bin/tclsh
-load tclrega.so
-puts -nonewline {Content-Type: text/xml
-Access-Control-Allow-Origin: *
+source session.tcl
 
-<?xml version="1.0" encoding="ISO-8859-1" ?><roomList>}
+puts "Content-Type: text/xml; charset=iso-8859-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><roomList>"
 
-array set res [rega_script {
+if {[info exists sid] && [check_session $sid]} {
+  array set res [rega_script {
 
-    object oRoom;
-    string sRoomId;
-    string sRoomName;
-    string sChannelId;
+      object oRoom;
+      string sRoomId;
+      string sRoomName;
+      string sChannelId;
 
-    foreach (sRoomId, dom.GetObject(ID_ROOMS).EnumUsedIDs())
-    {
-      oRoom     = dom.GetObject(sRoomId);
-
-      Write("<room name='");    WriteXML( oRoom.Name() );
-      Write("' ise_id='" # sRoomId # "'>");
-  
-      foreach(sChannelId, oRoom.EnumUsedIDs())
+      foreach (sRoomId, dom.GetObject(ID_ROOMS).EnumUsedIDs())
       {
-        Write("<channel ise_id='" # sChannelId # "'/>");
+        oRoom     = dom.GetObject(sRoomId);
+
+        Write("<room name='");    WriteXML( oRoom.Name() );
+        Write("' ise_id='" # sRoomId # "'>");
+
+        foreach(sChannelId, oRoom.EnumUsedIDs())
+        {
+          Write("<channel ise_id='" # sChannelId # "'/>");
+        }
+
+        Write("</room>");
       }
 
-      Write("</room>");
-    }
+  }]
 
-}]
-puts -nonewline $res(STDOUT)
-puts -nonewline {</roomList>}
-
+  if { $res(STDOUT) != "" } {
+    puts -nonewline $res(STDOUT)
+  }
+} else {
+  puts -nonewline {<not_authenticated/>}
+}
+puts "</roomList>"

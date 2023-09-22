@@ -1,14 +1,15 @@
 #!/bin/tclsh
 
-set checkURL    "https://raw.githubusercontent.com/hobbyquaker/XML-API/master/VERSION"
-set downloadURL "https://github.com/hobbyquaker/XML-API/releases/latest"
+set checkURL    "https://raw.githubusercontent.com/homematic-community/XML-API/master/VERSION"
+set downloadURL "https://github.com/homematic-community/XML-API/releases"
 
 catch {
   set input $env(QUERY_STRING)
   set pairs [split $input &]
   foreach pair $pairs {
-    if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
-      set $varname $val
+    if {$pair == "cmd=download"} {
+      set cmd "download"
+      break
     }
   }
 }
