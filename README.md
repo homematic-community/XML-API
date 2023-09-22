@@ -25,7 +25,7 @@ where [TOKEN_ID] corresponds to a stateless token-based authentication id a user
 | ScriptName                    | Description / Parameters  
 | ----------------------------- |-------------------------
 | `checkuptodate.cgi`           | ???
-| `devicelist.cgi`              | Lists all devices with channels. Contain names, serial number, device type and ids.<br> `show_internal=0/1` - adds internal channels also (default=0)
+| `devicelist.cgi`              | Lists all devices with channels. Contain names, serial number, device type and ids.<br> `show_internal=0/1` - adds internal channels also (default=0)<br>`show_remote=0/1` - adds output of virtual remote channels (default=0)
 | `devicetypelist.cgi`          | Lists all possible device types with their possible meta data.
 | `exec.cgi`                    | Allows to execute arbitrary ReGaHss script commands (as POST data).
 | `favoritelist.cgi`            | Lists all favorites and users.<br>`show_datapoint=0/1` - outputs datapoint_id and datapoint_type also (default=0)<br>`show_internal=0/1` - adds internal channels also (default=0)
@@ -37,11 +37,11 @@ where [TOKEN_ID] corresponds to a stateless token-based authentication id a user
 | `protocol.cgi`                | Outputs the system protocol.<br>`start=int` - start of the protocol<br>`show=int` - number of entries to output<br>`clear=0/1` - allows to clear the system protocol
 | `roomlist.cgi`                | Lists all configured rooms including channels.
 | `rssilist.cgi`                | Lists RSSI values of all RF devices.
-| `runprogram.cgi`              | Starts a program with the specified id.<br>`program_id=int` - id of program to modify (e.g. "1234")
+| `runprogram.cgi`              | Starts a program with the specified id.<br>`program_id=int` - id of program to modify (e.g. "1234")<br>`cond_check=0/1` - execute program with normal condition checks or not (only first "then" is executed) (default=0)
 | `scripterrors.cgi`            | Searches for the last 10 lines in `/var/log/messages` containing script runtime errors and outputs them.
 | `state.cgi`                   | Outputs one or more devices with their channels and current values.<br>`device_id=list` - returns values of specified devices (e.g. "1234,5678")<br>`channel_id=list` - returns values of specified channels (e.g. "1234,5678")<br>`datapoint_id=list` - returns Value() for datapoint with id (e.g. "1234,5678")
 | `statechange.cgi`             | Allows to change the state of one or more devices.<br>`ise_id=list` - selects the devices with the specified ids (e.g. "1234,5678")<br>`new_value=list` - new values for device states (e.g. "0.20,1.45")
-| `statelist.cgi`               | Outputs all devices with channels and their current values.<br>`ise_id=int` - output only channels and values of device with specified id (e.g. "1234")<br>`show_internal=0/1` - adds internal channels also (default=0)
+| `statelist.cgi`               | Outputs all devices with channels and their current values.<br>`ise_id=int` - output only channels and values of device with specified id (e.g. "1234")<br>`show_internal=0/1` - adds internal channels also (default=0)<br>`show_remote=0/1` - adds output of virtual remote channels (default=0)
 | `systemNotification.cgi`      | Outputs the currently existing system notifications.
 | `systemNotificationClear.cgi` | Clears the current active system notifications (if not sticky).
 | `sysvar.cgi`                  | Outputs a single system variable with its corresponding values.<br>`ise_id=int` - the id of the system variable to output (e.g. "1234")<br>`text=true/false` - outputs or suppressed the text for string variables (default=true)
