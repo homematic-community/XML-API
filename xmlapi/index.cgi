@@ -84,6 +84,7 @@ if {[info exists sid] && [check_session $sid]} {
     <tr><td><a href=./runprogram.cgi?sid=$sid>runprogram.cgi</a></td><td><b>Starts a program with the specified id.</b><br/>
       <i>sid=string</i> - security access token id<br/>
       <i>program_id=int</i> - id of program to modify (e.g. "1234")<br/>
+      <i>cond_check=0/1</i> - execute program with normal condition checks or not (only first "then" is executed) (default=0)
     </td></tr>
     <tr><td><a href=./scripterrors.cgi?sid=$sid>scripterrors.cgi</a></td><td><b>Searches for the last 10 lines in /var/log/messages containing script runtime errors and outputs them.</b><br/>
       <i>sid=string</i> - security access token id<br/>
