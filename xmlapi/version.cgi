@@ -7,9 +7,10 @@ if { $fd >=0 } {
   close $fd
 }
 
-set output "Content-Type: text/xml
-Access-Control-Allow-Origin: *
+puts "Content-Type: text/xml; charset=iso-8859-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><version>"
 
-<?xml version='1.0' encoding='ISO-8859-1' ?><version>$version</version>"
+puts -nonewline $version
 
-puts -nonewline $output
+puts "</version>"
