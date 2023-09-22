@@ -60,7 +60,7 @@ In addition many of these scripts rely on additional URL parameter to be specife
 ```
 http://<CCU-IP>/addons/xmlapi/statechange.cgi?sid=[TOKEN_ID]&ise_id=12345&new_value=0.20
 ```
-This call, if executed with a registered TOKEN_ID and the right ise_id and IP address would then e.g. set a dimmer to 20%.
+This call, if executed with a registered [TOKEN_ID] and the right ise_id and IP address would then e.g. set a dimmer to 20%.
 
 ## Support
 http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
