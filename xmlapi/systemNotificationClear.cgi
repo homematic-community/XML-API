@@ -1,13 +1,14 @@
 #!/bin/tclsh
-load tclrega.so
-puts -nonewline {Content-Type: text/xml
-Access-Control-Allow-Origin: *
+source session.tcl
 
-<?xml version="1.0" encoding="ISO-8859-1" ?><systemNotificationClear>}
+puts "Content-Type: text/xml; charset=iso-8859-1"
+puts ""
+puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><systemNotificationClear>"
 
-append hm_script {;
+if {[info exists sid] && [check_session $sid]} {
 
- string itemID;
+  set hm_script {
+    string itemID;
     string address;
     object aldp_obj;
 
@@ -20,10 +21,14 @@ append hm_script {;
         }
       }
     }
-	
+  }
+
+  array set res [rega_script $hm_script]
+
+  if { $res(STDOUT) != "" } {
+    puts -nonewline $res(STDOUT)
+  }
+} else {
+  puts -nonewline {<not_authenticated/>}
 }
-
-array set res [rega_script $hm_script]
-
-puts -nonewline $res(STDOUT)
-puts -nonewline {</systemNotificationClear>}
+puts "</systemNotificationClear>"
