@@ -9,6 +9,7 @@ if {[info exists sid] && [check_session $sid]} {
 
   set ise_id 0
   set show_internal 0
+  set show_remote 0
   catch {
     set input $env(QUERY_STRING)
     set pairs [split $input &]
@@ -21,11 +22,16 @@ if {[info exists sid] && [check_session $sid]} {
         set show_internal $val
         continue
       }
+      if {0 != [regexp "^show_remote=(.*)$" $pair dummy val]} {
+        set show_remote $val
+        continue
+      }
     }
   }
 
   set comm "var ise_id=$ise_id;\n"
   append comm "var show_internal=$show_internal;\n"
+  append comm "var show_remote=$show_remote;\n"
 
   if { $ise_id != 0 } then {
 
@@ -64,7 +70,9 @@ if {[info exists sid] && [check_session $sid]} {
       {
         object oDevice = dom.GetObject(sDevId);
 
-        if( oDevice.ReadyConfig() && (oDevice.Name() != "Zentrale") && (oDevice.Name() != "HMW-RCV-50 BidCoS-Wir") )
+        boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType() ) );
+
+        if( oDevice.ReadyConfig() && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
         {
           Write("<device");
           Write(" name='" # oDevice.Name() # "'");
