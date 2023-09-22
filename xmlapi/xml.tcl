@@ -21,7 +21,7 @@
 #*******************************************************************************
 proc xml_escape { value } {
   set     xml_map ""
-  
+
   lappend xml_map "<" "&lt;"
   lappend xml_map ">" "&gt;"
   lappend xml_map "&" "&amp;"
