@@ -18,7 +18,7 @@ This addon can be added like a usual CCU addon package via the WebUI provided fu
 ## Use
 After installation the XML-API should be avilable via the following URL call:
 ```
-http://[CCU_IP]/addons/xmlapi/[ScriptName]/?sid=[TOKEN_ID]
+http://[CCU_IP]/addons/xmlapi/[ScriptName]?sid=[TOKEN_ID]
 ```
 where [TOKEN_ID] corresponds to a stateless token-based authentication id a user can register using the `tokenregister.cgi` script listed below. In addition, [CCU_IP] corresponds to the IP address or hostname of your CCU device and [ScriptName] being one of the following scripts:
 
