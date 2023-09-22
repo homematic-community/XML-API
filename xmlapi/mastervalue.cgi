@@ -57,24 +57,34 @@ if {[info exists sid] && [check_session $sid]} {
 
     puts -nonewline $values(STDOUT)
 
-    if {[string compare -nocase -length 9 "HM-CC-VG-" $deviceType] == 0} {
-      set ausgabe [xmlrpc $interfaces(VirtualDevices) getParamset [list string $deviceAddress] [list string "MASTER"] ]
-    } elseif {[string compare -nocase -length 5 "HMIP-" $deviceType] == 0} {
-      set ausgabe [xmlrpc $interfaces(HmIP-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ]
+    # simple check against unknown device id
+    if { $deviceType == "null" } {
+      puts -nonewline {<device ise_id="}
+      puts -nonewline $devid
+      puts -nonewline {" error="true">DEVICE NOT FOUND</device>}
     } else {
-      set ausgabe [xmlrpc $interfaces(BidCos-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ]
-    }
-
-    foreach { bezeichnung wert } $ausgabe {
-      if { ($allMasterValues == "*" || [lsearch $requestedNames $bezeichnung] >= 0) } {
-        puts -nonewline {<mastervalue name='}
-        puts -nonewline $bezeichnung
-        puts -nonewline {' value='}
-        puts -nonewline $wert
-        puts -nonewline {'/>}
+      # initialize variable, could fail in catch block below
+      set ausgabe ""
+      if {[string compare -nocase -length 9 "HM-CC-VG-" $deviceType] == 0} {
+        catch {set ausgabe [xmlrpc $interfaces(VirtualDevices) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
+      } elseif {[string compare -nocase -length 5 "HMIP-" $deviceType] == 0} {
+        catch {set ausgabe [xmlrpc $interfaces(HmIP-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
+      } else {
+        catch {set ausgabe [xmlrpc $interfaces(BidCos-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
       }
+
+      foreach { bezeichnung wert } $ausgabe {
+        if { ($allMasterValues == "*" || [lsearch $requestedNames $bezeichnung] >= 0) } {
+          puts -nonewline {<mastervalue name='}
+          puts -nonewline $bezeichnung
+          puts -nonewline {' value='}
+          puts -nonewline $wert
+          puts -nonewline {'/>}
+        }
+      }
+
+      puts -nonewline {</device>}
     }
-    puts -nonewline {</device>}
   }
 } else {
   puts -nonewline {<not_authenticated/>}
