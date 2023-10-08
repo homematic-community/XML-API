@@ -16,55 +16,53 @@ catch {
 proc get_tokens {} {
   set filename "/etc/config/addons/xmlapi/token.list"
 
-  set tokens ""
+  array set tokens {}
   if {! [catch {set fd [open $filename r] } errmsg]} {
-    set tokens [read $fd]
+    array set tokens [read $fd]
     close $fd
   }
 
-  return $tokens
+  return [array get tokens]
+}
+
+proc save_tokens tokenlist {
+  set filename "/etc/config/addons/xmlapi/token.list"
+
+  array set tokens $tokenlist
+  if {! [catch {set fd [open $filename w] } errmsg]} {
+    puts $fd [array get tokens]
+    close $fd
+  }
 }
 
 proc register_token desc {
-  set filename "/etc/config/addons/xmlapi/token.list"
-
-  set tokens ""
-  if {! [catch {set fd [open $filename r] } errmsg]} {
-    set tokens [read $fd]
-    close $fd
-  }
+  # get tokens
+  array set tokens [get_tokens]
 
   # function to generate a random string of 16 characters
   # cf. https://wiki.tcl-lang.org/page/Generating+random+strings
   set newToken [subst [string repeat {[format %c [expr {int(rand() * 26) + (rand() > .5 ? 97 : 65)}]]} 16]]
 
-  # add token to dict
-  dict append tokens $newToken $desc
+  # add token to array
+  set tokens($newToken) $desc
 
-  if {! [catch {set fd [open $filename w] } errmsg]} {
-    puts $fd $tokens
-  }
+  # save tokens
+  save_tokens [array get tokens]
 
   return $newToken
 }
 
 proc revoke_token token {
-  set filename "/etc/config/addons/xmlapi/token.list"
+  # get tokens
+  array set tokens [get_tokens]
 
-  set tokens ""
-  if {! [catch {set fd [open $filename r] } errmsg]} {
-    set tokens [read $fd]
-    close $fd
-  }
+  if {[info exists tokens($token)]} {
+    # remove token from array
+    unset tokens($token)
 
-  if {[dict exists $tokens $token]} {
-    # remove token from dict
-    dict unset tokens $token
-
-    if {! [catch {set fd [open $filename w] } errmsg]} {
-      puts $fd $tokens
-      return 1
-    }
+    # write out new token list
+    save_tokens [array get tokens]
+    return 1
   }
 
   return 0
@@ -74,10 +72,11 @@ proc check_session sid {
   # check for api tokens first and then check
   # for webui session ids as well as a fallback
   if {[regexp {^([0-9a-zA-Z]{16})$} $sid all sidnr]} {
-    set tokens [get_tokens]
+    # get tokens
+    array set tokens [get_tokens]
 
-    # check if sid exists in token dict
-    if {[dict exists $tokens $sid]} {
+    # check if sid exists in token array
+    if {[info exists tokens($sid)]} {
       return 1
     }
   } elseif {[regexp {^@([0-9a-zA-Z]{10})@$} $sid all sidnr]} {
