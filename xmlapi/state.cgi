@@ -95,7 +95,10 @@ if {[info exists sid] && [check_session $sid]} {
 
               Write("<channel name='");
               WriteXML( oChannel.Name() );
-              Write("' ise_id='" # sChnId # "'>");
+              Write("' ise_id='" # sChnId);
+              Write("' lastdpactiontime='" # oChannel.LastDPActionTime().ToInteger());
+              Write("'>");
+
 
               foreach(sDPId, oChannel.DPs().EnumUsedIDs()) {
                 object oDP = dom.GetObject(sDPId);
@@ -114,7 +117,7 @@ if {[info exists sid] && [check_session $sid]} {
                     Write("' valuetype='" # oDP.ValueType());
                     Write("' valueunit='" # oDP.ValueUnit());
                     Write("' timestamp='" # oDP.Timestamp().ToInteger());
-                    Write("' lastdpactiontime='" # oDP.LastDPActionTime().ToInteger());
+                    Write("' lasttimestamp='" # oDP.LastTimestamp().ToInteger());
                     Write("' />");
                   }
                 }
