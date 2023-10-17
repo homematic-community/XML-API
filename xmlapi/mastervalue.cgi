@@ -41,6 +41,7 @@ if {[info exists sid] && [check_session $sid]} {
       integer iseId = "} $devid {";
       var oDevice = dom.GetObject(iseId);
       var address = oDevice.Address();
+      string deviceInterface = (dom.GetObject(oDevice.Interface())).Name();
       var deviceType = oDevice.HssType();
       Write("<device");
       Write(" name='");
@@ -54,6 +55,7 @@ if {[info exists sid] && [check_session $sid]} {
     }]
     set deviceAddress $values(address)
     set deviceType $values(deviceType)
+    set deviceInterface $values(deviceInterface)
 
     puts -nonewline $values(STDOUT)
 
@@ -64,14 +66,16 @@ if {[info exists sid] && [check_session $sid]} {
       puts -nonewline {" error="true">DEVICE NOT FOUND</device>}
     } else {
       # initialize variable, could fail in catch block below
-      set ausgabe ""
-      if {[string compare -nocase -length 9 "HM-CC-VG-" $deviceType] == 0} {
-        catch {set ausgabe [xmlrpc $interfaces(VirtualDevices) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
-      } elseif {[string compare -nocase -length 5 "HMIP-" $deviceType] == 0} {
-        catch {set ausgabe [xmlrpc $interfaces(HmIP-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
-      } else {
-        catch {set ausgabe [xmlrpc $interfaces(BidCos-RF) getParamset [list string $deviceAddress] [list string "MASTER"] ] }
+      set channel ""
+      if {[string compare -nocase -length 4 "HmIP" "$deviceInterface"] == 0 ||
+          [string compare -nocase -length 4 "HmIP" "$deviceType"] == 0 } {
+        # HmIP requires to add :0 to deviceAddress
+        set channel ":0"
       }
+
+      # call xmlrpc to get the MASTER paramset
+      set ausgabe ""
+      catch {set ausgabe [xmlrpc $interfaces($deviceInterface) getParamset [list string "$deviceAddress$channel"] [list string "MASTER"] ] }
 
       foreach { bezeichnung wert } $ausgabe {
         if { ($allMasterValues == "*" || [lsearch $requestedNames $bezeichnung] >= 0) } {
