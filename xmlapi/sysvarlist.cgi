@@ -70,6 +70,7 @@ if {[info exists sid] && [check_session $sid]} {
       if (oSysVar.ValueType() == 2) {
               WriteXML( oSysVar.ValueName1());
       }
+      Write("' info='"); WriteXML( oSysVar.DPInfo());
       Write("'/>");
     }
 
