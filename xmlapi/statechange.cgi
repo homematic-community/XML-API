@@ -48,8 +48,14 @@ if {[info exists sid] && [check_session $sid]} {
 
   } else {
 
-    set rec_new_value [split $new_value "\,"]
     set rec_ise_id [split $ise_id "\,"]
+
+    # only split new_value in case we have more ise_id
+    if { [llength $rec_ise_id] > 1 } {
+      set rec_new_value [split $new_value "\,"]
+    } else {
+      set rec_new_value [list $new_value]
+    }
 
     for {set x 0} {$x<[llength $rec_ise_id]} {incr x} {
 
