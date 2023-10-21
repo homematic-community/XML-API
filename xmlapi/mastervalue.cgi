@@ -41,17 +41,22 @@ if {[info exists sid] && [check_session $sid]} {
       integer iseId = "} $devid {";
       var oDevice = dom.GetObject(iseId);
       var address = oDevice.Address();
-      string deviceInterface = (dom.GetObject(oDevice.Interface())).Name();
-      var deviceType = oDevice.HssType();
-      Write("<device");
-      Write(" name='");
-      WriteXML(oDevice.Name());
-      Write("'");
-      Write(" ise_id='" # iseId # "'");
-      Write(" device_type='");
-      WriteXML(deviceType);
-      Write("'");
-      Write(" >");
+      integer ifId = oDevice.Interface();
+      object oDeviceInterface = dom.GetObject(ifId);
+      if(oDeviceInterface)
+      {
+        string deviceInterface = oDeviceInterface.Name();
+        var deviceType = oDevice.HssType();
+        Write("<device");
+        Write(" name='");
+        WriteXML(oDevice.Name());
+        Write("'");
+        Write(" ise_id='" # iseId # "'");
+        Write(" device_type='");
+        WriteXML(deviceType);
+        Write("'");
+        Write(" >");
+      }
     }]
     set deviceAddress $values(address)
     set deviceType $values(deviceType)

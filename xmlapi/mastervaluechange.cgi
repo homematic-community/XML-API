@@ -48,17 +48,22 @@ if {[info exists sid] && [check_session $sid]} {
       integer iseId = "} $devid {";
       var oDevice = dom.GetObject(iseId);
       var address = oDevice.Address();
-      string deviceInterface = (dom.GetObject(oDevice.Interface())).Name();
-      var deviceType = oDevice.HssType();
-      Write("<device");
-      Write(" name='");
-      WriteXML(oDevice.Name());
-      Write("'");
-      Write(" ise_id='" # iseId # "'");
-      Write(" device_type='");
-      WriteXML(deviceType);
-      Write("'");
-      Write(" >");
+      integer ifId = oDevice.Interface();
+      object oDeviceInterface = dom.GetObject(ifId);
+      if(oDeviceInterface)
+      {
+        string deviceInterface = oDeviceInterface.Name();
+        var deviceType = oDevice.HssType();
+        Write("<device");
+        Write(" name='");
+        WriteXML(oDevice.Name());
+        Write("'");
+        Write(" ise_id='" # iseId # "'");
+        Write(" device_type='");
+        WriteXML(deviceType);
+        Write("'");
+        Write(" >");
+      }
     }]
     set deviceAddress $values(address)
     set deviceType $values(deviceType)
@@ -66,24 +71,31 @@ if {[info exists sid] && [check_session $sid]} {
 
     puts -nonewline $values(STDOUT)
 
-    # initialize variable, could fail in catch block below
-    set channel ""
-    if {[string compare -nocase -length 4 "HmIP" "$deviceInterface"] == 0 ||
-        [string compare -nocase -length 4 "HmIP" "$deviceType"] == 0 } {
-      # HmIP requires to add :0 to deviceAddress
-      set channel ":0"
+    # simple check against unknown device id
+    if { $deviceType == "null" } {
+      puts -nonewline {<device ise_id="}
+      puts -nonewline $devid
+      puts -nonewline {" error="true">DEVICE NOT FOUND</device>}
+    } else {
+      # initialize variable, could fail in catch block below
+      set channel ""
+      if {[string compare -nocase -length 4 "HmIP" "$deviceInterface"] == 0 ||
+          [string compare -nocase -length 4 "HmIP" "$deviceType"] == 0 } {
+        # HmIP requires to add :0 to deviceAddress
+        set channel ":0"
+      }
+
+      # call xmlrpc to set the MASTER paramset
+      set ausgabe ""
+      catch {set ausgabe [xmlrpc $interfaces($deviceInterface) putParamset [list string "$deviceAddress$channel"] [list string "MASTER"] [list struct $cmd] ] }
+
+      puts -nonewline {<mastervalue name='}
+      puts -nonewline $item
+      puts -nonewline {' value='}
+      puts -nonewline $val
+      puts -nonewline {'/>}
+      puts -nonewline {</device>}
     }
-
-    # call xmlrpc to set the MASTER paramset
-    set ausgabe ""
-    catch {set ausgabe [xmlrpc $interfaces($deviceInterface) putParamset [list string "$deviceAddress$channel"] [list string "MASTER"] [list struct $cmd] ] }
-
-    puts -nonewline {<mastervalue name='}
-    puts -nonewline $item
-    puts -nonewline {' value='}
-    puts -nonewline $val
-    puts -nonewline {'/>}
-    puts -nonewline {</device>}
   }
 } else {
   puts -nonewline {<not_authenticated/>}

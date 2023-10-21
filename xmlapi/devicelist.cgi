@@ -40,13 +40,15 @@ if {[info exists sid] && [check_session $sid]} {
       foreach (sDevId, root.Devices().EnumUsedIDs())
       {
         object  oDevice   = dom.GetObject(sDevId);
+        integer iDevInterfaceId = oDevice.Interface();
+        object oDeviceInterface = dom.GetObject(iDevInterfaceId);
+
         boolean bDevReady = oDevice.ReadyConfig();
         boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType()) || ("HmIP-RCV-50" == oDevice.HssType()) );
 
-        if( (true == bDevReady) && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
+        if( (oDeviceInterface) && (true == bDevReady) && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
         {
-          string sDevInterfaceId = oDevice.Interface();
-          string sDevInterface   = dom.GetObject(sDevInterfaceId).Name();
+          string sDevInterface   = oDeviceInterface.Name();
           string sDevType        = oDevice.HssType();
 
           Write("<device");

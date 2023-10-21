@@ -69,17 +69,18 @@ if {[info exists sid] && [check_session $sid]} {
       foreach (sDevId, root.Devices().EnumUsedIDs())
       {
         object oDevice = dom.GetObject(sDevId);
+        integer iDevInterfaceId = oDevice.Interface();
+        object oDeviceInterface = dom.GetObject(iDevInterfaceId)
 
         boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType()) || ("HmIP-RCV-50" == oDevice.HssType()) );
 
-        if( oDevice.ReadyConfig() && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
+        if( ( oDeviceInterface ) && ( oDevice.ReadyConfig() ) && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
         {
           Write("<device");
           Write(" name='" # oDevice.Name() # "'");
           Write(" ise_id='" # sDevId # "'");
 
-          string interfaceid = oDevice.Interface();
-          string servicechan = "" # dom.GetObject(interfaceid).Name() #"."#oDevice.Address()#":0";
+          string servicechan = "" # oDeviceInterface.Name() #"."#oDevice.Address()#":0";
           object schan = dom.GetObject(servicechan#".UNREACH");
           if(schan) { Write(" unreach='" # schan.Value() #"'"); }
           object schan = dom.GetObject(servicechan#".STICKY_UNREACH");
