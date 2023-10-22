@@ -70,7 +70,7 @@ if {[info exists sid] && [check_session $sid]} {
       {
         object oDevice = dom.GetObject(sDevId);
         integer iDevInterfaceId = oDevice.Interface();
-        object oDeviceInterface = dom.GetObject(iDevInterfaceId)
+        object oDeviceInterface = dom.GetObject(iDevInterfaceId);
 
         boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType()) || ("HmIP-RCV-50" == oDevice.HssType()) );
 
