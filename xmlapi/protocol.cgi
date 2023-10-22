@@ -30,7 +30,6 @@ if {[info exists sid] && [check_session $sid]} {
   }
 
   set hm_script {
-      string drop = "";
       integer iLastGroupIndex = 1;
       string sCollectedNames = "";
       string sCollectedValues = "";
@@ -57,7 +56,11 @@ if {[info exists sid] && [check_session $sid]} {
       if (iCount == "0") {
         iCount = eCount;
       }
-      Write("<records start=\"" # iStart # "\" show=\"" # iCount # "\" count=\"" # eCount # "\"/>");
+      Write("<records");
+      Write(" start='"); WriteXML(iStart);
+      Write("' show='"); WriteXML(iCount);
+      Write("' count='"); WriteXML(eCount);
+      Write("' />");
   }
 
   append hm_script {
@@ -94,7 +97,12 @@ if {[info exists sid] && [check_session $sid]} {
 
             if( iLastGroupIndex != iGroupIndex )
             {
-                drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" timestamp=\"" # sCollectedTimestamp # "\" />\n";
+              Write("<row");
+              Write(" datetime='"); WriteXML(sCollectedDateTimes);
+              Write("' names='"); WriteXML(sCollectedNames);
+              Write("' values='"); WriteXML(sCollectedValues);
+              Write("' timestamp='"); WriteXML(sCollectedTimestamp);
+              Write("' />");
               sCollectedNames = "";
               sCollectedValues = "";
               iLastGroupIndex = iGroupIndex;
@@ -125,10 +133,13 @@ if {[info exists sid] && [check_session $sid]} {
       }
       if( sCollectedValues.Length() )
       {
-        drop = drop # "<row datetime=\"" # sCollectedDateTimes # "\" names=\"" # sCollectedNames # "\" values=\"" # sCollectedValues # "\" timestamp=\"" # sCollectedTimestamp # "\" />";
+        Write("<row");
+        Write(" datetime='"); WriteXML(sCollectedDateTimes);
+        Write("' names='"); WriteXML(sCollectedNames);
+        Write("' values='"); WriteXML(sCollectedValues);
+        Write("' timestamp='"); WriteXML(sCollectedTimestamp);
+        Write("' />");
       }
-
-      Write(drop);
     }
   }
 
