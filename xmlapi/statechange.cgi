@@ -41,7 +41,7 @@ if {[info exists sid] && [check_session $sid]} {
     array set res [rega_script "Write(dom.GetObject($ise_id).State('$new_value'));"]
 
     if {$res(STDOUT) != "null"} {
-      puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" />";
+      puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" success=\"$res(STDOUT)\" />";
     } else {
       puts -nonewline "<not_found />";
     }
@@ -62,7 +62,7 @@ if {[info exists sid] && [check_session $sid]} {
       array set res [rega_script "Write(dom.GetObject([lindex $rec_ise_id $x]).State('[lindex $rec_new_value $x]'));"]
 
       if {$res(STDOUT) != "null"} {
-        puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" />";
+        puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" success=\"$res(STDOUT)\" />";
       } else {
         puts -nonewline "<not_found />";
       }
