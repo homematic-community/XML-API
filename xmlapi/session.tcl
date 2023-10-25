@@ -2,6 +2,7 @@
 load tclrega.so
 
 catch {
+  set raddr $env(REMOTE_ADDR)
   set input $env(QUERY_STRING)
   set pairs [split $input &]
   set sid ""
@@ -69,6 +70,7 @@ proc revoke_token token {
 }
 
 proc check_session sid {
+  global raddr
   # check for api tokens first and then check
   # for webui session ids as well as a fallback
   if {[regexp {^([0-9a-zA-Z]{16})$} $sid all sidnr]} {
@@ -84,6 +86,10 @@ proc check_session sid {
     if {$res != ""} {
       return 1
     }
+  } elseif {$raddr == "127.0.0.1"} {
+    # allow all xmlapi requests from localhost without
+    # any sid
+    return 1
   }
   return 0
 }
