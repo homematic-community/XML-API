@@ -33,130 +33,137 @@ if {[info exists sid] && [check_session $sid]} {
 
       integer show_internal = "} $show_internal {";
       integer show_remote = "} $show_remote {";
-      integer device_id = "} $device_id {";
+      string device_id = "} $device_id {";
 
       integer DIR_SENDER      = 1;
       integer DIR_RECEIVER    = 2;
   !    string  TYPE_VIRTUAL    = "29";
       string  PARTNER_INVALID = "65535";
 
+      string sDevIdList;
       string sDevId;
       string sChnId;
       string sDPId;
-      foreach (sDevId, root.Devices().EnumUsedIDs())
+      
+      if( (device_id == 0) )
       {
-        if( (device_id == 0) || (device_id == sDevId) ){
-          object  oDevice   = dom.GetObject(sDevId);
-          integer iDevInterfaceId = oDevice.Interface();
-          object oDeviceInterface = dom.GetObject(iDevInterfaceId);
+        sDevIdList = root.Devices().EnumUsedIDs();
+      } else {
+        sDevIdList = device_id.Split(",");
+      }
 
-          boolean bDevReady = oDevice.ReadyConfig();
-          boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType()) || ("HmIP-RCV-50" == oDevice.HssType()) );
+      foreach (sDevId, sDevIdList)
+      {
+        object  oDevice   = dom.GetObject(sDevId);
+        integer iDevInterfaceId = oDevice.Interface();
+        object oDeviceInterface = dom.GetObject(iDevInterfaceId);
 
-          if( (oDeviceInterface) && (true == bDevReady) && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
+        boolean bDevReady = oDevice.ReadyConfig();
+        boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType()) || ("HmIP-RCV-50" == oDevice.HssType()) );
+
+        if( (oDeviceInterface) && (true == bDevReady) && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
+        {
+          string sDevInterface   = oDeviceInterface.Name();
+          string sDevType        = oDevice.HssType();
+
+          Write("<device");
+          Write(" name='");WriteXML( oDevice.Name() );Write("'");
+          Write(" address='");WriteXML( oDevice.Address() );Write("'");
+          Write(" ise_id='" # sDevId # "'");
+          Write(" interface='" # sDevInterface # "'");
+          Write(" device_type='");WriteXML(sDevType);Write("'");
+          Write(" ready_config='" # bDevReady # "'");
+          Write(">");
+
+          foreach(sChnId, oDevice.Channels())
           {
-            string sDevInterface   = oDeviceInterface.Name();
-            string sDevType        = oDevice.HssType();
+            object oChannel = dom.GetObject(sChnId);
 
-            Write("<device");
-            Write(" name='");WriteXML( oDevice.Name() );Write("'");
-            Write(" address='");WriteXML( oDevice.Address() );Write("'");
-            Write(" ise_id='" # sDevId # "'");
-            Write(" interface='" # sDevInterface # "'");
-            Write(" device_type='");WriteXML(sDevType);Write("'");
-            Write(" ready_config='" # bDevReady # "'");
-            Write(">");
+            boolean show = false;
 
-            foreach(sChnId, oDevice.Channels())
-            {
-              object oChannel = dom.GetObject(sChnId);
-
-              boolean show = false;
-
-              if (false == oChannel.Internal() ) {
-                show = true;
-              }
-
-              if ( show_internal == 1){
-                show = true;
-              }
-
-              if (show == true){
-                integer iChnDir     = oChannel.ChnDirection();
-                string  sChnDir     = "UNKNOWN";
-                if (DIR_SENDER   == iChnDir) { sChnDir = "SENDER";   }
-                if (DIR_RECEIVER == iChnDir) { sChnDir = "RECEIVER"; }
-                string  sChnPartnerId = oChannel.ChnGroupPartnerId();
-                if (PARTNER_INVALID == sChnPartnerId) { sChnPartnerId = ""; }
-                boolean bChnAESAvailable = false;
-                if (0 != oChannel.ChnAESOperation()) { bChnAESAvailable = true; }
-                string sChnMode = "DEFAULT";
-                if (true == oChannel.ChnAESActive()) { sChnMode = "AES"; }
-
-    !            boolean bChnReady        = oChannel.ReadyConfig();
-    !            integer iChnLinkCount    = oChannel.ChnLinkCount();
-    !            integer iChnProgramCount = oChannel.DPUsageCount();
-    !            if (ID_ERROR == iChnProgramCount) { iChnProgramCount = 0; }
-    !            boolean bChnVirtual = false;
-    !            if (TYPE_VIRTUAL == sChnType) { bChnVirtual = true; }
-    !            boolean bChnReadable  = false;
-    !            boolean bChnWritable  = false;
-    !            boolean bChnEventable = false;
-    !            foreach (sDPId, oChannel.DPs())
-    !            {
-    !              object  oDP          = dom.GetObject(sDPId);
-    !              if (false == oDP.Internal())
-    !              {
-    !                integer iDPOperations = oDP.Operations();
-    !                if (OPERATION_READ  & iDPOperations) { bChnReadable  = true; }
-    !                if (OPERATION_WRITE & iDPOperations) { bChnWritable  = true; }
-    !                if (OPERATION_EVENT & iDPOperations) { bChnEventable = true; }
-    !              }
-    !            }
-    !
-                Write("<channel name='");WriteXML( oChannel.Name() );Write("'");
-                Write(" type='");WriteXML( oChannel.ChannelType() );Write("'");
-                Write(" address='");WriteXML( oChannel.Address() );Write("'");
-                Write(" ise_id='" # sChnId # "'");
-                Write(" direction='" # sChnDir # "'");
-                Write(" parent_device='" # oChannel.Device() # "'");
-                Write(" index='" # oChannel.ChnNumber() # "'");
-                Write(" group_partner='" # sChnPartnerId # "'");
-                Write(" aes_available='" # bChnAESAvailable # "'");
-                Write(" transmission_mode='" # sChnMode # "'");
-    !            Write(" archive='" # oChannel.ChnArchive() # "'");
-
-                if (false == oChannel.Internal()) {
-                  Write(" visible='" # oChannel.Visible() # "'");
-                } else {
-                  Write(" visible=''");
-                }
-
-                Write(" ready_config='" # oChannel.ReadyConfig() # "'");
-    !            Write(" link_count='" # iChnLinkCount # "'");
-    !            Write(" program_count='" # iChnProgramCount # "'");
-    !            Write(" virtual='" # bChnVirtual # "'");
-    !            Write(" readable='" # bChnReadable # "'");
-    !            Write(" writable='" # bChnWritable # "'");
-    !            Write(" eventable='" # bChnEventable # "'");
-
-                if (false == oChannel.Internal()) {
-                  Write(" operate='");
-                  if( oChannel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) {
-                    Write("true");
-                  } else {
-                    Write("false");
-                  }
-                } else {
-                  Write(" operate='");
-                }
-
-                Write("' />");
-              }
+            if (false == oChannel.Internal() ) {
+              show = true;
             }
 
-            Write("</device>");
+            if ( show_internal == 1){
+              show = true;
+            }
+
+            if (show == true){
+              integer iChnDir     = oChannel.ChnDirection();
+              string  sChnDir     = "UNKNOWN";
+              if (DIR_SENDER   == iChnDir) { sChnDir = "SENDER";   }
+              if (DIR_RECEIVER == iChnDir) { sChnDir = "RECEIVER"; }
+              string  sChnPartnerId = oChannel.ChnGroupPartnerId();
+              if (PARTNER_INVALID == sChnPartnerId) { sChnPartnerId = ""; }
+              boolean bChnAESAvailable = false;
+              if (0 != oChannel.ChnAESOperation()) { bChnAESAvailable = true; }
+              string sChnMode = "DEFAULT";
+              if (true == oChannel.ChnAESActive()) { sChnMode = "AES"; }
+
+  !            boolean bChnReady        = oChannel.ReadyConfig();
+  !            integer iChnLinkCount    = oChannel.ChnLinkCount();
+  !            integer iChnProgramCount = oChannel.DPUsageCount();
+  !            if (ID_ERROR == iChnProgramCount) { iChnProgramCount = 0; }
+  !            boolean bChnVirtual = false;
+  !            if (TYPE_VIRTUAL == sChnType) { bChnVirtual = true; }
+  !            boolean bChnReadable  = false;
+  !            boolean bChnWritable  = false;
+  !            boolean bChnEventable = false;
+  !            foreach (sDPId, oChannel.DPs())
+  !            {
+  !              object  oDP          = dom.GetObject(sDPId);
+  !              if (false == oDP.Internal())
+  !              {
+  !                integer iDPOperations = oDP.Operations();
+  !                if (OPERATION_READ  & iDPOperations) { bChnReadable  = true; }
+  !                if (OPERATION_WRITE & iDPOperations) { bChnWritable  = true; }
+  !                if (OPERATION_EVENT & iDPOperations) { bChnEventable = true; }
+  !              }
+  !            }
+  !
+              Write("<channel name='");WriteXML( oChannel.Name() );Write("'");
+              Write(" type='");WriteXML( oChannel.ChannelType() );Write("'");
+              Write(" address='");WriteXML( oChannel.Address() );Write("'");
+              Write(" ise_id='" # sChnId # "'");
+              Write(" direction='" # sChnDir # "'");
+              Write(" parent_device='" # oChannel.Device() # "'");
+              Write(" index='" # oChannel.ChnNumber() # "'");
+              Write(" group_partner='" # sChnPartnerId # "'");
+              Write(" aes_available='" # bChnAESAvailable # "'");
+              Write(" transmission_mode='" # sChnMode # "'");
+  !            Write(" archive='" # oChannel.ChnArchive() # "'");
+
+              if (false == oChannel.Internal()) {
+                Write(" visible='" # oChannel.Visible() # "'");
+              } else {
+                Write(" visible=''");
+              }
+
+              Write(" ready_config='" # oChannel.ReadyConfig() # "'");
+  !            Write(" link_count='" # iChnLinkCount # "'");
+  !            Write(" program_count='" # iChnProgramCount # "'");
+  !            Write(" virtual='" # bChnVirtual # "'");
+  !            Write(" readable='" # bChnReadable # "'");
+  !            Write(" writable='" # bChnWritable # "'");
+  !            Write(" eventable='" # bChnEventable # "'");
+
+              if (false == oChannel.Internal()) {
+                Write(" operate='");
+                if( oChannel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) {
+                  Write("true");
+                } else {
+                  Write("false");
+                }
+              } else {
+                Write(" operate='");
+              }
+
+              Write("' />");
+            }
           }
+
+          Write("</device>");
         }
       }
     }]
