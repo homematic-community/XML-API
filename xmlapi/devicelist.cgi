@@ -45,8 +45,7 @@ if {[info exists sid] && [check_session $sid]} {
       string sChnId;
       string sDPId;
       
-      if( (device_id == 0) )
-      {
+      if( (device_id == 0) ) {
         sDevIdList = root.Devices().EnumUsedIDs();
       } else {
         sDevIdList = device_id.Split(",");
