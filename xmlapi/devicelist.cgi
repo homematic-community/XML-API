@@ -9,6 +9,7 @@ if {[info exists sid] && [check_session $sid]} {
 
   set show_internal 0
   set show_remote 0
+  set device_id 0
   catch {
     set input $env(QUERY_STRING)
     set pairs [split $input &]
@@ -21,6 +22,10 @@ if {[info exists sid] && [check_session $sid]} {
         set show_remote $val
         continue
       }
+      if {0 != [regexp "^device_id=(.*)$" $pair dummy val]} {
+        set device_id $val
+        continue
+      }
     }
   }
 
@@ -28,16 +33,25 @@ if {[info exists sid] && [check_session $sid]} {
 
       integer show_internal = "} $show_internal {";
       integer show_remote = "} $show_remote {";
+      string device_id = "} $device_id {";
 
       integer DIR_SENDER      = 1;
       integer DIR_RECEIVER    = 2;
   !    string  TYPE_VIRTUAL    = "29";
       string  PARTNER_INVALID = "65535";
 
+      string sDevIdList;
       string sDevId;
       string sChnId;
       string sDPId;
-      foreach (sDevId, root.Devices().EnumUsedIDs())
+      
+      if( (device_id == 0) ) {
+        sDevIdList = root.Devices().EnumUsedIDs();
+      } else {
+        sDevIdList = device_id.Split(",");
+      }
+
+      foreach (sDevId, sDevIdList)
       {
         object  oDevice   = dom.GetObject(sDevId);
         integer iDevInterfaceId = oDevice.Interface();

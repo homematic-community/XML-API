@@ -32,6 +32,7 @@ if {[info exists sid] && [check_session $sid]} {
     <tr><td><a href=./checkuptodate.cgi?sid=$sid>checkuptodate.cgi</a></td><td>????</td></tr>
     <tr><td><a href=./devicelist.cgi?sid=$sid>devicelist.cgi</a></td><td><b>Lists all devices with channels. Contain names, serial number, device type and ids.</b><br/>
       <i>sid=string</i> - security access token id<br/>
+      <i>device_id=list</i> - returns values of specified devices (e.g. "1234,5678") (optional)<br/>
       <i>show_internal=0/1</i> - adds internal channels also (default=0)<br/>
       <i>show_remote=0/1</i> - adds output of virtual remote channels (default=0)
     </td></tr>
