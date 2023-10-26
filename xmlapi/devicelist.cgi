@@ -165,7 +165,7 @@ if {[info exists sid] && [check_session $sid]} {
           Write("</device>");
         }
       }
-    }]
+  }]
 
   if { $res(STDOUT) != "" } {
     puts -nonewline $res(STDOUT)

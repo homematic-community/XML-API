@@ -14,27 +14,20 @@ loadOnce tclrpc.so
 
 proc decr {x {cnt 1}} {
        upvar $x xx
-       set xx [expr $xx - $cnt]
+       set xx [expr { $xx - $cnt }]
 }
 proc max {x y} { expr { $x > $y ? $x : $y } }
 proc min {x y} { expr { $x > $y ? $y : $x } }
 
 proc cgi_cgi {args} {return $args}
 
-proc in {list element} {expr [lsearch -exact $list $element] >= 0}
+proc in {list element} {expr { [lsearch -exact $list $element] >= 0 } }
 
 proc array_clear {name} {
     upvar $name arr
     foreach key [array names arr] {
               unset arr($key)
     }
-}
-
-proc array_copy {src_name dst_name} {
-
-       global $src_name $dst_name
-    array_clear $dst_name
-       array set $dst_name [array get $src_name]
 }
 
 #Liest eine Datei ein mit dem Format
@@ -118,13 +111,6 @@ proc eval_script {script} {
        return $ret
 }
 
-proc BitsSet {b_testee b_set} {
-
-       if {$b_testee == "" || $b_set == "" || $b_testee == 0 || $b_set == 0} then { return 0 }
-
-       return [expr [expr $b_set & $b_testee] == $b_testee]
-}
-
 proc putimage {img_path} {
 
        set in [open $img_path]
@@ -161,7 +147,7 @@ array set interface_descriptions ""
 proc read_interfaces {} {
   global interfaces interface_descriptions INTERFACES_FILE env
   set retval 1
-  if { [ info exist env(BIDCOS_SERVICE) ] } {
+  if { [ info exists env(BIDCOS_SERVICE) ] } {
     set interfaces(default) "$env(BIDCOS_SERVICE)"
     set interface_descriptions(default) "Default BidCoS Interface"
   } else {
@@ -171,7 +157,7 @@ proc read_interfaces {} {
       set contents [read $fd]
       while { [regexp -indices {</ipc[^>]*>} $contents range] } {
         set section [string range $contents 0 [lindex $range 1]]
-        set contents [string range $contents [expr [lindex $range 1] + 1] end]
+        set contents [string range $contents [expr { [lindex $range 1] + 1 }] end]
         if {
              [regexp {<name[^>]*>([^<]+)</name} $section dummy name] &&
              [regexp {<url[^>]*>([^<]+)</url} $section dummy url] &&

@@ -56,7 +56,7 @@ if {[info exists sid] && [check_session $sid]} {
               Write(" timestamp='");WriteXML(oDP.Timestamp().ToInteger());Write("'");
               Write(" />");
           }
-      }
+    }
 
   } else {
 

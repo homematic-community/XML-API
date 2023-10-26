@@ -35,7 +35,10 @@ if {[info exists sid] && [check_session $sid]} {
     set first 1
     set result "\{\n"
     foreach name [array names script_result] {
-      if { 1 != $first } { append result ",\n" } { set first 0 }
+      if { 1 != $first } {
+        append result ",\n"
+      }
+      set first 0
       set value $script_result($name)
       append result "  [toString $name]: [toString $value]"
     }

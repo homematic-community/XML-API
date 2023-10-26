@@ -36,7 +36,7 @@ proc save_tokens tokenlist {
   }
 }
 
-proc register_token desc {
+proc register_token descr {
   # get tokens
   array set tokens [get_tokens]
 
@@ -45,7 +45,7 @@ proc register_token desc {
   set newToken [subst [string repeat {[format %c [expr {int(rand() * 26) + (rand() > .5 ? 97 : 65)}]]} 16]]
 
   # add token to array
-  set tokens($newToken) $desc
+  set tokens($newToken) $descr
 
   # save tokens
   save_tokens [array get tokens]
@@ -53,13 +53,13 @@ proc register_token desc {
   return $newToken
 }
 
-proc revoke_token token {
+proc revoke_token tid {
   # get tokens
   array set tokens [get_tokens]
 
-  if {[info exists tokens($token)]} {
+  if {[info exists tokens($tid)]} {
     # remove token from array
-    unset tokens($token)
+    unset tokens($tid)
 
     # write out new token list
     save_tokens [array get tokens]
@@ -69,19 +69,19 @@ proc revoke_token token {
   return 0
 }
 
-proc check_session sid {
+proc check_session session_id {
   global raddr
   # check for api tokens first and then check
   # for webui session ids as well as a fallback
-  if {[regexp {^([0-9a-zA-Z]{16})$} $sid all sidnr]} {
+  if {[regexp {^([0-9a-zA-Z]{16})$} $session_id all sidnr]} {
     # get tokens
     array set tokens [get_tokens]
 
     # check if sid exists in token array
-    if {[info exists tokens($sid)]} {
+    if {[info exists tokens($session_id)]} {
       return 1
     }
-  } elseif {[regexp {^@([0-9a-zA-Z]{10})@$} $sid all sidnr]} {
+  } elseif {[regexp {^@([0-9a-zA-Z]{10})@$} $session_id all sidnr]} {
     set res [lindex [rega_script "Write(system.GetSessionVarStr('$sidnr'));"] 1]
     if {$res != ""} {
       return 1
