@@ -43,7 +43,7 @@ if {[info exists sid] && [check_session $sid]} {
     if {$res(STDOUT) != "null"} {
       if {$res(STDOUT) == "true"} {
         set success "true"
-       } else {
+      } else {
         set success "false"
       }
       puts -nonewline "<changed id=\"$ise_id\" new_value=\"$new_value\" success=\"$success\" />";
@@ -69,7 +69,7 @@ if {[info exists sid] && [check_session $sid]} {
       if {$res(STDOUT) != "null"} {
         if {$res(STDOUT) == "true"} {
           set success "true"
-         } else {
+        } else {
           set success "false"
         }
         puts -nonewline "<changed id=\"[lindex $rec_ise_id $x]\" new_value=\"[lindex $rec_new_value $x]\" success=\"$success\" />";
