@@ -8,7 +8,7 @@
 A HomeMatic CCU Addon implementing a xml request functionality as an interface to all homematic deviced available to a CCU device. This addon provides useful scripts that can be accessed via a HTTP request to a CCU device and allows to query and set all e.g. room- and devicetype names.
 
 ## Supported CCU models
-* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html) / [RaspberryMatic](http://raspberrymatic.de/)
+* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html) / [RaspberryMatic](https://raspberrymatic.de/)
 * [HomeMatic CCU2](https://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
 * HomeMatic CCU1
 
@@ -18,14 +18,14 @@ This addon can be added like a usual CCU addon package via the WebUI provided fu
 ## Use
 After installation the XML-API should be avilable via the following URL call:
 ```
-http://[CCU_IP]/addons/xmlapi/[ScriptName]?sid=[TOKEN_ID]
+https://[CCU_IP]/addons/xmlapi/[ScriptName]?sid=[TOKEN_ID]
 ```
 where [TOKEN_ID] corresponds to a stateless token-based authentication id a user can register using the `tokenregister.cgi` script listed below. In addition, [CCU_IP] corresponds to the IP address or hostname of your CCU device and [ScriptName] being one of the following scripts:
 
 | ScriptName                    | Description / Parameters  
 | ----------------------------- |-------------------------
 | `checkuptodate.cgi`           | ???
-| `devicelist.cgi`              | Lists all devices with channels. Contain names, serial number, device type and ids.<br> `show_internal=0/1` - adds internal channels also (default=0)<br>`show_remote=0/1` - adds output of virtual remote channels (default=0)
+| `devicelist.cgi`              | Lists all devices with channels. Contain names, serial number, device type and ids.<br>`device_id=list` - returns values of specified devices (e.g. "1234,5678") (optional)<br>`show_internal=0/1` - adds internal channels also (default=0)<br>`show_remote=0/1` - adds output of virtual remote channels (default=0)
 | `devicetypelist.cgi`          | Lists all possible device types with their possible meta data.
 | `exec.cgi`                    | Allows to execute arbitrary ReGaHss script commands (as POST data).
 | `favoritelist.cgi`            | Lists all favorites and users.<br>`show_datapoint=0/1` - outputs datapoint_id and datapoint_type also (default=0)<br>`show_internal=0/1` - adds internal channels also (default=0)
@@ -58,12 +58,12 @@ If a script will be correctly called, it generates a xml structured output that 
 
 In addition many of these scripts rely on additional URL parameter to be specifeid (e.g. `ise_id` device or channel identifier). And example of such script executing URL can be seen here:
 ```
-http://<CCU-IP>/addons/xmlapi/statechange.cgi?sid=[TOKEN_ID]&ise_id=12345&new_value=0.20
+https://<CCU-IP>/addons/xmlapi/statechange.cgi?sid=[TOKEN_ID]&ise_id=12345&new_value=0.20
 ```
 This call, if executed with a registered [TOKEN_ID] and the right ise_id and IP address would then e.g. set a dimmer to 20%.
 
 ## Support
-http://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
+https://homematic-forum.de/forum/viewtopic.php?f=26&t=10098&p=75959#p75959
 
 ## Authors
 * jens-maus, Maik (Monty1979), Philipp (ultrah), hobbyquaker, dirch, Uwe (uwe111)
