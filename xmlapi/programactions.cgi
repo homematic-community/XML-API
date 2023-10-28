@@ -15,10 +15,10 @@ if {[info exists sid] && [check_session $sid]} {
     set pairs [split $input &]
     foreach pair $pairs {
       if {0 != [regexp "^program_id=(.*)$" $pair dummy val]} {
-        set programn_id $val
+        set program_id $val
         continue
       }
-      if {0 != [regexp "^active_id=(.*)$" $pair dummy val]} {
+      if {0 != [regexp "^active=(.*)$" $pair dummy val]} {
         set active $val
         continue
       }
@@ -29,21 +29,26 @@ if {[info exists sid] && [check_session $sid]} {
     }
   }
 
-  array set res [rega_script "
-      if ($program_id > 0) { object obj = dom.GetObject($program_id);
-        if (obj && obj.IsTypeOf(OT_PROGRAM)) {
-          if (($active == false) || ($active == true)){
-            obj.Active($active);
-          }
-          if (($visible == false) || ($visible == true)){
-            obj.Visible($visible);
-          }
-          Write(obj);
+  array set res [rega_script {
+    integer prgId = } $program_id {;
+    string active = "} $active {";
+    string visible = "} $visible {";
+    if (prgId > 0) {
+      object obj = dom.GetObject(prgId);
+      if (obj && obj.IsTypeOf(OT_PROGRAM)) {
+        if ((active == "false") || (active == "true")){
+          obj.Active(active);
         }
-      }"]
+        if ((visible == "false") || (visible == "true")){
+          obj.Visible(visible);
+        }
+        Write(obj);
+      }
+    }
+  }]
 
   if { $res(STDOUT) != "" } {
-    puts -nonewline "<actions program_id=\"$program_id\" active=\"$active\" visible=\"$visible\"/>"
+    puts -nonewline "<actions program_id=\"$res(prgId)\" active=\"$res(active)\" visible=\"$res(visible)\"/>"
   } else {
     puts -nonewline {<not_found/>}
   }
