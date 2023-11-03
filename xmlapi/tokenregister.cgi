@@ -14,7 +14,7 @@ if {[info exists sid] && [check_session $sid]} {
     set pairs [split $input &]
     foreach pair $pairs {
       if {0 != [regexp "^desc=(.*)$" $pair dummy val]} {
-        set desc $val
+        set desc [regsub -all "%20" $val " "]
         break
       }
     }
