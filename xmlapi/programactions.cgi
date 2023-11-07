@@ -37,10 +37,10 @@ if {[info exists sid] && [check_session $sid]} {
       object obj = dom.GetObject(prgId);
       if (obj && obj.IsTypeOf(OT_PROGRAM)) {
         if ((active == "false") || (active == "true")){
-          obj.Active(active);
+          obj.Active(active == "true");
         }
         if ((visible == "false") || (visible == "true")){
-          obj.Visible(visible);
+          obj.Visible(visible == "true");
         }
         Write(obj);
       }
