@@ -3,7 +3,7 @@ load tclrpc.so
 source session.tcl
 source common.tcl
 
-puts "Content-Type: text/xml; charset=iso-8559-1"
+puts "Content-Type: text/xml; charset=iso-8859-1"
 puts ""
 puts -nonewline "<?xml version='1.0' encoding='ISO-8859-1' ?><mastervalue>"
 
